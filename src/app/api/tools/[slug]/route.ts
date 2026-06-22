@@ -5,6 +5,8 @@ import { getToolConfig } from '@/lib/tool-configs'
 import { logger } from '@/core/tool-engine/logger'
 
 export const runtime = 'nodejs'
+export const maxDuration = 30
+
 
 loadAllHandlers()
 

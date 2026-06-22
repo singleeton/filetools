@@ -29,8 +29,13 @@ const nextConfig: NextConfig = {
     ]
   },
 
+  serverExternalPackages: ['mammoth'],
+
   experimental: {
     optimizeCss: true,
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
   },
 }
 
