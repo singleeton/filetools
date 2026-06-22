@@ -19,7 +19,7 @@ export const pdfMergeHandler: ToolHandler = {
 
     return {
       success: true,
-      file: Buffer.from(mergedBytes),
+      file: new Uint8Array(mergedBytes),
       fileName: 'merged.pdf',
       mimeType: 'application/pdf',
     }

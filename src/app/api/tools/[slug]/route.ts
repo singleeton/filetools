@@ -4,6 +4,8 @@ import { loadAllHandlers } from '@/core/tool-engine/loader'
 import { getToolConfig } from '@/lib/tool-configs'
 import { logger } from '@/core/tool-engine/logger'
 
+export const runtime = 'nodejs'
+
 loadAllHandlers()
 
 const STATUS_MAP = {
@@ -62,14 +64,17 @@ export async function POST(
     )
   }
 
-  const responseBytes = new Uint8Array(result.file)
+  const buffer = result.file.buffer.slice(
+    result.file.byteOffset,
+    result.file.byteOffset + result.file.byteLength,
+  ) as ArrayBuffer
 
-  return new NextResponse(responseBytes, {
+  return new NextResponse(buffer, {
     status: 200,
     headers: {
       'Content-Type': result.mimeType,
       'Content-Disposition': `attachment; filename="${result.fileName}"`,
-      'Content-Length': String(responseBytes.byteLength),
+      'Content-Length': String(result.file.byteLength),
       'X-File-Name': result.fileName,
       'Cache-Control': 'no-store',
     },

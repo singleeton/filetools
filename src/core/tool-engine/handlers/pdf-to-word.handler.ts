@@ -54,7 +54,7 @@ export const pdfToWordHandler: ToolHandler = {
 
     return {
       success: true,
-      file: Buffer.from(docxBuffer),
+      file: new Uint8Array(docxBuffer),
       fileName: files[0].name.replace(/\.pdf$/i, '.docx'),
       mimeType:
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',

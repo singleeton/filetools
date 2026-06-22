@@ -22,7 +22,7 @@ export const wordToPdfHandler: ToolHandler = {
 
     return {
       success: true,
-      file: pdfBuffer,
+      file: new Uint8Array(pdfBuffer),
       fileName: files[0].name.replace(/\.(docx?|DOCX?)$/, '.pdf'),
       mimeType: 'application/pdf',
     }

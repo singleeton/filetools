@@ -33,7 +33,7 @@ export const pdfCompressHandler: ToolHandler = {
 
     return {
       success: true,
-      file: Buffer.from(resultBytes),
+      file: new Uint8Array(resultBytes),
       fileName: 'compressed.pdf',
       mimeType: 'application/pdf',
     }

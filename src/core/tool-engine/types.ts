@@ -6,7 +6,7 @@ export interface ToolInput {
 
 export interface ToolResult {
   success: true
-  file: Buffer
+  file: Uint8Array
   fileName: string
   mimeType: string
 }

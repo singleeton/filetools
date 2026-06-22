@@ -29,7 +29,7 @@ export const pdfSplitHandler: ToolHandler = {
 
     return {
       success: true,
-      file: Buffer.from(resultBytes),
+      file: new Uint8Array(resultBytes),
       fileName: 'split.pdf',
       mimeType: 'application/pdf',
     }
