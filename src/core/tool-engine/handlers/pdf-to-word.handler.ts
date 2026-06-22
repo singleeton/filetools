@@ -6,8 +6,6 @@ import {
   TextRun,
   HeadingLevel,
   AlignmentType,
-  TabStopPosition,
-  TabStopType,
   BorderStyle,
 } from 'docx'
 import type { ToolHandler, ToolResult } from '../types'
@@ -41,7 +39,8 @@ export const pdfToWordHandler: ToolHandler = {
       `[pdf-to-word] Extracted ${fullText.length} chars from ${pageCount} pages`,
     )
 
-    const paragraphs = parseDocument(fullText)
+    const blocks = analyzeDocument(fullText)
+    const paragraphs = blocks.flatMap(blockToParagraph)
 
     const doc = new Document({
       compatibility: { doNotExpandShiftReturn: true },
@@ -79,153 +78,233 @@ export const pdfToWordHandler: ToolHandler = {
   },
 }
 
-interface ParsedBlock {
-  type: 'heading1' | 'heading2' | 'heading3' | 'paragraph' | 'contact' | 'separator'
+type BlockType =
+  | 'title'
+  | 'heading'
+  | 'subheading'
+  | 'paragraph'
+  | 'list-item'
+  | 'numbered-item'
+  | 'contact'
+  | 'separator'
+  | 'caption'
+
+interface Block {
+  type: BlockType
   text: string
+  level?: number
 }
 
-const SECTION_HEADINGS = [
-  'EXPERIENCE', 'EDUCATION', 'SKILLS', 'LANGUAGES', 'REFERENCES',
-  'CONTACT', 'SUMMARY', 'OBJECTIVE', 'PROFILE', 'PROJECTS',
-  'CERTIFICATIONS', 'AWARDS', 'INTERESTS', 'HOBBIES', 'VOLUNTEER',
-  'PUBLICATIONS', 'ACHIEVEMENTS', 'WORK EXPERIENCE', 'PROFESSIONAL EXPERIENCE',
-  'DENEYIM', 'EĞİTİM', 'BECERİLER', 'DİLLER', 'REFERANSLAR',
-  'İLETİŞİM', 'ÖZET', 'AMAÇ', 'PROFİL', 'PROJELER',
-  'SERTİFİKALAR', 'ÖDÜLLER', 'İLGİ ALANLARI', 'GÖNÜLLÜLÜK',
-  'İŞ DENEYİMİ', 'MESLEKİ DENEYİM', 'KİŞİSEL BİLGİLER',
-  'ОПЫТ', 'ОБРАЗОВАНИЕ', 'НАВЫКИ', 'ЯЗЫКИ', 'КОНТАКТЫ',
-  '经验', '教育', '技能', '语言', '联系方式',
-]
+function analyzeDocument(rawText: string): Block[] {
+  const lines = rawText.split('\n')
+  const blocks: Block[] = []
+  const avgLineLength = calcAvgLength(lines)
+  let titleFound = false
 
-function isSectionHeading(line: string): boolean {
-  const clean = line.trim().replace(/[:\-–—]/g, '').trim()
-  if (clean.length < 2 || clean.length > 50) return false
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    const trimmed = line.trim()
 
-  const upper = clean.toUpperCase()
-  if (SECTION_HEADINGS.includes(upper)) return true
+    if (trimmed.length === 0) {
+      if (blocks.length > 0 && blocks[blocks.length - 1].type !== 'separator') {
+        blocks.push({ type: 'separator', text: '' })
+      }
+      continue
+    }
 
-  if (clean === clean.toUpperCase() && /[A-ZÀ-ÖÙ-Ýa-zà-öù-ýА-Яа-я]/.test(clean) && clean.length < 40) {
+    const prevEmpty = i === 0 || lines[i - 1]?.trim().length === 0
+    const nextEmpty = i === lines.length - 1 || lines[i + 1]?.trim().length === 0
+    const nextLine = lines[i + 1]?.trim() || ''
+
+    if (!titleFound && i < 5 && isTitle(trimmed, avgLineLength, prevEmpty, nextEmpty)) {
+      blocks.push({ type: 'title', text: trimmed })
+      titleFound = true
+      continue
+    }
+
+    if (isListItem(trimmed)) {
+      blocks.push({ type: 'list-item', text: cleanListPrefix(trimmed) })
+      continue
+    }
+
+    if (isNumberedItem(trimmed)) {
+      blocks.push({ type: 'numbered-item', text: cleanNumberPrefix(trimmed) })
+      continue
+    }
+
+    if (isContactLine(trimmed)) {
+      blocks.push({ type: 'contact', text: trimmed })
+      continue
+    }
+
+    if (isHeading(trimmed, avgLineLength, prevEmpty, nextEmpty, nextLine)) {
+      const level = getHeadingLevel(trimmed, avgLineLength)
+      blocks.push({
+        type: level === 1 ? 'heading' : 'subheading',
+        text: trimmed.replace(/[:\-–—]+$/, '').trim(),
+      })
+      continue
+    }
+
+    if (isCaption(trimmed, avgLineLength)) {
+      blocks.push({ type: 'caption', text: trimmed })
+      continue
+    }
+
+    blocks.push({ type: 'paragraph', text: trimmed })
+  }
+
+  return mergeParagraphs(blocks)
+}
+
+function calcAvgLength(lines: string[]): number {
+  const nonEmpty = lines.filter((l) => l.trim().length > 0)
+  if (nonEmpty.length === 0) return 50
+  return nonEmpty.reduce((sum, l) => sum + l.trim().length, 0) / nonEmpty.length
+}
+
+function isTitle(line: string, avg: number, prevEmpty: boolean, nextEmpty: boolean): boolean {
+  if (line.length > 100) return false
+  if (line.length < 3) return false
+  if (line.endsWith('.') || line.endsWith(',')) return false
+  if (line.length < avg * 0.6 && (prevEmpty || nextEmpty)) return true
+  return false
+}
+
+function isHeading(
+  line: string,
+  avg: number,
+  prevEmpty: boolean,
+  nextEmpty: boolean,
+  nextLine: string,
+): boolean {
+  if (line.length > 80) return false
+  if (line.length < 2) return false
+
+  if (line === line.toUpperCase() && /\p{L}/u.test(line) && line.length < 60) {
+    return true
+  }
+
+  if (
+    line.length < avg * 0.5 &&
+    !line.endsWith('.') &&
+    !line.endsWith(',') &&
+    !line.endsWith(';') &&
+    prevEmpty &&
+    nextLine.length > 0 &&
+    !nextEmpty
+  ) {
+    return true
+  }
+
+  if (
+    /^\d+[\.\)]\s+\S/.test(line) &&
+    line.length < 60 &&
+    !line.endsWith('.')
+  ) {
+    return false
+  }
+
+  if (/^(Chapter|Section|Part|Bölüm|Kısım|Глава|Раздел|第)\s+/i.test(line)) {
     return true
   }
 
   return false
 }
 
+function getHeadingLevel(line: string, avg: number): number {
+  if (line === line.toUpperCase() && line.length < 40) return 1
+  if (line.length < avg * 0.3) return 1
+  return 2
+}
+
+function isListItem(line: string): boolean {
+  return /^[\-•●○◦▪▸→»]\s+/.test(line) || /^[\*]\s+\S/.test(line)
+}
+
+function isNumberedItem(line: string): boolean {
+  return /^\d{1,3}[\.\)]\s+\S/.test(line) || /^[a-zA-Z][\.\)]\s+\S/.test(line)
+}
+
+function cleanListPrefix(line: string): string {
+  return line.replace(/^[\-•●○◦▪▸→»\*]\s+/, '')
+}
+
+function cleanNumberPrefix(line: string): string {
+  return line.replace(/^(\d{1,3}|[a-zA-Z])[\.\)]\s+/, '')
+}
+
 function isContactLine(line: string): boolean {
-  const contactPatterns = [
-    /[\w.-]+@[\w.-]+\.\w+/,
-    /\+?\d[\d\s\-()]{7,}/,
-    /Phone:|Tel:|Email:|Address:|Adres:|Telefon:/i,
+  const patterns = [
+    /[\w.\-]+@[\w.\-]+\.\w+/,
+    /\+?\d[\d\s\-()]{8,}/,
+    /^(Phone|Tel|Email|Fax|Address|Website|URL|Telefon|Adres|E-posta|Телефон|Адрес)[\s:]/i,
+    /^https?:\/\//,
+    /^www\./i,
   ]
-  return contactPatterns.some((p) => p.test(line))
+  return patterns.some((p) => p.test(line))
 }
 
-function isNameLine(line: string, index: number): boolean {
-  if (index > 2) return false
-  const words = line.trim().split(/\s+/)
-  if (words.length < 2 || words.length > 5) return false
-  return words.every((w) => /^[A-ZÀ-ÖÙ-ÝА-Я]/.test(w))
+function isCaption(line: string, avg: number): boolean {
+  if (line.length > avg * 0.7) return false
+  return /^(Figure|Table|Image|Chart|Diagram|Şekil|Tablo|Resim|Рисунок|Таблица|图|表)\s*\d/i.test(line)
 }
 
-function splitIntoSentences(text: string): string[] {
-  const parts = text.split(/(?<=[.!?])\s+/)
-  const result: string[] = []
-  let current = ''
+function mergeParagraphs(blocks: Block[]): Block[] {
+  const merged: Block[] = []
 
-  for (const part of parts) {
-    if (current.length + part.length > 120 && current.length > 0) {
-      result.push(current.trim())
-      current = part
-    } else {
-      current = current ? `${current} ${part}` : part
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i]
+
+    if (
+      block.type === 'paragraph' &&
+      merged.length > 0 &&
+      merged[merged.length - 1].type === 'paragraph'
+    ) {
+      merged[merged.length - 1].text += ' ' + block.text
+      continue
     }
-  }
-  if (current.trim()) result.push(current.trim())
-  return result
-}
 
-function parseDocument(rawText: string): Paragraph[] {
-  const lines = rawText.split('\n')
-  const blocks: ParsedBlock[] = []
-  let currentText: string[] = []
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim()
-
-    if (line.length === 0) {
-      if (currentText.length > 0) {
-        blocks.push({ type: 'paragraph', text: currentText.join(' ') })
-        currentText = []
+    if (block.type === 'separator') {
+      if (
+        merged.length > 0 &&
+        merged[merged.length - 1].type !== 'separator' &&
+        i < blocks.length - 1
+      ) {
+        merged.push(block)
       }
       continue
     }
 
-    if (isNameLine(line, blocks.length)) {
-      if (currentText.length > 0) {
-        blocks.push({ type: 'paragraph', text: currentText.join(' ') })
-        currentText = []
-      }
-      blocks.push({ type: 'heading1', text: line })
-      continue
-    }
-
-    if (isSectionHeading(line)) {
-      if (currentText.length > 0) {
-        blocks.push({ type: 'paragraph', text: currentText.join(' ') })
-        currentText = []
-      }
-      blocks.push({ type: 'separator', text: '' })
-      blocks.push({ type: 'heading2', text: line.replace(/[:\-–—]$/, '').trim() })
-      continue
-    }
-
-    if (isContactLine(line)) {
-      if (currentText.length > 0) {
-        blocks.push({ type: 'paragraph', text: currentText.join(' ') })
-        currentText = []
-      }
-      blocks.push({ type: 'contact', text: line })
-      continue
-    }
-
-    currentText.push(line)
+    merged.push({ ...block })
   }
 
-  if (currentText.length > 0) {
-    blocks.push({ type: 'paragraph', text: currentText.join(' ') })
-  }
-
-  return blocks.flatMap(blockToParagraphs)
+  return merged
 }
 
-function blockToParagraphs(block: ParsedBlock): Paragraph[] {
+function blockToParagraph(block: Block): Paragraph[] {
   switch (block.type) {
-    case 'heading1':
+    case 'title':
       return [
         new Paragraph({
           alignment: AlignmentType.LEFT,
-          spacing: { after: 80 },
+          spacing: { after: 120 },
           children: [
-            new TextRun({
-              text: block.text,
-              bold: true,
-              size: 36,
-              font: 'Calibri',
-            }),
+            new TextRun({ text: block.text, bold: true, size: 36, font: 'Calibri' }),
           ],
         }),
       ]
 
-    case 'heading2':
+    case 'heading':
       return [
         new Paragraph({
-          heading: HeadingLevel.HEADING_2,
-          spacing: { before: 200, after: 80 },
+          heading: HeadingLevel.HEADING_1,
+          spacing: { before: 240, after: 80 },
           children: [
             new TextRun({
               text: block.text,
               bold: true,
-              size: 26,
+              size: 28,
               font: 'Calibri',
               color: '2E74B5',
             }),
@@ -233,18 +312,42 @@ function blockToParagraphs(block: ParsedBlock): Paragraph[] {
         }),
       ]
 
-    case 'heading3':
+    case 'subheading':
       return [
         new Paragraph({
-          heading: HeadingLevel.HEADING_3,
-          spacing: { before: 120, after: 60 },
+          heading: HeadingLevel.HEADING_2,
+          spacing: { before: 180, after: 60 },
           children: [
             new TextRun({
               text: block.text,
               bold: true,
               size: 24,
               font: 'Calibri',
+              color: '404040',
             }),
+          ],
+        }),
+      ]
+
+    case 'list-item':
+      return [
+        new Paragraph({
+          spacing: { after: 60 },
+          indent: { left: 360 },
+          children: [
+            new TextRun({ text: '•  ', size: 22, font: 'Calibri' }),
+            new TextRun({ text: block.text, size: 22, font: 'Calibri' }),
+          ],
+        }),
+      ]
+
+    case 'numbered-item':
+      return [
+        new Paragraph({
+          spacing: { after: 60 },
+          indent: { left: 360 },
+          children: [
+            new TextRun({ text: block.text, size: 22, font: 'Calibri' }),
           ],
         }),
       ]
@@ -253,14 +356,19 @@ function blockToParagraphs(block: ParsedBlock): Paragraph[] {
       return [
         new Paragraph({
           spacing: { after: 40 },
-          tabStops: [{ type: TabStopType.LEFT, position: TabStopPosition.MAX }],
           children: [
-            new TextRun({
-              text: block.text,
-              size: 20,
-              font: 'Calibri',
-              color: '555555',
-            }),
+            new TextRun({ text: block.text, size: 20, font: 'Calibri', color: '666666' }),
+          ],
+        }),
+      ]
+
+    case 'caption':
+      return [
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { before: 60, after: 120 },
+          children: [
+            new TextRun({ text: block.text, size: 20, font: 'Calibri', italics: true, color: '555555' }),
           ],
         }),
       ]
@@ -268,31 +376,24 @@ function blockToParagraphs(block: ParsedBlock): Paragraph[] {
     case 'separator':
       return [
         new Paragraph({
-          spacing: { before: 60, after: 60 },
+          spacing: { before: 40, after: 40 },
           border: {
-            bottom: { style: BorderStyle.SINGLE, size: 1, color: 'CCCCCC' },
+            bottom: { style: BorderStyle.SINGLE, size: 1, color: 'E0E0E0' },
           },
           children: [],
         }),
       ]
 
     case 'paragraph':
-    default: {
-      const sentences = splitIntoSentences(block.text)
-      return sentences.map(
-        (sentence) =>
-          new Paragraph({
-            alignment: AlignmentType.JUSTIFIED,
-            spacing: { after: 100, line: 276 },
-            children: [
-              new TextRun({
-                text: sentence,
-                size: 22,
-                font: 'Calibri',
-              }),
-            ],
-          }),
-      )
-    }
+    default:
+      return [
+        new Paragraph({
+          alignment: AlignmentType.JUSTIFIED,
+          spacing: { after: 120, line: 276 },
+          children: [
+            new TextRun({ text: block.text, size: 22, font: 'Calibri' }),
+          ],
+        }),
+      ]
   }
 }
