@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { GoogleAnalytics } from '@/components/layout/google-analytics'
+import { ThemeProvider } from '@/components/layout/theme-provider'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
 
@@ -36,8 +37,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <GoogleAnalytics />
-        {children}
+        <ThemeProvider>
+          <GoogleAnalytics />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

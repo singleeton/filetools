@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Menu, X, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from './language-switcher'
+import { ThemeToggle } from './theme-toggle'
 import { siteConfig } from '@/lib/site-config'
 import { useDictionary } from '@/lib/i18n/dictionary-context'
 
@@ -40,10 +41,12 @@ export function Header() {
               {dict.tool[id].name}
             </Link>
           ))}
+          <ThemeToggle />
           <LanguageSwitcher />
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
           <LanguageSwitcher />
           <Button
             variant="ghost"
