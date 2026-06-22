@@ -66,12 +66,7 @@ export async function POST(
     )
   }
 
-  const buffer = result.file.buffer.slice(
-    result.file.byteOffset,
-    result.file.byteOffset + result.file.byteLength,
-  ) as ArrayBuffer
-
-  return new NextResponse(buffer, {
+  return new Response(Buffer.from(result.file), {
     status: 200,
     headers: {
       'Content-Type': result.mimeType,

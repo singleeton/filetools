@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp tmp/test-fixed.docx tmp/test-fixed.zip)",
+      "Bash(powershell -Command \"Remove-Item tmp/docx-verify -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path tmp/test-fixed.zip -DestinationPath tmp/docx-verify -Force; Get-Content tmp/docx-verify/word/document.xml\")",
+      "Bash(node -e ' *)",
+      "Bash(cp tmp/final-test.docx tmp/final-test.zip)",
+      "Bash(powershell -Command \"Remove-Item tmp/final-verify -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive tmp/final-test.zip tmp/final-verify -Force; \\(Get-ChildItem tmp/final-verify -Recurse -File\\).Count\")",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}

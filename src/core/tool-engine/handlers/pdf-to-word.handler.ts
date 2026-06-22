@@ -114,6 +114,9 @@ export const pdfToWordHandler: ToolHandler = {
     const paragraphs = buildParagraphs(extractedText)
 
     const doc = new Document({
+      compatibility: {
+        doNotExpandShiftReturn: true,
+      },
       sections: [
         {
           properties: {
