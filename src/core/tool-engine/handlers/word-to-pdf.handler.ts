@@ -1,28 +1,22 @@
 import mammoth from 'mammoth'
-import PDFDocument from 'pdfkit'
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import type { ToolHandler, ToolResult } from '../types'
 
 interface DocElement {
-  type: string
   tag?: string
-  text?: string
-  children?: DocElement[]
-  isBold?: boolean
-  isItalic?: boolean
+  texts: { text: string; bold?: boolean; italic?: boolean }[]
 }
 
 export const wordToPdfHandler: ToolHandler = {
   async execute(files): Promise<ToolResult> {
     const buffer = Buffer.from(await files[0].arrayBuffer())
-
     const { value: html } = await mammoth.convertToHtml({ buffer })
     const elements = parseHtml(html)
-
-    const pdfBuffer = await generatePdf(elements)
+    const pdfBytes = await generatePdf(elements)
 
     return {
       success: true,
-      file: new Uint8Array(pdfBuffer),
+      file: pdfBytes,
       fileName: files[0].name.replace(/\.(docx?|DOCX?)$/, '.pdf'),
       mimeType: 'application/pdf',
     }
@@ -33,138 +27,142 @@ function parseHtml(html: string): DocElement[] {
   const elements: DocElement[] = []
   const tagRegex = /<(\/?)(\w+)[^>]*>|([^<]+)/g
   let match: RegExpExecArray | null
-
-  const stack: DocElement[] = []
+  const stack: string[] = []
   let current: DocElement | null = null
 
   while ((match = tagRegex.exec(html)) !== null) {
     const [, isClosing, tagName, text] = match
 
     if (text) {
-      const trimmed = decodeHtmlEntities(text)
-      if (trimmed && current) {
-        if (!current.children) current.children = []
-        current.children.push({
-          type: 'text',
-          text: trimmed,
-          isBold: stack.some((el) => el.tag === 'strong' || el.tag === 'b'),
-          isItalic: stack.some((el) => el.tag === 'em' || el.tag === 'i'),
+      const decoded = text
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
+      if (decoded.trim() && current) {
+        current.texts.push({
+          text: decoded,
+          bold: stack.includes('strong') || stack.includes('b'),
+          italic: stack.includes('em') || stack.includes('i'),
         })
       }
-    } else if (isClosing) {
-      const closed = stack.pop()
-      if (closed && isBlockTag(closed.tag!)) {
-        elements.push(closed)
+    } else if (isClosing && tagName) {
+      const tag = tagName.toLowerCase()
+      const idx = stack.lastIndexOf(tag)
+      if (idx >= 0) stack.splice(idx, 1)
+      if (isBlockTag(tag) && current) {
+        elements.push(current)
+        current = null
       }
-      current = stack[stack.length - 1] || null
     } else if (tagName) {
       const tag = tagName.toLowerCase()
-      const el: DocElement = { type: isBlockTag(tag) ? 'block' : 'inline', tag }
-
+      stack.push(tag)
       if (isBlockTag(tag)) {
-        stack.push(el)
-        current = el
-      } else {
-        stack.push(el)
-        current = stack.find((s) => isBlockTag(s.tag!)) || null
+        current = { tag, texts: [] }
       }
     }
   }
 
+  if (current && current.texts.length > 0) elements.push(current)
   return elements
 }
 
 function isBlockTag(tag: string): boolean {
-  return ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'ul', 'ol', 'table', 'tr', 'blockquote'].includes(tag)
+  return ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'].includes(tag)
 }
 
-function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-}
+async function generatePdf(elements: DocElement[]): Promise<Uint8Array> {
+  const doc = await PDFDocument.create()
+  const fontRegular = await doc.embedFont(StandardFonts.Helvetica)
+  const fontBold = await doc.embedFont(StandardFonts.HelveticaBold)
+  const fontItalic = await doc.embedFont(StandardFonts.HelveticaOblique)
+  const fontBoldItalic = await doc.embedFont(StandardFonts.HelveticaBoldOblique)
 
-function generatePdf(elements: DocElement[]): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({
-      size: 'A4',
-      margins: { top: 72, bottom: 72, left: 72, right: 72 },
-      bufferPages: true,
-    })
+  const PAGE_W = 595.28
+  const PAGE_H = 841.89
+  const MARGIN = 72
+  const CONTENT_W = PAGE_W - MARGIN * 2
 
-    const chunks: Buffer[] = []
-    doc.on('data', (chunk: Buffer) => chunks.push(chunk))
-    doc.on('end', () => resolve(Buffer.concat(chunks)))
-    doc.on('error', reject)
+  let page = doc.addPage([PAGE_W, PAGE_H])
+  let y = PAGE_H - MARGIN
 
-    const PAGE_WIDTH = 595.28 - 144
+  function getFont(bold?: boolean, italic?: boolean) {
+    if (bold && italic) return fontBoldItalic
+    if (bold) return fontBold
+    if (italic) return fontItalic
+    return fontRegular
+  }
 
-    for (const el of elements) {
-      if (!el.children || el.children.length === 0) {
-        doc.moveDown(0.3)
-        continue
+  function fontSize(tag?: string): number {
+    switch (tag) {
+      case 'h1': return 22
+      case 'h2': return 18
+      case 'h3': return 15
+      case 'h4': return 13
+      default: return 11
+    }
+  }
+
+  function lineHeight(size: number): number {
+    return size * 1.4
+  }
+
+  function wrapText(text: string, font: ReturnType<typeof getFont>, size: number): string[] {
+    const words = text.split(/\s+/)
+    const lines: string[] = []
+    let currentLine = ''
+
+    for (const word of words) {
+      const testLine = currentLine ? `${currentLine} ${word}` : word
+      const width = font.widthOfTextAtSize(testLine, size)
+      if (width > CONTENT_W && currentLine) {
+        lines.push(currentLine)
+        currentLine = word
+      } else {
+        currentLine = testLine
       }
+    }
+    if (currentLine) lines.push(currentLine)
+    return lines.length > 0 ? lines : ['']
+  }
 
-      const fontSize = getFontSize(el.tag)
-      const bottomMargin = getBottomMargin(el.tag)
-
-      if (el.tag === 'li') {
-        doc.fontSize(fontSize).font('Helvetica').text('•  ', { continued: true })
-      }
-
-      for (let i = 0; i < el.children.length; i++) {
-        const child = el.children[i]
-        if (!child.text) continue
-
-        const font = getFont(child.isBold, child.isItalic)
-        const isLast = i === el.children.length - 1
-
-        doc.fontSize(fontSize).font(font).text(child.text, {
-          width: PAGE_WIDTH,
-          continued: !isLast,
-          lineGap: 2,
-        })
-      }
-
-      doc.moveDown(bottomMargin)
+  for (const el of elements) {
+    if (el.texts.length === 0) {
+      y -= 8
+      continue
     }
 
-    if (elements.length === 0) {
-      doc.fontSize(12).font('Helvetica').text(' ')
+    const size = fontSize(el.tag)
+    const lh = lineHeight(size)
+    const isHeading = el.tag?.startsWith('h')
+    const prefix = el.tag === 'li' ? '•  ' : ''
+
+    const fullText = prefix + el.texts.map((t) => t.text).join('')
+    const font = isHeading ? fontBold : getFont(el.texts[0]?.bold, el.texts[0]?.italic)
+    const lines = wrapText(fullText, font, size)
+
+    for (const line of lines) {
+      if (y - lh < MARGIN) {
+        page = doc.addPage([PAGE_W, PAGE_H])
+        y = PAGE_H - MARGIN
+      }
+
+      page.drawText(line, {
+        x: MARGIN,
+        y: y - size,
+        size,
+        font,
+        color: rgb(0, 0, 0),
+      })
+
+      y -= lh
     }
 
-    doc.end()
-  })
-}
-
-function getFontSize(tag?: string): number {
-  switch (tag) {
-    case 'h1': return 24
-    case 'h2': return 20
-    case 'h3': return 16
-    case 'h4': return 14
-    default: return 12
+    y -= isHeading ? 10 : 4
   }
-}
 
-function getBottomMargin(tag?: string): number {
-  switch (tag) {
-    case 'h1': return 0.8
-    case 'h2': return 0.6
-    case 'h3': return 0.5
-    case 'h4': return 0.4
-    case 'li': return 0.2
-    default: return 0.4
+  if (elements.length === 0) {
+    page.drawText(' ', { x: MARGIN, y: PAGE_H - MARGIN - 12, size: 12, font: fontRegular })
   }
-}
 
-function getFont(bold?: boolean, italic?: boolean): string {
-  if (bold && italic) return 'Helvetica-BoldOblique'
-  if (bold) return 'Helvetica-Bold'
-  if (italic) return 'Helvetica-Oblique'
-  return 'Helvetica'
+  const bytes = await doc.save()
+  return new Uint8Array(bytes)
 }
