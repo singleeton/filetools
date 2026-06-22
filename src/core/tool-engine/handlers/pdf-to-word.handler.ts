@@ -1,4 +1,4 @@
-import { PDFParse } from 'pdf-parse'
+import { extractText } from 'unpdf'
 import {
   Document,
   Packer,
@@ -13,13 +13,12 @@ export const pdfToWordHandler: ToolHandler = {
   async execute(files): Promise<ToolResult> {
     const bytes = new Uint8Array(await files[0].arrayBuffer())
 
-    let extractedText: string
+    let fullText: string
     let pageCount: number
     try {
-      const parser = new PDFParse({ data: bytes })
-      const textResult = await parser.getText()
-      extractedText = textResult.text
-      pageCount = textResult.total
+      const result = await extractText(bytes)
+      fullText = result.text.join('\n\n')
+      pageCount = result.totalPages
     } catch (err) {
       console.error('[pdf-to-word] extraction error:', err)
       throw new Error(
@@ -27,15 +26,17 @@ export const pdfToWordHandler: ToolHandler = {
       )
     }
 
-    if (!extractedText || extractedText.trim().length === 0) {
+    if (!fullText || fullText.trim().length === 0) {
       throw new Error(
         'No extractable text found in this PDF. It may be a scanned/image-based document.',
       )
     }
 
-    console.log(`[pdf-to-word] Extracted ${extractedText.length} chars from ${pageCount} pages`)
+    console.log(
+      `[pdf-to-word] Extracted ${fullText.length} chars from ${pageCount} pages`,
+    )
 
-    const paragraphs = buildParagraphs(extractedText)
+    const paragraphs = buildParagraphs(fullText)
 
     const doc = new Document({
       compatibility: {
@@ -66,8 +67,7 @@ export const pdfToWordHandler: ToolHandler = {
 }
 
 function buildParagraphs(rawText: string): Paragraph[] {
-  const cleanText = rawText.replace(/-- \d+ of \d+ --/g, '').trim()
-  const lines = cleanText.split('\n')
+  const lines = rawText.split('\n')
   const paragraphs: Paragraph[] = []
   let currentBlock: string[] = []
 
