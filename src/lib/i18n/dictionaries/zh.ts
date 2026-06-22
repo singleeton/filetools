@@ -1,0 +1,222 @@
+import type { Dictionary } from './en'
+
+export const zh: Dictionary = {
+  nav: {
+    tools: '工具',
+  },
+
+  hero: {
+    title: '快速免费的在线文件工具',
+    subtitle:
+      '在浏览器中即时转换、合并、拆分和压缩 PDF 及文档。无需安装任何软件。',
+    cta: '免费试用',
+  },
+
+  popularTools: {
+    title: '热门工具',
+    subtitle: '处理 PDF 和文档文件所需的一切',
+    useTool: '使用工具 →',
+  },
+
+  tool: {
+    'pdf-merge': {
+      name: 'PDF 合并',
+      shortDesc: '将多个 PDF 文件合并为一个文档',
+      description:
+        '将多个 PDF 文件合并为一个文档。拖放以重新排列页面顺序。',
+    },
+    'pdf-split': {
+      name: 'PDF 拆分',
+      shortDesc: '将 PDF 文件拆分为单独的页面或部分',
+      description:
+        '将 PDF 文件拆分为单独的页面或部分。选择特定页面或页面范围进行提取。',
+    },
+    'pdf-compress': {
+      name: 'PDF 压缩',
+      shortDesc: '在不损失质量的情况下减小 PDF 文件大小',
+      description:
+        '在不损失质量的情况下减小 PDF 文件大小。选择低、中或高压缩级别。',
+    },
+    'word-to-pdf': {
+      name: 'Word 转 PDF',
+      shortDesc: '将 DOCX 文件转换为 PDF 格式',
+      description:
+        '将 Microsoft Word 文档（DOCX）转换为 PDF 格式。快速准确的转换。',
+    },
+    'pdf-to-word': {
+      name: 'PDF 转 Word',
+      shortDesc: '将 PDF 文件转换为可编辑的 DOCX 格式',
+      description:
+        '将 PDF 文件转换为可编辑的 Microsoft Word（DOCX）格式。保留格式和布局。',
+    },
+  },
+
+  features: {
+    title: '为什么选择 FileTools？',
+    subtitle: '简单、快速、安全的文件处理',
+    fast: {
+      title: '极速处理',
+      description: '文件在我们的服务器上即时处理，无需等待。',
+    },
+    secure: {
+      title: '安全私密',
+      description: '文件处理后自动删除。我们绝不存储您的数据。',
+    },
+    noInstall: {
+      title: '无需安装',
+      description: '完全在浏览器中运行。无需下载或安装任何软件。',
+    },
+    mobile: {
+      title: '移动端适配',
+      description: '在任何设备上使用——电脑、平板或手机。完全响应式设计。',
+    },
+  },
+
+  howItWorks: {
+    title: '使用方法',
+    subtitle: '三个简单步骤即可完成文件处理',
+    step1: { title: '上传文件', description: '拖放或浏览选择您的文件' },
+    step2: { title: '处理', description: '选择设置，其余交给我们' },
+    step3: { title: '下载', description: '即时获取转换后的文件' },
+  },
+
+  faq: {
+    title: '常见问题',
+    items: [
+      {
+        question: '是免费的吗？',
+        answer: '是的！所有工具完全免费使用，没有隐藏费用，无需注册。',
+      },
+      {
+        question: '我的文件安全吗？',
+        answer:
+          '绝对安全。文件在我们的服务器上安全处理，处理后自动删除。我们绝不存储或分享您的文件。',
+      },
+      {
+        question: '需要创建账户吗？',
+        answer: '不需要。您可以在不创建账户或注册的情况下使用所有工具。',
+      },
+      {
+        question: '支持哪些文件格式？',
+        answer: '我们目前支持 PDF、DOCX 和 DOC 文件。更多格式即将推出。',
+      },
+      {
+        question: '有文件大小限制吗？',
+        answer:
+          '有。大多数工具支持最大 50 MB 的文件。PDF 压缩支持最大 100 MB。',
+      },
+    ],
+  },
+
+  trust: {
+    title: '深受数千用户信赖',
+    subtitle: '您的文件安全无忧',
+    noStorage: {
+      title: '不存储文件',
+      description: '我们绝不存储您的文件。所有内容在内存中处理后即被丢弃。',
+    },
+    autoDelete: {
+      title: '自动删除',
+      description: '所有上传的文件在处理后几分钟内自动删除。',
+    },
+    encrypted: {
+      title: '安全处理',
+      description: '文件在我们的服务器上安全处理。无第三方访问。',
+    },
+  },
+
+  cta: {
+    title: '准备好开始了吗？',
+    subtitle: '无需注册。选择一个工具，开始免费转换您的文件。',
+    button: '浏览所有工具',
+  },
+
+  ui: {
+    dropzone: {
+      drag: '将文件拖放到此处',
+      browse: '将文件拖放到此处，或',
+      browseLink: '浏览选择',
+      maxSize: '最大',
+      upTo: '最多',
+      files: '个文件',
+    },
+    download: {
+      ready: '您的文件已准备好！',
+      button: '下载',
+      startOver: '重新开始',
+    },
+    processing: {
+      default: '正在处理您的文件...',
+      compressing: '正在压缩 PDF...',
+    },
+    process: {
+      button: '处理',
+      file: '个文件',
+      files: '个文件',
+    },
+    relatedTools: '您可能需要的其他工具',
+  },
+
+  split: {
+    options: '拆分选项',
+    pagesDetected: '页已检测',
+    pageRange: '页面范围',
+    pageRangeDesc: '提取一个页面范围',
+    extractPages: '提取特定页面',
+    extractPagesDesc: '输入以逗号分隔的页码（例如 1, 3, 5）',
+    allPages: '所有页面',
+    allPagesDesc: '保留所有页面（用于移除加密）',
+    button: '拆分 PDF',
+    from: '从',
+    to: '到',
+  },
+
+  compress: {
+    title: '压缩级别',
+    low: '低',
+    lowDesc: '最佳质量，轻微减小',
+    medium: '中',
+    mediumDesc: '质量与大小的良好平衡',
+    high: '高',
+    highDesc: '最小文件大小，较低质量',
+    button: '压缩 PDF',
+    original: '原始大小',
+  },
+
+  footer: {
+    tagline: '免费在线文件工具。无需安装。',
+    tools: '工具',
+    legal: '法律信息',
+    contact: '联系我们',
+    privacy: '隐私政策',
+    terms: '服务条款',
+    rights: '保留所有权利。',
+  },
+
+  meta: {
+    home: {
+      title: 'FileTools — 免费在线文件工具',
+      description: '免费在线文件工具。在线转换、合并、拆分和压缩文件。',
+    },
+    'pdf-merge': {
+      title: 'PDF 合并 — 免费在线合并 PDF 文件',
+      description: '免费在线将多个 PDF 文件合并为一个文档。',
+    },
+    'pdf-split': {
+      title: 'PDF 拆分 — 免费在线拆分 PDF 页面',
+      description: '免费在线将 PDF 文件拆分为单独的页面或提取特定页面范围。',
+    },
+    'pdf-compress': {
+      title: 'PDF 压缩 — 免费在线减小 PDF 大小',
+      description: '免费在线压缩 PDF 文件。多种压缩级别可选。',
+    },
+    'word-to-pdf': {
+      title: 'Word 转 PDF — 免费在线转换 DOCX',
+      description: '免费在线将 Word 文档（DOCX）转换为 PDF 格式。快速安全。',
+    },
+    'pdf-to-word': {
+      title: 'PDF 转 Word — 免费在线转换',
+      description: '免费在线将 PDF 文件转换为可编辑的 Word 文档（DOCX）。',
+    },
+  },
+}

@@ -1,0 +1,235 @@
+import type { Dictionary } from './en'
+
+export const tr: Dictionary = {
+  nav: {
+    tools: 'Araçlar',
+  },
+
+  hero: {
+    title: 'Hızlı ve Ücretsiz Online Dosya Araçları',
+    subtitle:
+      'PDF ve belgelerinizi tarayıcınızda anında dönüştürün, birleştirin, bölün ve sıkıştırın. Kurulum gerektirmez.',
+    cta: 'Ücretsiz Deneyin',
+  },
+
+  popularTools: {
+    title: 'Popüler Araçlar',
+    subtitle: 'PDF ve belge dosyalarıyla çalışmak için ihtiyacınız olan her şey',
+    useTool: 'Kullan →',
+  },
+
+  tool: {
+    'pdf-merge': {
+      name: 'PDF Birleştir',
+      shortDesc: 'Birden fazla PDF dosyasını tek belgede birleştirin',
+      description:
+        'Birden fazla PDF dosyasını tek bir belgede birleştirin. Sürükle bırak ile sayfaları yeniden sıralayın.',
+    },
+    'pdf-split': {
+      name: 'PDF Böl',
+      shortDesc: 'PDF dosyasını sayfalara veya bölümlere ayırın',
+      description:
+        'PDF dosyasını sayfalara veya bölümlere ayırın. Belirli sayfaları veya sayfa aralıklarını seçin.',
+    },
+    'pdf-compress': {
+      name: 'PDF Sıkıştır',
+      shortDesc: 'Kalite kaybı olmadan PDF boyutunu küçültün',
+      description:
+        'Kalite kaybı olmadan PDF boyutunu küçültün. Düşük, orta veya yüksek sıkıştırma seviyeleri arasından seçin.',
+    },
+    'word-to-pdf': {
+      name: "Word'den PDF'e",
+      shortDesc: "DOCX dosyalarını PDF formatına dönüştürün",
+      description:
+        "Microsoft Word belgelerini (DOCX) PDF formatına dönüştürün. Hızlı ve doğru dönüşüm.",
+    },
+    'pdf-to-word': {
+      name: "PDF'den Word'e",
+      shortDesc: "PDF dosyalarını düzenlenebilir DOCX formatına dönüştürün",
+      description:
+        "PDF dosyalarını düzenlenebilir Microsoft Word (DOCX) formatına dönüştürün. Biçimlendirmeyi korur.",
+    },
+  },
+
+  features: {
+    title: 'Neden FileTools?',
+    subtitle: 'Basit, hızlı ve güvenli dosya işleme',
+    fast: {
+      title: 'Hızlı İşleme',
+      description: 'Dosyalar sunucularımızda anında işlenir. Bekleme yok.',
+    },
+    secure: {
+      title: 'Güvenli ve Gizli',
+      description:
+        'Dosyalar işlem sonrası otomatik olarak silinir. Verilerinizi asla saklamayız.',
+    },
+    noInstall: {
+      title: 'Kurulum Gerektirmez',
+      description:
+        'Tamamen tarayıcınızda çalışır. İndirme veya kurulum gerekmez.',
+    },
+    mobile: {
+      title: 'Mobil Uyumlu',
+      description:
+        'Her cihazda kullanın — masaüstü, tablet veya telefon. Tam uyumlu.',
+    },
+  },
+
+  howItWorks: {
+    title: 'Nasıl Çalışır?',
+    subtitle: 'Dosyanızı hazırlamak için üç basit adım',
+    step1: { title: 'Dosya Yükle', description: 'Sürükle bırak veya dosyanızı seçin' },
+    step2: { title: 'İşle', description: 'Ayarlarınızı seçin, gerisini bize bırakın' },
+    step3: { title: 'İndir', description: 'Dönüştürülmüş dosyanızı anında alın' },
+  },
+
+  faq: {
+    title: 'Sıkça Sorulan Sorular',
+    items: [
+      {
+        question: 'Kullanımı ücretsiz mi?',
+        answer:
+          'Evet! Tüm araçlar tamamen ücretsizdir. Gizli maliyet veya kayıt gerekmez.',
+      },
+      {
+        question: 'Dosyalarım güvende mi?',
+        answer:
+          'Kesinlikle. Dosyalar sunucularımızda güvenle işlenir ve işlem sonrası otomatik silinir. Dosyalarınızı asla saklamaz veya paylaşmayız.',
+      },
+      {
+        question: 'Hesap oluşturmam gerekiyor mu?',
+        answer:
+          'Hayır. Tüm araçları hesap oluşturmadan veya kayıt olmadan kullanabilirsiniz.',
+      },
+      {
+        question: 'Hangi dosya formatları destekleniyor?',
+        answer:
+          'Şu anda PDF, DOCX ve DOC dosyalarını destekliyoruz. Yakında daha fazla format eklenecek.',
+      },
+      {
+        question: 'Dosya boyutu sınırı var mı?',
+        answer:
+          "Evet. Çoğu araç 50 MB'a kadar dosyaları destekler. PDF Sıkıştır 100 MB'a kadar destekler.",
+      },
+    ],
+  },
+
+  trust: {
+    title: 'Binlerce Kullanıcının Güveni',
+    subtitle: 'Dosyalarınız güvende',
+    noStorage: {
+      title: 'Dosya Saklanmaz',
+      description: 'Dosyalarınızı asla saklamayız. Her şey bellekte işlenir ve silinir.',
+    },
+    autoDelete: {
+      title: 'Otomatik Silme',
+      description: 'Yüklenen tüm dosyalar işlem sonrası dakikalar içinde otomatik silinir.',
+    },
+    encrypted: {
+      title: 'Güvenli İşleme',
+      description: 'Dosyalar sunucularımızda güvenle işlenir. Üçüncü taraf erişimi yoktur.',
+    },
+  },
+
+  cta: {
+    title: 'Başlamaya Hazır mısınız?',
+    subtitle:
+      'Kayıt gerekmez. Bir araç seçin ve dosyalarınızı ücretsiz dönüştürmeye başlayın.',
+    button: 'Tüm Araçlara Göz At',
+  },
+
+  ui: {
+    dropzone: {
+      drag: 'Dosyalarınızı buraya bırakın',
+      browse: 'Dosyalarınızı sürükleyip bırakın veya',
+      browseLink: 'seçin',
+      maxSize: 'Maks',
+      upTo: 'En fazla',
+      files: 'dosya',
+    },
+    download: {
+      ready: 'Dosyanız hazır!',
+      button: 'İndir',
+      startOver: 'Baştan Başla',
+    },
+    processing: {
+      default: 'Dosyanız işleniyor...',
+      compressing: "PDF'niz sıkıştırılıyor...",
+    },
+    process: {
+      button: 'İşle',
+      file: 'Dosya',
+      files: 'Dosya',
+    },
+    relatedTools: 'İhtiyacınız Olabilecek Diğer Araçlar',
+  },
+
+  split: {
+    options: 'Bölme Seçenekleri',
+    pagesDetected: 'sayfa algılandı',
+    pageRange: 'Sayfa Aralığı',
+    pageRangeDesc: 'Bir sayfa aralığı çıkarın',
+    extractPages: 'Belirli Sayfaları Çıkar',
+    extractPagesDesc: 'Virgülle ayrılmış sayfa numaraları girin (ör. 1, 3, 5)',
+    allPages: 'Tüm Sayfalar',
+    allPagesDesc: 'Tüm sayfaları koru (şifre kaldırma için kullanışlı)',
+    button: "PDF'yi Böl",
+    from: 'Başlangıç',
+    to: 'bitiş',
+  },
+
+  compress: {
+    title: 'Sıkıştırma Seviyesi',
+    low: 'Düşük',
+    lowDesc: 'En iyi kalite, hafif boyut azaltma',
+    medium: 'Orta',
+    mediumDesc: 'Kalite ve boyut dengesi',
+    high: 'Yüksek',
+    highDesc: 'En küçük dosya boyutu, düşük kalite',
+    button: "PDF'yi Sıkıştır",
+    original: 'Orijinal',
+  },
+
+  footer: {
+    tagline: 'Ücretsiz online dosya araçları. Kurulum gerektirmez.',
+    tools: 'Araçlar',
+    legal: 'Yasal',
+    contact: 'İletişim',
+    privacy: 'Gizlilik Politikası',
+    terms: 'Kullanım Koşulları',
+    rights: 'Tüm hakları saklıdır.',
+  },
+
+  meta: {
+    home: {
+      title: 'FileTools - Ücretsiz Online Dosya Araçları',
+      description:
+        'Ücretsiz online dosya araçları. Dosyaları çevrimiçi dönüştürün, birleştirin, bölün ve sıkıştırın.',
+    },
+    'pdf-merge': {
+      title: 'PDF Birleştir - PDF Dosyalarını Ücretsiz Birleştirin',
+      description:
+        'Birden fazla PDF dosyasını ücretsiz olarak tek belgede birleştirin.',
+    },
+    'pdf-split': {
+      title: 'PDF Böl - PDF Sayfalarını Ücretsiz Ayırın',
+      description:
+        'PDF dosyalarını ücretsiz olarak ayrı sayfalara bölün veya belirli sayfa aralıklarını çıkarın.',
+    },
+    'pdf-compress': {
+      title: 'PDF Sıkıştır - PDF Boyutunu Ücretsiz Küçültün',
+      description:
+        'PDF dosyalarını ücretsiz olarak sıkıştırın. Düşük, orta veya yüksek sıkıştırma seviyeleri.',
+    },
+    'word-to-pdf': {
+      title: "Word'den PDF'e - DOCX'i Ücretsiz PDF'e Dönüştürün",
+      description:
+        "Word belgelerini (DOCX) ücretsiz olarak PDF formatına dönüştürün. Hızlı ve güvenli.",
+    },
+    'pdf-to-word': {
+      title: "PDF'den Word'e - PDF'i Ücretsiz DOCX'e Dönüştürün",
+      description:
+        "PDF dosyalarını ücretsiz olarak düzenlenebilir Word belgelerine (DOCX) dönüştürün.",
+    },
+  },
+}
