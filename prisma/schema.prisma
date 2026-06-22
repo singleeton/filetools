@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- AUTH ---
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("superadmin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+// --- SITE SETTINGS (CMS) ---
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @db.Text
+  type  String @default("string") // string, json, boolean, number
+
+  @@map("site_settings")
+}
+
+// --- TOOL MANAGEMENT ---
+
+model Tool {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String   @db.Text
+  category    String
+  icon        String
+  isActive    Boolean  @default(true)
+  isPremium   Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  maxFileSize Int      @default(52428800) // 50MB
+  config      String?  @db.Text // JSON string for extra config
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  usageLogs ToolUsageLog[]
+
+  @@map("tools")
+}
+
+// --- ANALYTICS ---
+
+model ToolUsageLog {
+  id            String   @id @default(cuid())
+  toolId        String
+  tool          Tool     @relation(fields: [toolId], references: [id])
+  event         String   // upload_start, conversion_start, conversion_complete, download
+  fileSize      Int?
+  outputSize    Int?
+  duration      Int?     // ms
+  locale        String?
+  userAgent     String?  @db.Text
+  ip            String?
+  country       String?
+  createdAt     DateTime @default(now())
+
+  @@index([toolId])
+  @@index([createdAt])
+  @@index([event])
+  @@map("tool_usage_logs")
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  locale    String?
+  referrer  String?  @db.Text
+  userAgent String?  @db.Text
+  ip        String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+  @@map("page_views")
+}
+
+// --- ADS ---
+
+model AdSlot {
+  id       String  @id @default(cuid())
+  name     String  @unique // header, sidebar, tool-top, tool-bottom
+  label    String
+  code     String? @db.Text // HTML/JS ad code
+  isActive Boolean @default(false)
+
+  @@map("ad_slots")
+}
+
+// --- LANDING PAGE CMS ---
+
+model LandingContent {
+  id       String @id @default(cuid())
+  section  String // hero, features, howItWorks, faq, cta, trust
+  locale   String @default("en")
+  content  String @db.Text // JSON string
+  sortOrder Int   @default(0)
+
+  @@unique([section, locale])
+  @@map("landing_content")
+}
