@@ -1,4 +1,6 @@
 import { extractText } from 'unpdf'
+import { PDFDocument, PDFName, PDFRawStream } from 'pdf-lib'
+import Tesseract from 'tesseract.js'
 import {
   Document,
   Packer,
@@ -14,30 +16,35 @@ export const pdfToWordHandler: ToolHandler = {
   async execute(files): Promise<ToolResult> {
     const bytes = new Uint8Array(await files[0].arrayBuffer())
 
-    let pageTexts: string[]
-    let pageCount: number
+    let fullText = ''
+
+    // 1) Metin tabanlı PDF — hızlı çıkarma
     try {
       const result = await extractText(bytes)
-      pageTexts = result.text
-      pageCount = result.totalPages
-    } catch (err) {
-      console.error('[pdf-to-word] extraction error:', err)
-      throw new Error(
-        'Could not read this PDF. The file may be corrupted or password-protected.',
-      )
+      fullText = result.text.join('\n\n').trim()
+      if (fullText.length > 0) {
+        console.log(`[pdf-to-word] Text extraction: ${fullText.length} chars`)
+      }
+    } catch {
+      // text extraction failed, will try OCR
     }
 
-    const fullText = pageTexts.join('\n\n')
+    // 2) Metin bulunamadıysa — OCR ile görüntüden oku
+    if (fullText.length === 0) {
+      console.log('[pdf-to-word] No text found, trying OCR...')
+      try {
+        fullText = await extractWithOCR(bytes)
+        console.log(`[pdf-to-word] OCR extraction: ${fullText.length} chars`)
+      } catch (err) {
+        console.error('[pdf-to-word] OCR error:', err)
+      }
+    }
 
     if (!fullText || fullText.trim().length === 0) {
       throw new Error(
-        'No extractable text found in this PDF. It may be a scanned/image-based document.',
+        'Could not extract any text from this PDF. The file may be corrupted or contain only vector graphics.',
       )
     }
-
-    console.log(
-      `[pdf-to-word] Extracted ${fullText.length} chars from ${pageCount} pages`,
-    )
 
     const blocks = analyzeDocument(fullText)
     const paragraphs = blocks.flatMap(blockToParagraph)
@@ -78,6 +85,71 @@ export const pdfToWordHandler: ToolHandler = {
   },
 }
 
+// --- OCR ---
+
+async function extractWithOCR(pdfBytes: Uint8Array): Promise<string> {
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true })
+  const images = extractImagesFromPdf(pdfDoc)
+
+  if (images.length === 0) {
+    throw new Error('No images found in PDF for OCR')
+  }
+
+  const worker = await Tesseract.createWorker(['eng', 'tur'], 1)
+
+  const texts: string[] = []
+  for (const imageData of images) {
+    try {
+      const { data } = await worker.recognize(Buffer.from(imageData))
+      if (data.text.trim()) {
+        texts.push(data.text.trim())
+      }
+    } catch {
+      // skip unrecognizable images
+    }
+  }
+
+  await worker.terminate()
+  return texts.join('\n\n')
+}
+
+function extractImagesFromPdf(pdfDoc: PDFDocument): Uint8Array[] {
+  const images: Uint8Array[] = []
+  const context = pdfDoc.context
+
+  for (const [, obj] of context.enumerateIndirectObjects()) {
+    if (!(obj instanceof PDFRawStream)) continue
+
+    const dict = obj.dict
+    if (!dict) continue
+
+    const subtype = dict.get(PDFName.of('Subtype'))
+    if (!subtype || subtype.toString() !== '/Image') continue
+
+    const width = getNum(dict, 'Width')
+    const height = getNum(dict, 'Height')
+    if (!width || !height || width < 100 || height < 100) continue
+
+    const filter = dict.get(PDFName.of('Filter'))?.toString() || ''
+
+    // JPEG images — can be used directly
+    if (filter.includes('DCTDecode')) {
+      images.push(obj.getContents())
+    }
+  }
+
+  return images
+}
+
+function getNum(dict: { get(name: ReturnType<typeof PDFName.of>): unknown }, key: string): number | null {
+  const val = dict.get(PDFName.of(key))
+  if (!val) return null
+  const num = parseInt(val.toString(), 10)
+  return isNaN(num) ? null : num
+}
+
+// --- DOCUMENT ANALYSIS ---
+
 type BlockType =
   | 'title'
   | 'heading'
@@ -86,24 +158,22 @@ type BlockType =
   | 'list-item'
   | 'numbered-item'
   | 'contact'
-  | 'separator'
   | 'caption'
+  | 'separator'
 
 interface Block {
   type: BlockType
   text: string
-  level?: number
 }
 
 function analyzeDocument(rawText: string): Block[] {
   const lines = rawText.split('\n')
   const blocks: Block[] = []
-  const avgLineLength = calcAvgLength(lines)
+  const avgLen = calcAvgLength(lines)
   let titleFound = false
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
-    const trimmed = line.trim()
+    const trimmed = lines[i].trim()
 
     if (trimmed.length === 0) {
       if (blocks.length > 0 && blocks[blocks.length - 1].type !== 'separator') {
@@ -116,19 +186,19 @@ function analyzeDocument(rawText: string): Block[] {
     const nextEmpty = i === lines.length - 1 || lines[i + 1]?.trim().length === 0
     const nextLine = lines[i + 1]?.trim() || ''
 
-    if (!titleFound && i < 5 && isTitle(trimmed, avgLineLength, prevEmpty, nextEmpty)) {
+    if (!titleFound && i < 5 && isTitle(trimmed, avgLen, prevEmpty, nextEmpty)) {
       blocks.push({ type: 'title', text: trimmed })
       titleFound = true
       continue
     }
 
     if (isListItem(trimmed)) {
-      blocks.push({ type: 'list-item', text: cleanListPrefix(trimmed) })
+      blocks.push({ type: 'list-item', text: trimmed.replace(/^[\-•●○◦▪▸→»\*]\s+/, '') })
       continue
     }
 
     if (isNumberedItem(trimmed)) {
-      blocks.push({ type: 'numbered-item', text: cleanNumberPrefix(trimmed) })
+      blocks.push({ type: 'numbered-item', text: trimmed })
       continue
     }
 
@@ -137,16 +207,13 @@ function analyzeDocument(rawText: string): Block[] {
       continue
     }
 
-    if (isHeading(trimmed, avgLineLength, prevEmpty, nextEmpty, nextLine)) {
-      const level = getHeadingLevel(trimmed, avgLineLength)
-      blocks.push({
-        type: level === 1 ? 'heading' : 'subheading',
-        text: trimmed.replace(/[:\-–—]+$/, '').trim(),
-      })
+    if (isHeading(trimmed, avgLen, prevEmpty, nextEmpty, nextLine)) {
+      const level = (trimmed === trimmed.toUpperCase() && trimmed.length < 40) ? 'heading' : 'subheading'
+      blocks.push({ type: level, text: trimmed.replace(/[:\-–—]+$/, '').trim() })
       continue
     }
 
-    if (isCaption(trimmed, avgLineLength)) {
+    if (isCaption(trimmed)) {
       blocks.push({ type: 'caption', text: trimmed })
       continue
     }
@@ -164,236 +231,114 @@ function calcAvgLength(lines: string[]): number {
 }
 
 function isTitle(line: string, avg: number, prevEmpty: boolean, nextEmpty: boolean): boolean {
-  if (line.length > 100) return false
-  if (line.length < 3) return false
-  if (line.endsWith('.') || line.endsWith(',')) return false
-  if (line.length < avg * 0.6 && (prevEmpty || nextEmpty)) return true
-  return false
+  return line.length >= 3 && line.length < 100 && !line.endsWith('.') && line.length < avg * 0.6 && (prevEmpty || nextEmpty)
 }
 
-function isHeading(
-  line: string,
-  avg: number,
-  prevEmpty: boolean,
-  nextEmpty: boolean,
-  nextLine: string,
-): boolean {
-  if (line.length > 80) return false
-  if (line.length < 2) return false
-
-  if (line === line.toUpperCase() && /\p{L}/u.test(line) && line.length < 60) {
-    return true
-  }
-
-  if (
-    line.length < avg * 0.5 &&
-    !line.endsWith('.') &&
-    !line.endsWith(',') &&
-    !line.endsWith(';') &&
-    prevEmpty &&
-    nextLine.length > 0 &&
-    !nextEmpty
-  ) {
-    return true
-  }
-
-  if (
-    /^\d+[\.\)]\s+\S/.test(line) &&
-    line.length < 60 &&
-    !line.endsWith('.')
-  ) {
-    return false
-  }
-
-  if (/^(Chapter|Section|Part|Bölüm|Kısım|Глава|Раздел|第)\s+/i.test(line)) {
-    return true
-  }
-
+function isHeading(line: string, avg: number, prevEmpty: boolean, _nextEmpty: boolean, nextLine: string): boolean {
+  if (line.length > 80 || line.length < 2) return false
+  if (line === line.toUpperCase() && /\p{L}/u.test(line) && line.length < 60) return true
+  if (line.length < avg * 0.5 && !line.endsWith('.') && !line.endsWith(',') && prevEmpty && nextLine.length > 0) return true
+  if (/^(Chapter|Section|Part|Bölüm|Kısım|Глава|Раздел|第)\s+/i.test(line)) return true
   return false
-}
-
-function getHeadingLevel(line: string, avg: number): number {
-  if (line === line.toUpperCase() && line.length < 40) return 1
-  if (line.length < avg * 0.3) return 1
-  return 2
 }
 
 function isListItem(line: string): boolean {
-  return /^[\-•●○◦▪▸→»]\s+/.test(line) || /^[\*]\s+\S/.test(line)
+  return /^[\-•●○◦▪▸→»\*]\s+/.test(line)
 }
 
 function isNumberedItem(line: string): boolean {
   return /^\d{1,3}[\.\)]\s+\S/.test(line) || /^[a-zA-Z][\.\)]\s+\S/.test(line)
 }
 
-function cleanListPrefix(line: string): string {
-  return line.replace(/^[\-•●○◦▪▸→»\*]\s+/, '')
-}
-
-function cleanNumberPrefix(line: string): string {
-  return line.replace(/^(\d{1,3}|[a-zA-Z])[\.\)]\s+/, '')
-}
-
 function isContactLine(line: string): boolean {
-  const patterns = [
-    /[\w.\-]+@[\w.\-]+\.\w+/,
-    /\+?\d[\d\s\-()]{8,}/,
-    /^(Phone|Tel|Email|Fax|Address|Website|URL|Telefon|Adres|E-posta|Телефон|Адрес)[\s:]/i,
-    /^https?:\/\//,
-    /^www\./i,
-  ]
-  return patterns.some((p) => p.test(line))
+  return [/[\w.\-]+@[\w.\-]+\.\w+/, /\+?\d[\d\s\-()]{8,}/, /^(Phone|Tel|Email|Address|Telefon|Adres)[\s:]/i, /^https?:\/\//, /^www\./i]
+    .some((p) => p.test(line))
 }
 
-function isCaption(line: string, avg: number): boolean {
-  if (line.length > avg * 0.7) return false
-  return /^(Figure|Table|Image|Chart|Diagram|Şekil|Tablo|Resim|Рисунок|Таблица|图|表)\s*\d/i.test(line)
+function isCaption(line: string): boolean {
+  return /^(Figure|Table|Image|Şekil|Tablo|Resim|Рисунок|Таблица|图|表)\s*\d/i.test(line)
 }
 
 function mergeParagraphs(blocks: Block[]): Block[] {
   const merged: Block[] = []
-
-  for (let i = 0; i < blocks.length; i++) {
-    const block = blocks[i]
-
-    if (
-      block.type === 'paragraph' &&
-      merged.length > 0 &&
-      merged[merged.length - 1].type === 'paragraph'
-    ) {
+  for (const block of blocks) {
+    if (block.type === 'paragraph' && merged.length > 0 && merged[merged.length - 1].type === 'paragraph') {
       merged[merged.length - 1].text += ' ' + block.text
+    } else if (block.type === 'separator' && merged.length > 0 && merged[merged.length - 1].type === 'separator') {
       continue
+    } else {
+      merged.push({ ...block })
     }
-
-    if (block.type === 'separator') {
-      if (
-        merged.length > 0 &&
-        merged[merged.length - 1].type !== 'separator' &&
-        i < blocks.length - 1
-      ) {
-        merged.push(block)
-      }
-      continue
-    }
-
-    merged.push({ ...block })
   }
-
   return merged
 }
+
+// --- DOCX OUTPUT ---
 
 function blockToParagraph(block: Block): Paragraph[] {
   switch (block.type) {
     case 'title':
-      return [
-        new Paragraph({
-          alignment: AlignmentType.LEFT,
-          spacing: { after: 120 },
-          children: [
-            new TextRun({ text: block.text, bold: true, size: 36, font: 'Calibri' }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        spacing: { after: 120 },
+        children: [new TextRun({ text: block.text, bold: true, size: 36, font: 'Calibri' })],
+      })]
 
     case 'heading':
-      return [
-        new Paragraph({
-          heading: HeadingLevel.HEADING_1,
-          spacing: { before: 240, after: 80 },
-          children: [
-            new TextRun({
-              text: block.text,
-              bold: true,
-              size: 28,
-              font: 'Calibri',
-              color: '2E74B5',
-            }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 240, after: 80 },
+        children: [new TextRun({ text: block.text, bold: true, size: 28, font: 'Calibri', color: '2E74B5' })],
+      })]
 
     case 'subheading':
-      return [
-        new Paragraph({
-          heading: HeadingLevel.HEADING_2,
-          spacing: { before: 180, after: 60 },
-          children: [
-            new TextRun({
-              text: block.text,
-              bold: true,
-              size: 24,
-              font: 'Calibri',
-              color: '404040',
-            }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        heading: HeadingLevel.HEADING_2,
+        spacing: { before: 180, after: 60 },
+        children: [new TextRun({ text: block.text, bold: true, size: 24, font: 'Calibri', color: '404040' })],
+      })]
 
     case 'list-item':
-      return [
-        new Paragraph({
-          spacing: { after: 60 },
-          indent: { left: 360 },
-          children: [
-            new TextRun({ text: '•  ', size: 22, font: 'Calibri' }),
-            new TextRun({ text: block.text, size: 22, font: 'Calibri' }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        spacing: { after: 60 },
+        indent: { left: 360 },
+        children: [
+          new TextRun({ text: '•  ', size: 22, font: 'Calibri' }),
+          new TextRun({ text: block.text, size: 22, font: 'Calibri' }),
+        ],
+      })]
 
     case 'numbered-item':
-      return [
-        new Paragraph({
-          spacing: { after: 60 },
-          indent: { left: 360 },
-          children: [
-            new TextRun({ text: block.text, size: 22, font: 'Calibri' }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        spacing: { after: 60 },
+        indent: { left: 360 },
+        children: [new TextRun({ text: block.text, size: 22, font: 'Calibri' })],
+      })]
 
     case 'contact':
-      return [
-        new Paragraph({
-          spacing: { after: 40 },
-          children: [
-            new TextRun({ text: block.text, size: 20, font: 'Calibri', color: '666666' }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        spacing: { after: 40 },
+        children: [new TextRun({ text: block.text, size: 20, font: 'Calibri', color: '666666' })],
+      })]
 
     case 'caption':
-      return [
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { before: 60, after: 120 },
-          children: [
-            new TextRun({ text: block.text, size: 20, font: 'Calibri', italics: true, color: '555555' }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 60, after: 120 },
+        children: [new TextRun({ text: block.text, size: 20, font: 'Calibri', italics: true, color: '555555' })],
+      })]
 
     case 'separator':
-      return [
-        new Paragraph({
-          spacing: { before: 40, after: 40 },
-          border: {
-            bottom: { style: BorderStyle.SINGLE, size: 1, color: 'E0E0E0' },
-          },
-          children: [],
-        }),
-      ]
+      return [new Paragraph({
+        spacing: { before: 40, after: 40 },
+        border: { bottom: { style: BorderStyle.SINGLE, size: 1, color: 'E0E0E0' } },
+        children: [],
+      })]
 
-    case 'paragraph':
     default:
-      return [
-        new Paragraph({
-          alignment: AlignmentType.JUSTIFIED,
-          spacing: { after: 120, line: 276 },
-          children: [
-            new TextRun({ text: block.text, size: 22, font: 'Calibri' }),
-          ],
-        }),
-      ]
+      return [new Paragraph({
+        alignment: AlignmentType.JUSTIFIED,
+        spacing: { after: 120, line: 276 },
+        children: [new TextRun({ text: block.text, size: 22, font: 'Calibri' })],
+      })]
   }
 }
