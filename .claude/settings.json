@@ -6,7 +6,10 @@
       "Bash(node -e ' *)",
       "Bash(cp tmp/final-test.docx tmp/final-test.zip)",
       "Bash(powershell -Command \"Remove-Item tmp/final-verify -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive tmp/final-test.zip tmp/final-verify -Force; \\(Get-ChildItem tmp/final-verify -Recurse -File\\).Count\")",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(echo \"tmp/\")",
+      "Bash(git rm *)",
+      "Bash(git commit *)"
     ]
   }
 }

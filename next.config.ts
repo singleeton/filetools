@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  serverExternalPackages: ['mammoth'],
+  serverExternalPackages: ['mammoth', 'pdf-parse', 'pdfjs-dist'],
 
   experimental: {
     optimizeCss: true,
