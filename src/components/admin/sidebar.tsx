@@ -11,6 +11,7 @@ import {
   FileText,
   Globe,
   Search,
+  Users,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAdminLang } from './admin-lang-provider'
@@ -24,6 +25,7 @@ export function AdminSidebar() {
     { href: '/admin/tools', label: t.tools, icon: Wrench },
     { href: '/admin/analytics', label: t.analytics, icon: BarChart3 },
     { href: '/admin/landing', label: t.landing, icon: Globe },
+    { href: '/admin/users', label: 'Users', icon: Users },
     { href: '/admin/seo', label: 'SEO', icon: Search },
     { href: '/admin/ads', label: t.ads, icon: Megaphone },
     { href: '/admin/settings', label: t.settings, icon: Settings },
