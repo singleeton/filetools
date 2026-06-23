@@ -46,9 +46,14 @@ export const ru: Dictionary = {
     'pdf-to-word': {
       name: 'PDF в Word',
       shortDesc: 'Конвертируйте PDF в редактируемый формат DOCX',
-      description:
-        'Конвертируйте PDF-файлы в редактируемый формат Microsoft Word (DOCX). Сохраняет форматирование.',
+      description: 'Конвертируйте PDF-файлы в редактируемый формат Microsoft Word (DOCX). Сохраняет форматирование.',
     },
+    'pdf-to-excel': { name: 'PDF в Excel', shortDesc: 'Конвертируйте PDF в таблицу Excel', description: 'Конвертируйте PDF в Excel (XLSX). Извлекает таблицы и данные.' },
+    'jpg-to-png': { name: 'JPG в PNG', shortDesc: 'Конвертируйте JPEG в PNG', description: 'Конвертируйте JPEG в формат PNG без потерь.' },
+    'png-to-jpg': { name: 'PNG в JPG', shortDesc: 'Конвертируйте PNG в JPG', description: 'Конвертируйте PNG в JPEG. Выберите уровень качества.' },
+    'image-resize': { name: 'Изменить размер', shortDesc: 'Измените размер изображений', description: 'Измените размер изображений. Поддержка JPG, PNG, WebP.' },
+    'pdf-rotate': { name: 'Повернуть PDF', shortDesc: 'Поверните страницы PDF', description: 'Поверните все страницы PDF на 90°, 180° или 270°.' },
+    'remove-bg': { name: 'Удалить фон', shortDesc: 'Удалите фон изображения', description: 'Удалите белый/светлый фон. Вывод в прозрачном PNG.' },
   },
 
   features: {
@@ -222,9 +227,12 @@ export const ru: Dictionary = {
       title: 'Word в PDF — Конвертировать DOCX бесплатно',
       description: 'Конвертируйте Word (DOCX) в PDF бесплатно. Быстро и безопасно.',
     },
-    'pdf-to-word': {
-      title: 'PDF в Word — Конвертировать бесплатно',
-      description: 'Конвертируйте PDF в редактируемый Word (DOCX) бесплатно.',
-    },
+    'pdf-to-word': { title: 'PDF в Word — Конвертировать бесплатно', description: 'Конвертируйте PDF в Word бесплатно.' },
+    'pdf-to-excel': { title: 'PDF в Excel — Бесплатно', description: 'Конвертируйте PDF в Excel бесплатно.' },
+    'jpg-to-png': { title: 'JPG в PNG — Бесплатно', description: 'Конвертируйте JPEG в PNG бесплатно.' },
+    'png-to-jpg': { title: 'PNG в JPG — Бесплатно', description: 'Конвертируйте PNG в JPEG бесплатно.' },
+    'image-resize': { title: 'Изменить размер — Бесплатно', description: 'Измените размер изображений бесплатно.' },
+    'pdf-rotate': { title: 'Повернуть PDF — Бесплатно', description: 'Поверните страницы PDF бесплатно.' },
+    'remove-bg': { title: 'Удалить фон — Бесплатно', description: 'Удалите фон изображения бесплатно.' },
   },
 }

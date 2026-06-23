@@ -46,9 +46,14 @@ export const zh: Dictionary = {
     'pdf-to-word': {
       name: 'PDF 转 Word',
       shortDesc: '将 PDF 文件转换为可编辑的 DOCX 格式',
-      description:
-        '将 PDF 文件转换为可编辑的 Microsoft Word（DOCX）格式。保留格式和布局。',
+      description: '将 PDF 文件转换为可编辑的 Microsoft Word（DOCX）格式。保留格式和布局。',
     },
+    'pdf-to-excel': { name: 'PDF 转 Excel', shortDesc: '将 PDF 转换为 Excel 表格', description: '将 PDF 文件转换为 Excel 表格（XLSX）。提取表格和数据。' },
+    'jpg-to-png': { name: 'JPG 转 PNG', shortDesc: '将 JPEG 图片转换为 PNG 格式', description: '将 JPEG 图片转换为无损 PNG 格式。' },
+    'png-to-jpg': { name: 'PNG 转 JPG', shortDesc: '将 PNG 图片转换为 JPG 格式', description: '将 PNG 图片转换为 JPEG 格式。可选择质量级别。' },
+    'image-resize': { name: '图片调整大小', shortDesc: '将图片调整为任意尺寸', description: '将图片调整为自定义尺寸。支持 JPG、PNG、WebP。' },
+    'pdf-rotate': { name: 'PDF 旋转', shortDesc: '旋转 PDF 页面', description: '将 PDF 中的所有页面旋转 90°、180° 或 270°。' },
+    'remove-bg': { name: '移除背景', shortDesc: '移除图片背景', description: '移除图片中的白色/浅色背景。输出为透明 PNG。' },
   },
 
   features: {
@@ -214,9 +219,12 @@ export const zh: Dictionary = {
       title: 'Word 转 PDF — 免费在线转换 DOCX',
       description: '免费在线将 Word 文档（DOCX）转换为 PDF 格式。快速安全。',
     },
-    'pdf-to-word': {
-      title: 'PDF 转 Word — 免费在线转换',
-      description: '免费在线将 PDF 文件转换为可编辑的 Word 文档（DOCX）。',
-    },
+    'pdf-to-word': { title: 'PDF 转 Word — 免费在线转换', description: '免费在线将 PDF 转换为 Word。' },
+    'pdf-to-excel': { title: 'PDF 转 Excel — 免费在线', description: '免费在线将 PDF 转换为 Excel 表格。' },
+    'jpg-to-png': { title: 'JPG 转 PNG — 免费在线', description: '免费在线将 JPEG 转换为 PNG。' },
+    'png-to-jpg': { title: 'PNG 转 JPG — 免费在线', description: '免费在线将 PNG 转换为 JPEG。' },
+    'image-resize': { title: '调整图片大小 — 免费在线', description: '免费在线调整图片大小。' },
+    'pdf-rotate': { title: 'PDF 旋转 — 免费在线', description: '免费在线旋转 PDF 页面。' },
+    'remove-bg': { title: '移除背景 — 免费在线', description: '免费在线移除图片背景。' },
   },
 }

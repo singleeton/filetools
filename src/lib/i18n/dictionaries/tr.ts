@@ -46,8 +46,37 @@ export const tr: Dictionary = {
     'pdf-to-word': {
       name: "PDF'den Word'e",
       shortDesc: "PDF dosyalarını düzenlenebilir DOCX formatına dönüştürün",
-      description:
-        "PDF dosyalarını düzenlenebilir Microsoft Word (DOCX) formatına dönüştürün. Biçimlendirmeyi korur.",
+      description: "PDF dosyalarını düzenlenebilir Microsoft Word (DOCX) formatına dönüştürün. Biçimlendirmeyi korur.",
+    },
+    'pdf-to-excel': {
+      name: "PDF'den Excel'e",
+      shortDesc: "PDF'yi Excel tablosuna dönüştürün",
+      description: "PDF dosyalarını Excel tablolarına (XLSX) dönüştürün. Tablo ve verileri çıkarır.",
+    },
+    'jpg-to-png': {
+      name: "JPG'den PNG'ye",
+      shortDesc: "JPEG görsellerini PNG formatına dönüştürün",
+      description: "JPEG görsellerini kayıpsız PNG formatına dönüştürün.",
+    },
+    'png-to-jpg': {
+      name: "PNG'den JPG'ye",
+      shortDesc: "PNG görsellerini JPG formatına dönüştürün",
+      description: "PNG görsellerini JPEG formatına dönüştürün. Kalite seviyesi seçebilirsiniz.",
+    },
+    'image-resize': {
+      name: 'Görsel Boyutlandır',
+      shortDesc: 'Görselleri istediğiniz boyuta getirin',
+      description: 'Görselleri özel boyutlara yeniden boyutlandırın. JPG, PNG, WebP destekler.',
+    },
+    'pdf-rotate': {
+      name: 'PDF Döndür',
+      shortDesc: 'PDF sayfalarını döndürün',
+      description: "PDF'deki tüm sayfaları 90°, 180° veya 270° döndürün.",
+    },
+    'remove-bg': {
+      name: 'Arka Plan Kaldır',
+      shortDesc: 'Görsel arka planını kaldırın',
+      description: 'Görsellerden beyaz/açık arka planları kaldırın. Şeffaf PNG olarak çıktı.',
     },
   },
 
@@ -226,10 +255,12 @@ export const tr: Dictionary = {
       description:
         "Word belgelerini (DOCX) ücretsiz olarak PDF formatına dönüştürün. Hızlı ve güvenli.",
     },
-    'pdf-to-word': {
-      title: "PDF'den Word'e - PDF'i Ücretsiz DOCX'e Dönüştürün",
-      description:
-        "PDF dosyalarını ücretsiz olarak düzenlenebilir Word belgelerine (DOCX) dönüştürün.",
-    },
+    'pdf-to-word': { title: "PDF'den Word'e - PDF'i Ücretsiz DOCX'e Dönüştürün", description: "PDF dosyalarını ücretsiz olarak düzenlenebilir Word belgelerine dönüştürün." },
+    'pdf-to-excel': { title: "PDF'den Excel'e - Ücretsiz Dönüştürün", description: "PDF dosyalarını ücretsiz olarak Excel tablolarına dönüştürün." },
+    'jpg-to-png': { title: "JPG'den PNG'ye - Ücretsiz Dönüştürün", description: "JPEG görsellerini ücretsiz olarak PNG formatına dönüştürün." },
+    'png-to-jpg': { title: "PNG'den JPG'ye - Ücretsiz Dönüştürün", description: "PNG görsellerini ücretsiz olarak JPEG formatına dönüştürün." },
+    'image-resize': { title: 'Görsel Boyutlandır - Ücretsiz Online', description: 'Görselleri ücretsiz olarak istediğiniz boyuta getirin.' },
+    'pdf-rotate': { title: 'PDF Döndür - Ücretsiz Online', description: 'PDF sayfalarını ücretsiz olarak 90°, 180° veya 270° döndürün.' },
+    'remove-bg': { title: 'Arka Plan Kaldır - Ücretsiz Online', description: 'Görsellerden arka planı ücretsiz olarak kaldırın.' },
   },
 }

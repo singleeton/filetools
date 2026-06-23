@@ -44,8 +44,37 @@ export const en = {
     'pdf-to-word': {
       name: 'PDF to Word',
       shortDesc: 'Convert PDF files to editable DOCX format',
-      description:
-        'Convert PDF files to editable Microsoft Word (DOCX) format. Preserves formatting and layout.',
+      description: 'Convert PDF files to editable Microsoft Word (DOCX) format. Preserves formatting and layout.',
+    },
+    'pdf-to-excel': {
+      name: 'PDF to Excel',
+      shortDesc: 'Convert PDF to Excel spreadsheet',
+      description: 'Convert PDF files to Excel spreadsheets (XLSX). Extracts tables and data from PDFs.',
+    },
+    'jpg-to-png': {
+      name: 'JPG to PNG',
+      shortDesc: 'Convert JPEG images to PNG format',
+      description: 'Convert JPEG images to lossless PNG format. Preserves full quality.',
+    },
+    'png-to-jpg': {
+      name: 'PNG to JPG',
+      shortDesc: 'Convert PNG images to JPG format',
+      description: 'Convert PNG images to JPEG format. Choose quality level for optimal file size.',
+    },
+    'image-resize': {
+      name: 'Image Resize',
+      shortDesc: 'Resize images to any dimension',
+      description: 'Resize images to custom dimensions. Supports JPG, PNG, WebP.',
+    },
+    'pdf-rotate': {
+      name: 'PDF Rotate',
+      shortDesc: 'Rotate PDF pages',
+      description: 'Rotate all pages in a PDF by 90°, 180°, or 270°.',
+    },
+    'remove-bg': {
+      name: 'Remove Background',
+      shortDesc: 'Remove image background',
+      description: 'Remove white/light backgrounds from images. Output as transparent PNG.',
     },
   },
 
@@ -226,8 +255,31 @@ export const en = {
     },
     'pdf-to-word': {
       title: 'PDF to Word - Convert PDF to DOCX Free Online',
-      description:
-        'Convert PDF to Word online for free. Transform PDF files into editable DOCX documents. Preserves text and layout. No registration required.',
+      description: 'Convert PDF to Word online for free. Transform PDF files into editable DOCX documents. Preserves text and layout. No registration required.',
+    },
+    'pdf-to-excel': {
+      title: 'PDF to Excel - Convert PDF to XLSX Free Online',
+      description: 'Convert PDF to Excel online for free. Extract tables and data from PDF files into editable spreadsheets.',
+    },
+    'jpg-to-png': {
+      title: 'JPG to PNG - Convert JPEG to PNG Free Online',
+      description: 'Convert JPG to PNG online for free. Lossless quality conversion. No installation required.',
+    },
+    'png-to-jpg': {
+      title: 'PNG to JPG - Convert PNG to JPEG Free Online',
+      description: 'Convert PNG to JPG online for free. Choose quality level for optimal file size.',
+    },
+    'image-resize': {
+      title: 'Resize Image Online Free - Image Resizer',
+      description: 'Resize images online for free. Custom dimensions, maintain aspect ratio. Supports JPG, PNG, WebP.',
+    },
+    'pdf-rotate': {
+      title: 'Rotate PDF Online Free - PDF Page Rotator',
+      description: 'Rotate PDF pages online for free. Rotate by 90°, 180°, or 270°. No installation required.',
+    },
+    'remove-bg': {
+      title: 'Remove Background Free Online - Background Remover',
+      description: 'Remove image background online for free. Get transparent PNG output. No sign-up required.',
     },
   },
 }

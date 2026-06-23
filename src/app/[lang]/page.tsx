@@ -2,7 +2,7 @@ import Link from 'next/link'
 import {
   FileText, Scissors, FileDown, FileOutput, Merge,
   Upload, Cog, Download, Zap, Shield, Monitor, Globe,
-  ServerOff, Trash2, Lock,
+  ServerOff, Trash2, Lock, RotateCw, Image, Maximize, Eraser, Sheet,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { HomeStructuredData, FaqStructuredData } from '@/components/shared/structured-data'
@@ -16,14 +16,25 @@ const toolIcons: Record<string, React.ReactNode> = {
   FileDown: <FileDown className="h-8 w-8" />,
   FileText: <FileText className="h-8 w-8" />,
   FileOutput: <FileOutput className="h-8 w-8" />,
+  RotateCw: <RotateCw className="h-8 w-8" />,
+  Sheet: <Sheet className="h-8 w-8" />,
+  Image: <Image className="h-8 w-8" />,
+  Maximize: <Maximize className="h-8 w-8" />,
+  Eraser: <Eraser className="h-8 w-8" />,
 }
 
 const toolIconMap: Record<string, string> = {
   'pdf-merge': 'Merge',
   'pdf-split': 'Scissors',
   'pdf-compress': 'FileDown',
+  'pdf-rotate': 'RotateCw',
   'word-to-pdf': 'FileText',
   'pdf-to-word': 'FileOutput',
+  'pdf-to-excel': 'Sheet',
+  'jpg-to-png': 'Image',
+  'png-to-jpg': 'Image',
+  'image-resize': 'Maximize',
+  'remove-bg': 'Eraser',
 }
 
 export async function generateMetadata({
