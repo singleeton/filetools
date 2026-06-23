@@ -83,7 +83,7 @@ export function ToolsList({ tools: initialTools }: { tools: ToolData[] }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t.toolsManagement}</h1>
-        <span className="text-sm text-muted-foreground">{tools.length} tools</span>
+        <span className="text-sm text-muted-foreground">{tools.length} {t.tools.toLowerCase()}</span>
       </div>
 
       {message && (
@@ -99,40 +99,40 @@ export function ToolsList({ tools: initialTools }: { tools: ToolData[] }) {
               <div className="p-5 space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>Name</Label>
+                    <Label>{t.name}</Label>
                     <Input value={editData.name || ''} onChange={(e) => setEditData((d) => ({ ...d, name: e.target.value }))} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Slug</Label>
+                    <Label>{t.slug}</Label>
                     <Input value={editData.slug || ''} disabled className="opacity-60" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Category</Label>
+                    <Label>{t.category}</Label>
                     <Input value={editData.category || ''} onChange={(e) => setEditData((d) => ({ ...d, category: e.target.value }))} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Icon</Label>
+                    <Label>{t.icon}</Label>
                     <Input value={editData.icon || ''} onChange={(e) => setEditData((d) => ({ ...d, icon: e.target.value }))} />
                   </div>
                   <div className="sm:col-span-2 space-y-2">
-                    <Label>Description</Label>
+                    <Label>{t.description}</Label>
                     <Input value={editData.description || ''} onChange={(e) => setEditData((d) => ({ ...d, description: e.target.value }))} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Sort Order</Label>
+                    <Label>{t.sortOrder}</Label>
                     <Input type="number" value={editData.sortOrder || 0} onChange={(e) => setEditData((d) => ({ ...d, sortOrder: parseInt(e.target.value) || 0 }))} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Max File Size (bytes)</Label>
+                    <Label>{t.maxFileSize}</Label>
                     <Input type="number" value={editData.maxFileSize || 0} onChange={(e) => setEditData((d) => ({ ...d, maxFileSize: parseInt(e.target.value) || 0 }))} />
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" onClick={saveEdit} disabled={saving}>
                     {saving ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Save className="mr-1 h-3 w-3" />}
-                    Save
+                    {t.save}
                   </Button>
-                  <Button size="sm" variant="outline" onClick={cancelEdit}>Cancel</Button>
+                  <Button size="sm" variant="outline" onClick={cancelEdit}>{t.cancel}</Button>
                 </div>
               </div>
             ) : (
@@ -152,7 +152,7 @@ export function ToolsList({ tools: initialTools }: { tools: ToolData[] }) {
                   </div>
                 </div>
                 <Button size="sm" variant="ghost" onClick={() => startEdit(tool)}>
-                  <Pencil className="mr-1 h-3 w-3" /> Edit
+                  <Pencil className="mr-1 h-3 w-3" /> {t.edit}
                 </Button>
               </div>
             )}

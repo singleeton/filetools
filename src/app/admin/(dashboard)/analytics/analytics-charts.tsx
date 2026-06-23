@@ -4,6 +4,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Cell,
 } from 'recharts'
+import { useAdminLang } from '@/components/admin/admin-lang-provider'
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
 
@@ -14,10 +15,12 @@ export function AnalyticsCharts({
   dailyData: { date: string; views: number }[]
   perTool: { name: string; count: number }[]
 }) {
+  const { t } = useAdminLang()
+
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <div className="rounded-xl border bg-card p-6">
-        <h3 className="mb-4 font-semibold">Last 30 Days Traffic</h3>
+        <h3 className="mb-4 font-semibold">{t.last30Days}</h3>
         {dailyData.some((d) => d.views > 0) ? (
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={dailyData}>
@@ -29,12 +32,12 @@ export function AnalyticsCharts({
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground">No data yet</div>
+          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground">{t.noData}</div>
         )}
       </div>
 
       <div className="rounded-xl border bg-card p-6">
-        <h3 className="mb-4 font-semibold">Conversions by Tool</h3>
+        <h3 className="mb-4 font-semibold">{t.conversionsByTool}</h3>
         {perTool.length > 0 ? (
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={perTool} layout="vertical">
@@ -50,7 +53,7 @@ export function AnalyticsCharts({
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground">No conversions yet</div>
+          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground">{t.noConversions}</div>
         )}
       </div>
     </div>
