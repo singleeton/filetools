@@ -12,24 +12,26 @@ import {
   Globe,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-const menuItems = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/tools', label: 'Tools', icon: Wrench },
-  { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
-  { href: '/admin/landing', label: 'Landing Page', icon: Globe },
-  { href: '/admin/ads', label: 'Ads', icon: Megaphone },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
-]
+import { useAdminLang } from './admin-lang-provider'
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const { t } = useAdminLang()
+
+  const menuItems = [
+    { href: '/admin', label: t.dashboard, icon: LayoutDashboard },
+    { href: '/admin/tools', label: t.tools, icon: Wrench },
+    { href: '/admin/analytics', label: t.analytics, icon: BarChart3 },
+    { href: '/admin/landing', label: t.landing, icon: Globe },
+    { href: '/admin/ads', label: t.ads, icon: Megaphone },
+    { href: '/admin/settings', label: t.settings, icon: Settings },
+  ]
 
   return (
     <aside className="hidden w-64 flex-col border-r bg-card md:flex">
       <div className="flex h-16 items-center gap-2 border-b px-6">
         <FileText className="h-6 w-6 text-primary" />
-        <span className="text-lg font-bold">Admin</span>
+        <span className="text-lg font-bold">{t.admin}</span>
       </div>
 
       <nav className="flex-1 space-y-1 p-4">

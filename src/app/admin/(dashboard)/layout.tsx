@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getAdminSession } from '@/lib/admin-auth'
 import { AdminSidebar } from '@/components/admin/sidebar'
 import { AdminHeader } from '@/components/admin/header'
+import { AdminLangProvider } from '@/components/admin/admin-lang-provider'
 
 export default async function AdminDashboardLayout({
   children,
@@ -15,12 +16,14 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-background">
-      <AdminSidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AdminHeader session={session} />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+    <AdminLangProvider>
+      <div className="flex h-screen bg-background">
+        <AdminSidebar />
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <AdminHeader session={session} />
+          <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        </div>
       </div>
-    </div>
+    </AdminLangProvider>
   )
 }

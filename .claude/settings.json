@@ -11,7 +11,12 @@
       "Bash(git rm *)",
       "Bash(git commit *)",
       "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\" http://localhost:3000/admin/login)",
-      "WebFetch(domain:filetools-ochre.vercel.app)"
+      "WebFetch(domain:filetools-ochre.vercel.app)",
+      "Bash(npx vercel *)",
+      "Bash(vercel login *)",
+      "Bash(vercel link *)",
+      "Bash(vercel env *)",
+      "Bash(vercel --prod)"
     ]
   }
 }
