@@ -69,6 +69,23 @@ export async function executeTool(input: ToolInput): Promise<ToolOutput> {
     logger.error(slug, 'Handler threw an exception', err)
     const message =
       err instanceof Error ? err.message : 'An unexpected error occurred'
-    return { success: false, error: message, code: 'PROCESSING_ERROR' }
+
+    const isInputError =
+      message.includes('Failed to parse PDF') ||
+      message.includes('No PDF header') ||
+      message.includes('No valid pages') ||
+      message.includes('Corrupted zip') ||
+      message.includes('No extractable text') ||
+      message.includes('Could not read') ||
+      message.includes('Could not extract') ||
+      message.includes('End of data reached')
+
+    return {
+      success: false,
+      error: isInputError
+        ? 'The uploaded file appears to be corrupted or invalid. Please try a different file.'
+        : message,
+      code: isInputError ? 'INVALID_INPUT' : 'PROCESSING_ERROR',
+    }
   }
 }

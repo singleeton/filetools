@@ -25,8 +25,11 @@ export const pdfToWordHandler: ToolHandler = {
       if (fullText.length > 0) {
         console.log(`[pdf-to-word] Text extraction: ${fullText.length} chars`)
       }
-    } catch {
-      // text extraction failed, will try OCR
+    } catch (extractErr) {
+      const msg = extractErr instanceof Error ? extractErr.message : ''
+      if (msg.includes('Failed to parse PDF') || msg.includes('No PDF header')) {
+        throw new Error('The uploaded file appears to be corrupted or is not a valid PDF.')
+      }
     }
 
     // 2) Metin bulunamadıysa — OCR ile görüntüden oku

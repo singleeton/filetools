@@ -19,7 +19,8 @@
       "Bash(vercel --prod)",
       "Bash(mkdir -p \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/api/admin/tools/[id]\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/api/track\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/admin/\\(dashboard\\)/seo\")",
       "Bash(mkdir -p \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(tools\\)/pdf-to-excel\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(tools\\)/jpg-to-png\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(tools\\)/png-to-jpg\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(tools\\)/image-resize\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(tools\\)/pdf-rotate\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(tools\\)/remove-bg\")",
-      "Bash(mkdir -p \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/api/admin/users\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/api/admin/users/[id]\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/admin/\\(dashboard\\)/users\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(auth\\)/pricing\")"
+      "Bash(mkdir -p \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/api/admin/users\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/api/admin/users/[id]\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/admin/\\(dashboard\\)/users\" \"c:/Users/yusuf/Desktop/sith-code/pdftools/src/app/[lang]/\\(auth\\)/pricing\")",
+      "Bash(mkdir -p tmp)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",
