@@ -3,6 +3,7 @@ import { executeTool } from '@/core/tool-engine'
 import { loadAllHandlers } from '@/core/tool-engine/loader'
 import { getToolConfig } from '@/lib/tool-configs'
 import { logger } from '@/core/tool-engine/logger'
+import { checkUsageLimit, incrementUsage } from '@/lib/usage-limiter'
 
 export const runtime = 'nodejs'
 export const maxDuration = 30
@@ -28,6 +29,17 @@ export async function POST(
     return NextResponse.json(
       { success: false, error: 'Tool not found' },
       { status: 404 },
+    )
+  }
+
+  const usage = await checkUsageLimit()
+  if (!usage.allowed) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: `Daily limit reached (${usage.limit}/${usage.plan}). ${usage.plan === 'guest' ? 'Sign up for more.' : 'Upgrade to Premium for unlimited.'}`,
+      },
+      { status: 429 },
     )
   }
 
@@ -65,6 +77,8 @@ export async function POST(
       { status: STATUS_MAP[result.code] },
     )
   }
+
+  await incrementUsage()
 
   return new Response(Buffer.from(result.file), {
     status: 200,
