@@ -158,6 +158,7 @@ type BlockType =
   | 'list-item'
   | 'numbered-item'
   | 'contact'
+  | 'date-line'
   | 'caption'
   | 'separator'
 
@@ -204,6 +205,11 @@ function analyzeDocument(rawText: string): Block[] {
 
     if (isContactLine(trimmed)) {
       blocks.push({ type: 'contact', text: trimmed })
+      continue
+    }
+
+    if (isDateLine(trimmed)) {
+      blocks.push({ type: 'date-line', text: trimmed })
       continue
     }
 
@@ -255,6 +261,14 @@ function isContactLine(line: string): boolean {
     .some((p) => p.test(line))
 }
 
+function isDateLine(line: string): boolean {
+  return /\b(20\d{2}|19\d{2})\b/.test(line) &&
+    (/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|Ocak|Şubat|Mart|Nisan|Mayıs|Haziran|Temmuz|Ağustos|Eylül|Ekim|Kasım|Aralık)\b/i.test(line) ||
+    /\d{1,2}[\/.]\d{1,2}[\/.]\d{2,4}/.test(line) ||
+    /\b(20\d{2})\s*[-–]\s*(20\d{2}|Present|Günümüz|Devam)\b/i.test(line)) &&
+    line.length < 80
+}
+
 function isCaption(line: string): boolean {
   return /^(Figure|Table|Image|Şekil|Tablo|Resim|Рисунок|Таблица|图|表)\s*\d/i.test(line)
 }
@@ -262,10 +276,21 @@ function isCaption(line: string): boolean {
 function mergeParagraphs(blocks: Block[]): Block[] {
   const merged: Block[] = []
   for (const block of blocks) {
-    if (block.type === 'paragraph' && merged.length > 0 && merged[merged.length - 1].type === 'paragraph') {
-      merged[merged.length - 1].text += ' ' + block.text
-    } else if (block.type === 'separator' && merged.length > 0 && merged[merged.length - 1].type === 'separator') {
+    if (block.type === 'separator' && merged.length > 0 && merged[merged.length - 1].type === 'separator') {
       continue
+    }
+
+    const prev = merged[merged.length - 1]
+    if (
+      block.type === 'paragraph' &&
+      prev?.type === 'paragraph' &&
+      prev.text.length > 40 &&
+      block.text.length > 40 &&
+      !prev.text.endsWith(':') &&
+      !isDateLine(block.text) &&
+      !isContactLine(block.text)
+    ) {
+      prev.text += ' ' + block.text
     } else {
       merged.push({ ...block })
     }
@@ -312,6 +337,12 @@ function blockToParagraph(block: Block): Paragraph[] {
         spacing: { after: 60 },
         indent: { left: 360 },
         children: [new TextRun({ text: block.text, size: 22, font: 'Calibri' })],
+      })]
+
+    case 'date-line':
+      return [new Paragraph({
+        spacing: { after: 60 },
+        children: [new TextRun({ text: block.text, size: 20, font: 'Calibri', italics: true, color: '555555' })],
       })]
 
     case 'contact':

@@ -88,17 +88,25 @@ async function compressImages(
       } else {
         if (bitsPerComponent !== 8) continue
 
+        const rawChannels = channels === 4 ? 3 : channels
         const expectedSize = width * height * channels
         if (imageBytes.length < expectedSize) continue
 
-        compressed = await sharp(Buffer.from(imageBytes.slice(0, expectedSize)), {
+        let input = sharp(Buffer.from(imageBytes.slice(0, expectedSize)), {
           raw: { width, height, channels: channels as 1 | 3 | 4 },
         })
+
+        if (channels === 4) {
+          input = input.removeAlpha()
+        }
+
+        compressed = await input
           .jpeg({ quality, mozjpeg: true })
           .toBuffer()
       }
 
-      if (compressed.length >= imageBytes.length) continue
+      const savings = 1 - compressed.length / imageBytes.length
+      if (savings < 0.05) continue
 
       const newStream = context.stream(compressed, {
         ['/Type']: '/XObject',
