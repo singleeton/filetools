@@ -6,7 +6,10 @@ import { PageTracker } from '@/components/layout/page-tracker'
 import { DictionaryProvider } from '@/lib/i18n/dictionary-context'
 import { getDictionary } from '@/lib/i18n/get-dictionary'
 import { isValidLocale, locales } from '@/lib/i18n/config'
+import { getLandingOverrides, applyOverrides } from '@/lib/landing-content'
 import type { Locale } from '@/lib/i18n/config'
+
+export const dynamic = 'force-dynamic'
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }))
@@ -25,7 +28,16 @@ export default async function LangLayout({
     notFound()
   }
 
-  const dict = await getDictionary(lang as Locale)
+  let dict = await getDictionary(lang as Locale)
+
+  try {
+    const overrides = await getLandingOverrides(lang)
+    if (Object.keys(overrides).length > 0) {
+      dict = applyOverrides(dict, overrides)
+    }
+  } catch {
+    // use default dictionary
+  }
 
   return (
     <DictionaryProvider dictionary={dict} lang={lang as Locale}>
