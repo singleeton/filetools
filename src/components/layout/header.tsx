@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
-import { Menu, X, FileText } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Menu, X, FileText, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from './language-switcher'
 import { ThemeToggle } from './theme-toggle'
@@ -14,6 +14,11 @@ const toolIds = ['pdf-merge', 'pdf-split', 'pdf-compress'] as const
 export function Header() {
   const { dict, lang } = useDictionary()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [user, setUser] = useState<{ name: string } | null>(null)
+
+  useEffect(() => {
+    fetch('/api/auth/me').then((r) => r.json()).then((d) => setUser(d.user)).catch(() => {})
+  }, [])
 
   const allToolIds = Object.keys(dict.tool) as (keyof typeof dict.tool)[]
 
@@ -43,6 +48,16 @@ export function Header() {
           ))}
           <ThemeToggle />
           <LanguageSwitcher />
+          {user ? (
+            <Link href={`/${lang}/profile`} className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-foreground">
+              <User className="h-4 w-4" />
+              <span>{user.name}</span>
+            </Link>
+          ) : (
+            <Link href={`/${lang}/login`}>
+              <Button size="sm" variant="outline">Sign In</Button>
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
