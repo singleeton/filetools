@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Check, X, Pencil, Save, Loader2 } from 'lucide-react'
+import { useAdminLang } from '@/components/admin/admin-lang-provider'
 
 interface ToolData {
   id: string
@@ -26,6 +27,7 @@ export function ToolsList({ tools: initialTools }: { tools: ToolData[] }) {
   const [editData, setEditData] = useState<Partial<ToolData>>({})
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const { t } = useAdminLang()
 
   const startEdit = (tool: ToolData) => {
     setEditingId(tool.id)
@@ -54,9 +56,9 @@ export function ToolsList({ tools: initialTools }: { tools: ToolData[] }) {
         const updated = await res.json()
         setTools((prev) => prev.map((t) => (t.id === editingId ? updated.tool : t)))
         setEditingId(null)
-        setMessage('Saved')
+        setMessage(t.saved)
       } else {
-        setMessage('Save failed')
+        setMessage(t.saveFailed)
       }
     } catch {
       setMessage('Network error')
@@ -80,12 +82,12 @@ export function ToolsList({ tools: initialTools }: { tools: ToolData[] }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Tools Management</h1>
+        <h1 className="text-2xl font-bold">{t.toolsManagement}</h1>
         <span className="text-sm text-muted-foreground">{tools.length} tools</span>
       </div>
 
       {message && (
-        <div className={`rounded-md p-3 text-sm ${message === 'Saved' ? 'bg-green-500/10 text-green-600' : 'bg-destructive/10 text-destructive'}`}>
+        <div className={`rounded-md p-3 text-sm ${message === t.saved ? 'bg-green-500/10 text-green-600' : 'bg-destructive/10 text-destructive'}`}>
           {message}
         </div>
       )}

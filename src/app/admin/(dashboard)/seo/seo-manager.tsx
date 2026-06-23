@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Save, Loader2, Plus } from 'lucide-react'
+import { Save, Loader2 } from 'lucide-react'
+import { useAdminLang } from '@/components/admin/admin-lang-provider'
 
 const LOCALES = ['en', 'tr', 'ru', 'zh'] as const
 const LOCALE_NAMES: Record<string, string> = { en: 'English', tr: 'Türkçe', ru: 'Русский', zh: '中文' }
@@ -32,6 +33,7 @@ export function SeoManager({ initialData }: { initialData: SeoEntry[] }) {
   const [data, setData] = useState<SeoEntry[]>(initialData)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const { t } = useAdminLang()
 
   const currentKey = `seo-${activeTool}`
   const current = data.find((d) => d.section === currentKey && d.locale === activeLocale)
@@ -68,7 +70,7 @@ export function SeoManager({ initialData }: { initialData: SeoEntry[] }) {
           content: JSON.stringify(parsed),
         }),
       })
-      setMessage(res.ok ? 'Saved successfully' : 'Save failed')
+      setMessage(res.ok ? t.saved : t.saveFailed)
     } catch {
       setMessage('Network error')
     } finally {
