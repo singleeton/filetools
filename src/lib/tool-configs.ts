@@ -29,8 +29,8 @@ export const toolConfigs: Record<string, ToolConfig> = {
     id: 'pdf-compress',
     name: 'PDF Compress',
     description:
-      'Reduce PDF file size without losing quality. Choose from low, medium, or high compression levels.',
-    shortDescription: 'Reduce PDF file size without losing quality',
+      'Reduce PDF file size by compressing embedded images. Choose from low, medium, or high compression levels. Works best with image-heavy PDFs.',
+    shortDescription: 'Reduce PDF file size by compressing images',
     acceptedTypes: ['.pdf', 'application/pdf'],
     maxFileSize: 100 * MB,
     maxFiles: 1,
@@ -44,9 +44,7 @@ export const toolConfigs: Record<string, ToolConfig> = {
     shortDescription: 'Convert DOCX files to PDF format',
     acceptedTypes: [
       '.docx',
-      '.doc',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/msword',
     ],
     maxFileSize: 50 * MB,
     maxFiles: 1,
@@ -116,8 +114,8 @@ export const toolConfigs: Record<string, ToolConfig> = {
   'remove-bg': {
     id: 'remove-bg',
     name: 'Remove Background',
-    description: 'Remove white/light backgrounds from images. Output as transparent PNG.',
-    shortDescription: 'Remove image background',
+    description: 'Paint over areas to remove from your image. Interactive editor with brush tool, undo, and live preview. Output as transparent PNG.',
+    shortDescription: 'Remove background with interactive editor',
     acceptedTypes: ['.jpg', '.jpeg', '.png', '.webp', 'image/jpeg', 'image/png', 'image/webp'],
     maxFileSize: 20 * MB,
     maxFiles: 1,

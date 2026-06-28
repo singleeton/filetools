@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useDictionary } from '@/lib/i18n/dictionary-context'
 
-export type SplitMode = 'range' | 'extract' | 'every'
+export type SplitMode = 'range' | 'extract'
 
 interface SplitOptionsProps {
   mode: SplitMode
@@ -61,13 +61,6 @@ export function SplitOptions(props: SplitOptionsProps) {
           </div>
         </div>
 
-        <div className="flex items-start gap-3">
-          <RadioGroupItem value="every" id="every" className="mt-0.5" />
-          <div className="flex-1 space-y-2">
-            <Label htmlFor="every" className="font-medium">{t.allPages}</Label>
-            <p className="text-xs text-muted-foreground">{t.allPagesDesc}</p>
-          </div>
-        </div>
       </RadioGroup>
     </div>
   )

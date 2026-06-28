@@ -33,9 +33,9 @@ export const zh: Dictionary = {
     },
     'pdf-compress': {
       name: 'PDF 压缩',
-      shortDesc: '在不损失质量的情况下减小 PDF 文件大小',
+      shortDesc: '通过压缩图像减小 PDF 文件大小',
       description:
-        '在不损失质量的情况下减小 PDF 文件大小。选择低、中或高压缩级别。',
+        '通过压缩嵌入图像减小 PDF 文件大小。选择低、中或高压缩级别。对包含大量图像的 PDF 效果最佳。',
     },
     'word-to-pdf': {
       name: 'Word 转 PDF',
@@ -53,7 +53,7 @@ export const zh: Dictionary = {
     'png-to-jpg': { name: 'PNG 转 JPG', shortDesc: '将 PNG 图片转换为 JPG 格式', description: '将 PNG 图片转换为 JPEG 格式。可选择质量级别。' },
     'image-resize': { name: '图片调整大小', shortDesc: '将图片调整为任意尺寸', description: '将图片调整为自定义尺寸。支持 JPG、PNG、WebP。' },
     'pdf-rotate': { name: 'PDF 旋转', shortDesc: '旋转 PDF 页面', description: '将 PDF 中的所有页面旋转 90°、180° 或 270°。' },
-    'remove-bg': { name: '移除背景', shortDesc: '移除图片背景', description: '移除图片中的白色/浅色背景。输出为透明 PNG。' },
+    'remove-bg': { name: '移除背景', shortDesc: '使用交互式编辑器移除背景', description: '涂抹要删除的区域。交互式编辑器支持画笔、撤销和实时预览。输出为透明 PNG。' },
   },
 
   features: {
@@ -186,6 +186,20 @@ export const zh: Dictionary = {
     highDesc: '最小文件大小，较低质量',
     button: '压缩 PDF',
     original: '原始大小',
+  },
+
+  removeBg: {
+    uploadPrompt: '上传图片开始编辑',
+    brushSize: '画笔大小',
+    eraser: '橡皮擦',
+    brush: '画笔',
+    undo: '撤销',
+    reset: '重置',
+    download: '下载',
+    original: '原图',
+    preview: '预览',
+    paintToRemove: '涂抹要删除的区域',
+    zoom: '缩放',
   },
 
   footer: {

@@ -33,9 +33,9 @@ export const tr: Dictionary = {
     },
     'pdf-compress': {
       name: 'PDF Sıkıştır',
-      shortDesc: 'Kalite kaybı olmadan PDF boyutunu küçültün',
+      shortDesc: 'Görselleri sıkıştırarak PDF boyutunu küçültün',
       description:
-        'Kalite kaybı olmadan PDF boyutunu küçültün. Düşük, orta veya yüksek sıkıştırma seviyeleri arasından seçin.',
+        'PDF içindeki görselleri sıkıştırarak dosya boyutunu küçültün. Düşük, orta veya yüksek sıkıştırma seviyeleri. Görsel ağırlıklı PDF dosyalarında en iyi sonucu verir.',
     },
     'word-to-pdf': {
       name: "Word'den PDF'e",
@@ -75,8 +75,8 @@ export const tr: Dictionary = {
     },
     'remove-bg': {
       name: 'Arka Plan Kaldır',
-      shortDesc: 'Görsel arka planını kaldırın',
-      description: 'Görsellerden beyaz/açık arka planları kaldırın. Şeffaf PNG olarak çıktı.',
+      shortDesc: 'İnteraktif editör ile arka planı kaldırın',
+      description: 'Kaldırmak istediğiniz alanları fırça ile boyayın. Geri alma, önizleme ve yakınlaştırma destekli editör. Şeffaf PNG olarak çıktı.',
     },
   },
 
@@ -217,6 +217,20 @@ export const tr: Dictionary = {
     highDesc: 'En küçük dosya boyutu, düşük kalite',
     button: "PDF'yi Sıkıştır",
     original: 'Orijinal',
+  },
+
+  removeBg: {
+    uploadPrompt: 'Düzenlemeye başlamak için bir görsel yükleyin',
+    brushSize: 'Fırça Boyutu',
+    eraser: 'Silgi',
+    brush: 'Fırça',
+    undo: 'Geri Al',
+    reset: 'Sıfırla',
+    download: 'İndir',
+    original: 'Orijinal',
+    preview: 'Önizleme',
+    paintToRemove: 'Şeffaf yapmak istediğiniz alanları boyayın',
+    zoom: 'Yakınlaştır',
   },
 
   footer: {

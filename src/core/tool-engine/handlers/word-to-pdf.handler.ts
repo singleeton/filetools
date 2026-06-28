@@ -5,6 +5,7 @@ import type { ToolHandler, ToolResult } from '../types'
 interface DocElement {
   tag?: string
   texts: { text: string; bold?: boolean; italic?: boolean }[]
+  imageData?: { bytes: Uint8Array; mimeType: 'image/png' | 'image/jpeg' }
 }
 
 export const wordToPdfHandler: ToolHandler = {
@@ -17,7 +18,7 @@ export const wordToPdfHandler: ToolHandler = {
     return {
       success: true,
       file: pdfBytes,
-      fileName: files[0].name.replace(/\.(docx?|DOCX?)$/, '.pdf'),
+      fileName: files[0].name.replace(/\.(docx|DOCX)$/, '.pdf'),
       mimeType: 'application/pdf',
     }
   },
@@ -25,13 +26,13 @@ export const wordToPdfHandler: ToolHandler = {
 
 function parseHtml(html: string): DocElement[] {
   const elements: DocElement[] = []
-  const tagRegex = /<(\/?)(\w+)[^>]*>|([^<]+)/g
+  const tagRegex = /<(\/?)(\w+)([^>]*)>|([^<]+)/g
   let match: RegExpExecArray | null
   const stack: string[] = []
   let current: DocElement | null = null
 
   while ((match = tagRegex.exec(html)) !== null) {
-    const [, isClosing, tagName, text] = match
+    const [, isClosing, tagName, attrs, text] = match
 
     if (text) {
       const decoded = text
@@ -54,6 +55,19 @@ function parseHtml(html: string): DocElement[] {
       }
     } else if (tagName) {
       const tag = tagName.toLowerCase()
+
+      if (tag === 'img' && attrs) {
+        const imgElement = parseImgTag(attrs)
+        if (imgElement) {
+          if (current) {
+            elements.push(current)
+            current = null
+          }
+          elements.push(imgElement)
+        }
+        continue
+      }
+
       stack.push(tag)
       if (isBlockTag(tag)) {
         current = { tag, texts: [] }
@@ -63,6 +77,23 @@ function parseHtml(html: string): DocElement[] {
 
   if (current && current.texts.length > 0) elements.push(current)
   return elements
+}
+
+function parseImgTag(attrs: string): DocElement | null {
+  const srcMatch = attrs.match(/src\s*=\s*"([^"]*)"/)
+  if (!srcMatch) return null
+
+  const src = srcMatch[1]
+  const dataMatch = src.match(/^data:(image\/(png|jpeg|jpg));base64,(.+)$/)
+  if (!dataMatch) return null
+
+  const mimeType = dataMatch[1] === 'image/jpg' ? 'image/jpeg' : dataMatch[1] as 'image/png' | 'image/jpeg'
+  try {
+    const bytes = Uint8Array.from(Buffer.from(dataMatch[3], 'base64'))
+    return { tag: 'img', texts: [], imageData: { bytes, mimeType } }
+  } catch {
+    return null
+  }
 }
 
 function isBlockTag(tag: string): boolean {
@@ -125,6 +156,48 @@ async function generatePdf(elements: DocElement[]): Promise<Uint8Array> {
   }
 
   for (const el of elements) {
+    if (el.imageData) {
+      try {
+        const embedded = el.imageData.mimeType === 'image/png'
+          ? await doc.embedPng(el.imageData.bytes)
+          : await doc.embedJpg(el.imageData.bytes)
+
+        const imgDims = embedded.scale(1)
+        let drawW = imgDims.width
+        let drawH = imgDims.height
+
+        if (drawW > CONTENT_W) {
+          const ratio = CONTENT_W / drawW
+          drawW = CONTENT_W
+          drawH = imgDims.height * ratio
+        }
+
+        const maxImgH = PAGE_H - MARGIN * 2 - 20
+        if (drawH > maxImgH) {
+          const ratio = maxImgH / drawH
+          drawH = maxImgH
+          drawW = drawW * ratio
+        }
+
+        if (y - drawH < MARGIN) {
+          page = doc.addPage([PAGE_W, PAGE_H])
+          y = PAGE_H - MARGIN
+        }
+
+        page.drawImage(embedded, {
+          x: MARGIN,
+          y: y - drawH,
+          width: drawW,
+          height: drawH,
+        })
+
+        y -= drawH + 8
+      } catch {
+        // skip images that can't be embedded
+      }
+      continue
+    }
+
     if (el.texts.length === 0) {
       y -= 8
       continue

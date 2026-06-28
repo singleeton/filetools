@@ -7,6 +7,10 @@ export const imageResizeHandler: ToolHandler = {
     const height = (options?.height as number) || undefined
     const fit = (options?.fit as string) || 'inside'
 
+    if (!width && !height) {
+      throw new Error('Could not read image: width or height is required')
+    }
+
     const buffer = Buffer.from(await files[0].arrayBuffer())
     const meta = await sharp(buffer).metadata()
 

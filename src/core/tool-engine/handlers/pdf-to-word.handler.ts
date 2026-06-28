@@ -1,6 +1,8 @@
 import { extractText } from 'unpdf'
 import { PDFDocument, PDFName, PDFRawStream } from 'pdf-lib'
 import Tesseract from 'tesseract.js'
+import sharp from 'sharp'
+import pako from 'pako'
 import {
   Document,
   Packer,
@@ -92,7 +94,7 @@ export const pdfToWordHandler: ToolHandler = {
 
 async function extractWithOCR(pdfBytes: Uint8Array): Promise<string> {
   const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true })
-  const images = extractImagesFromPdf(pdfDoc)
+  const images = await extractImagesFromPdf(pdfDoc)
 
   if (images.length === 0) {
     throw new Error('No images found in PDF for OCR')
@@ -116,7 +118,7 @@ async function extractWithOCR(pdfBytes: Uint8Array): Promise<string> {
   return texts.join('\n\n')
 }
 
-function extractImagesFromPdf(pdfDoc: PDFDocument): Uint8Array[] {
+async function extractImagesFromPdf(pdfDoc: PDFDocument): Promise<Uint8Array[]> {
   const images: Uint8Array[] = []
   const context = pdfDoc.context
 
@@ -135,9 +137,28 @@ function extractImagesFromPdf(pdfDoc: PDFDocument): Uint8Array[] {
 
     const filter = dict.get(PDFName.of('Filter'))?.toString() || ''
 
-    // JPEG images — can be used directly
     if (filter.includes('DCTDecode')) {
       images.push(obj.getContents())
+    } else if (filter.includes('FlateDecode')) {
+      try {
+        const raw = pako.inflate(obj.getContents())
+        const bitsPerComponent = getNum(dict, 'BitsPerComponent') || 8
+        if (bitsPerComponent !== 8) continue
+
+        const colorSpace = dict.get(PDFName.of('ColorSpace'))?.toString() || '/DeviceRGB'
+        const channels = colorSpace.includes('Gray') ? 1 : colorSpace.includes('CMYK') ? 4 : 3
+        const expectedSize = width * height * channels
+
+        if (raw.length < expectedSize) continue
+
+        const jpegBuf = await sharp(Buffer.from(raw.slice(0, expectedSize)), {
+          raw: { width, height, channels: channels as 1 | 3 | 4 },
+        }).jpeg({ quality: 90 }).toBuffer()
+
+        images.push(new Uint8Array(jpegBuf))
+      } catch {
+        // skip undecodable images
+      }
     }
   }
 

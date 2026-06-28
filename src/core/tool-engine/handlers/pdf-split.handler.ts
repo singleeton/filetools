@@ -2,7 +2,7 @@ import { PDFDocument } from 'pdf-lib'
 import type { ToolHandler, ToolResult } from '../types'
 
 interface SplitOptions {
-  mode: 'range' | 'extract' | 'every'
+  mode: 'range' | 'extract'
   rangeStart?: number
   rangeEnd?: number
   pages?: number[]
@@ -47,9 +47,6 @@ function resolvePageIndices(
       return pages
         .map((p) => p - 1)
         .filter((i) => i >= 0 && i < totalPages)
-
-    case 'every':
-      return Array.from({ length: totalPages }, (_, i) => i)
 
     case 'range':
     default: {

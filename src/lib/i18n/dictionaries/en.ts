@@ -31,9 +31,9 @@ export const en = {
     },
     'pdf-compress': {
       name: 'PDF Compress',
-      shortDesc: 'Reduce PDF file size without losing quality',
+      shortDesc: 'Reduce PDF file size by compressing images',
       description:
-        'Reduce PDF file size without losing quality. Choose from low, medium, or high compression levels.',
+        'Reduce PDF file size by compressing embedded images. Choose from low, medium, or high compression levels. Works best with image-heavy PDFs.',
     },
     'word-to-pdf': {
       name: 'Word to PDF',
@@ -73,8 +73,8 @@ export const en = {
     },
     'remove-bg': {
       name: 'Remove Background',
-      shortDesc: 'Remove image background',
-      description: 'Remove white/light backgrounds from images. Output as transparent PNG.',
+      shortDesc: 'Remove background with interactive editor',
+      description: 'Paint over areas to remove from your image. Interactive editor with brush tool, undo, and live preview. Output as transparent PNG.',
     },
   },
 
@@ -215,6 +215,20 @@ export const en = {
     highDesc: 'Smallest file size, lower quality',
     button: 'Compress PDF',
     original: 'Original',
+  },
+
+  removeBg: {
+    uploadPrompt: 'Upload an image to start editing',
+    brushSize: 'Brush Size',
+    eraser: 'Eraser',
+    brush: 'Brush',
+    undo: 'Undo',
+    reset: 'Reset',
+    download: 'Download',
+    original: 'Original',
+    preview: 'Preview',
+    paintToRemove: 'Paint over areas to make transparent',
+    zoom: 'Zoom',
   },
 
   footer: {
