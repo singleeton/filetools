@@ -30,7 +30,6 @@ export function BgEditor({ imageFile, onReset }: BgEditorProps) {
   const originalDataRef = useRef<ImageData | null>(null)
   const maskRef = useRef<Uint8Array | null>(null)
   const historyRef = useRef<Uint8Array[]>([])
-  const imgRef = useRef<HTMLImageElement | null>(null)
 
   const renderDisplay = useCallback((showPrev: boolean) => {
     const canvas = displayCanvasRef.current
@@ -90,30 +89,41 @@ export function BgEditor({ imageFile, onReset }: BgEditorProps) {
 
   useEffect(() => {
     const url = URL.createObjectURL(imageFile)
-    const img = new Image()
-    img.onload = () => {
-      imgRef.current = img
+    const img = document.createElement('img')
+
+    const onLoad = () => {
       const w = img.naturalWidth
       const h = img.naturalHeight
       setImgDims({ w, h })
 
-      const canvas = displayCanvasRef.current
-      if (!canvas) return
+      const offscreen = document.createElement('canvas')
+      offscreen.width = w
+      offscreen.height = h
+      const offCtx = offscreen.getContext('2d')!
+      offCtx.drawImage(img, 0, 0)
 
-      canvas.width = w
-      canvas.height = h
-
-      const ctx = canvas.getContext('2d')!
-      ctx.drawImage(img, 0, 0)
-
-      originalDataRef.current = ctx.getImageData(0, 0, w, h)
+      originalDataRef.current = offCtx.getImageData(0, 0, w, h)
       maskRef.current = new Uint8Array(w * h)
       historyRef.current = []
 
+      const canvas = displayCanvasRef.current
+      if (canvas) {
+        canvas.width = w
+        canvas.height = h
+        const ctx = canvas.getContext('2d')!
+        ctx.drawImage(img, 0, 0)
+      }
+
       setLoaded(true)
     }
+
+    img.addEventListener('load', onLoad)
     img.src = url
-    return () => URL.revokeObjectURL(url)
+
+    return () => {
+      img.removeEventListener('load', onLoad)
+      URL.revokeObjectURL(url)
+    }
   }, [imageFile])
 
   useEffect(() => {
@@ -241,133 +251,131 @@ export function BgEditor({ imageFile, onReset }: BgEditorProps) {
     setZoom((z) => dir === 'in' ? Math.min(z + 0.25, 3) : Math.max(z - 0.25, 0.25))
   }, [])
 
-  if (!loaded) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    )
-  }
-
-  const canvasStyle = {
-    width: `${100 * zoom}%`,
-    maxWidth: `${imgDims.w * zoom}px`,
-    height: 'auto',
-  }
-
   return (
     <div className="space-y-4">
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-card p-3">
-        <div className="flex items-center gap-1">
-          <Button
-            size="sm"
-            variant={mode === 'brush' ? 'default' : 'outline'}
-            onClick={() => setMode('brush')}
+      {!loaded ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+      ) : (
+        <>
+          {/* Toolbar */}
+          <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-card p-3">
+            <div className="flex items-center gap-1">
+              <Button
+                size="sm"
+                variant={mode === 'brush' ? 'default' : 'outline'}
+                onClick={() => setMode('brush')}
+              >
+                <Paintbrush className="mr-1.5 h-4 w-4" />
+                {t.brush}
+              </Button>
+              <Button
+                size="sm"
+                variant={mode === 'eraser' ? 'default' : 'outline'}
+                onClick={() => setMode('eraser')}
+              >
+                <Eraser className="mr-1.5 h-4 w-4" />
+                {t.eraser}
+              </Button>
+            </div>
+
+            <div className="mx-2 h-6 w-px bg-border" />
+
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-muted-foreground whitespace-nowrap">{t.brushSize}</label>
+              <input
+                type="range"
+                min={5}
+                max={100}
+                value={brushSize}
+                onChange={(e) => setBrushSize(Number(e.target.value))}
+                className="w-24 accent-primary"
+              />
+              <span className="text-xs text-muted-foreground w-6 text-right">{brushSize}</span>
+            </div>
+
+            <div className="mx-2 h-6 w-px bg-border" />
+
+            <div className="flex items-center gap-1">
+              <Button size="sm" variant="outline" onClick={() => handleZoom('out')}>
+                <ZoomOut className="h-4 w-4" />
+              </Button>
+              <span className="text-xs text-muted-foreground w-10 text-center">{Math.round(zoom * 100)}%</span>
+              <Button size="sm" variant="outline" onClick={() => handleZoom('in')}>
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="mx-2 h-6 w-px bg-border" />
+
+            <Button size="sm" variant="outline" onClick={handleUndo}>
+              <Undo2 className="mr-1.5 h-4 w-4" />
+              {t.undo}
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleResetCanvas}>
+              <RotateCcw className="mr-1.5 h-4 w-4" />
+              {t.reset}
+            </Button>
+          </div>
+
+          {/* View toggle */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowPreview(false)}
+              className={cn(
+                'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                !showPreview ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {t.original}
+            </button>
+            <button
+              onClick={() => setShowPreview(true)}
+              className={cn(
+                'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                showPreview ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {t.preview}
+            </button>
+            <p className="ml-auto text-xs text-muted-foreground">{t.paintToRemove}</p>
+          </div>
+
+          {/* Canvas area */}
+          <div
+            ref={containerRef}
+            className="overflow-auto rounded-lg border bg-card"
+            style={{ maxHeight: '70vh' }}
           >
-            <Paintbrush className="mr-1.5 h-4 w-4" />
-            {t.brush}
-          </Button>
-          <Button
-            size="sm"
-            variant={mode === 'eraser' ? 'default' : 'outline'}
-            onClick={() => setMode('eraser')}
-          >
-            <Eraser className="mr-1.5 h-4 w-4" />
-            {t.eraser}
-          </Button>
-        </div>
+            <canvas
+              ref={displayCanvasRef}
+              className="cursor-crosshair"
+              style={{
+                width: `${100 * zoom}%`,
+                maxWidth: `${imgDims.w * zoom}px`,
+                height: 'auto',
+              }}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+            />
+          </div>
 
-        <div className="mx-2 h-6 w-px bg-border" />
-
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-muted-foreground whitespace-nowrap">{t.brushSize}</label>
-          <input
-            type="range"
-            min={5}
-            max={100}
-            value={brushSize}
-            onChange={(e) => setBrushSize(Number(e.target.value))}
-            className="w-24 accent-primary"
-          />
-          <span className="text-xs text-muted-foreground w-6 text-right">{brushSize}</span>
-        </div>
-
-        <div className="mx-2 h-6 w-px bg-border" />
-
-        <div className="flex items-center gap-1">
-          <Button size="sm" variant="outline" onClick={() => handleZoom('out')}>
-            <ZoomOut className="h-4 w-4" />
-          </Button>
-          <span className="text-xs text-muted-foreground w-10 text-center">{Math.round(zoom * 100)}%</span>
-          <Button size="sm" variant="outline" onClick={() => handleZoom('in')}>
-            <ZoomIn className="h-4 w-4" />
-          </Button>
-        </div>
-
-        <div className="mx-2 h-6 w-px bg-border" />
-
-        <Button size="sm" variant="outline" onClick={handleUndo}>
-          <Undo2 className="mr-1.5 h-4 w-4" />
-          {t.undo}
-        </Button>
-        <Button size="sm" variant="outline" onClick={handleResetCanvas}>
-          <RotateCcw className="mr-1.5 h-4 w-4" />
-          {t.reset}
-        </Button>
-      </div>
-
-      {/* View toggle */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setShowPreview(false)}
-          className={cn(
-            'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-            !showPreview ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          {t.original}
-        </button>
-        <button
-          onClick={() => setShowPreview(true)}
-          className={cn(
-            'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-            showPreview ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          {t.preview}
-        </button>
-        <p className="ml-auto text-xs text-muted-foreground">{t.paintToRemove}</p>
-      </div>
-
-      {/* Canvas area */}
-      <div
-        ref={containerRef}
-        className="overflow-auto rounded-lg border bg-card"
-        style={{ maxHeight: '70vh' }}
-      >
-        <canvas
-          ref={displayCanvasRef}
-          className="cursor-crosshair"
-          style={canvasStyle}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-        />
-      </div>
-
-      {/* Action buttons */}
-      <div className="flex justify-center gap-3">
-        <Button size="lg" onClick={handleDownload}>
-          <Download className="mr-2 h-4 w-4" />
-          {t.download}
-        </Button>
-        <Button size="lg" variant="outline" onClick={onReset}>
-          <RotateCcw className="mr-2 h-4 w-4" />
-          {dict.ui.download.startOver}
-        </Button>
-      </div>
+          {/* Action buttons */}
+          <div className="flex justify-center gap-3">
+            <Button size="lg" onClick={handleDownload}>
+              <Download className="mr-2 h-4 w-4" />
+              {t.download}
+            </Button>
+            <Button size="lg" variant="outline" onClick={onReset}>
+              <RotateCcw className="mr-2 h-4 w-4" />
+              {dict.ui.download.startOver}
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   )
 }
