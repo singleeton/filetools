@@ -226,6 +226,17 @@ export const en = {
     removeAnother: 'Remove Another',
     error: 'Background removal failed',
     retry: 'Try Again',
+    refine: 'Refine',
+    refineHint: 'Paint to restore or erase areas',
+    restore: 'Restore',
+    erase: 'Erase',
+    brushSize: 'Brush Size',
+    undo: 'Undo',
+    resetMask: 'Reset',
+    apply: 'Apply Changes',
+    cancel: 'Cancel',
+    editView: 'Edit',
+    previewView: 'Preview',
   },
 
   footer: {

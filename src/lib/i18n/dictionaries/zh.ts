@@ -197,6 +197,17 @@ export const zh: Dictionary = {
     removeAnother: '处理其他图片',
     error: '背景删除失败',
     retry: '重试',
+    refine: '微调',
+    refineHint: '涂抹以恢复或擦除区域',
+    restore: '恢复',
+    erase: '擦除',
+    brushSize: '画笔大小',
+    undo: '撤销',
+    resetMask: '重置',
+    apply: '应用更改',
+    cancel: '取消',
+    editView: '编辑',
+    previewView: '预览',
   },
 
   footer: {

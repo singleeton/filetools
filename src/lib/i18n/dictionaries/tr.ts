@@ -228,6 +228,17 @@ export const tr: Dictionary = {
     removeAnother: 'Başka Görsel',
     error: 'Arka plan kaldırılamadı',
     retry: 'Tekrar Dene',
+    refine: 'Düzelt',
+    refineHint: 'Alanları geri getirmek veya silmek için boyayın',
+    restore: 'Geri Getir',
+    erase: 'Sil',
+    brushSize: 'Fırça Boyutu',
+    undo: 'Geri Al',
+    resetMask: 'Sıfırla',
+    apply: 'Değişiklikleri Uygula',
+    cancel: 'Vazgeç',
+    editView: 'Düzenle',
+    previewView: 'Önizleme',
   },
 
   footer: {

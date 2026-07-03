@@ -2,18 +2,19 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Download, RotateCcw } from 'lucide-react'
+import { Download, RotateCcw, Wand2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useDictionary } from '@/lib/i18n/dictionary-context'
 import { trackEvent } from '@/lib/analytics'
 import { BackgroundRemovalService } from '@/lib/background-removal/service'
+import { RefineEditor } from './refine-editor'
 
 interface BgEditorProps {
   imageFile: File
   onReset: () => void
 }
 
-type Phase = 'processing' | 'result' | 'error'
+type Phase = 'processing' | 'result' | 'refine' | 'error'
 
 export function BgEditor({ imageFile, onReset }: BgEditorProps) {
   const { dict } = useDictionary()
@@ -81,6 +82,16 @@ export function BgEditor({ imageFile, onReset }: BgEditorProps) {
     document.body.removeChild(a)
   }, [imageFile.name, resultUrl])
 
+  const handleApplyRefine = useCallback((blob: Blob) => {
+    const nextResultUrl = URL.createObjectURL(blob)
+    setResultUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return nextResultUrl
+    })
+    urlsRef.current.result = nextResultUrl
+    setPhase('result')
+  }, [])
+
   if (phase === 'processing') {
     return (
       <div className="flex flex-col items-center justify-center gap-6 py-20">
@@ -116,6 +127,17 @@ export function BgEditor({ imageFile, onReset }: BgEditorProps) {
           </Button>
         </div>
       </div>
+    )
+  }
+
+  if (phase === 'refine' && originalUrl && resultUrl) {
+    return (
+      <RefineEditor
+        originalUrl={originalUrl}
+        resultUrl={resultUrl}
+        onApply={handleApplyRefine}
+        onCancel={() => setPhase('result')}
+      />
     )
   }
 
@@ -177,6 +199,10 @@ export function BgEditor({ imageFile, onReset }: BgEditorProps) {
         <Button size="lg" onClick={download}>
           <Download className="mr-2 h-4 w-4" />
           {t.download}
+        </Button>
+        <Button size="lg" variant="outline" onClick={() => setPhase('refine')}>
+          <Wand2 className="mr-2 h-4 w-4" />
+          {t.refine}
         </Button>
         <Button size="lg" variant="outline" onClick={onReset}>
           <RotateCcw className="mr-2 h-4 w-4" />

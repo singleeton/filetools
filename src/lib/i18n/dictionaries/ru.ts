@@ -204,6 +204,17 @@ export const ru: Dictionary = {
     removeAnother: 'Другое изображение',
     error: 'Не удалось удалить фон',
     retry: 'Повторить',
+    refine: 'Уточнить',
+    refineHint: 'Закрасьте, чтобы восстановить или удалить участки',
+    restore: 'Восстановить',
+    erase: 'Удалить',
+    brushSize: 'Размер кисти',
+    undo: 'Отменить',
+    resetMask: 'Сбросить',
+    apply: 'Применить изменения',
+    cancel: 'Отмена',
+    editView: 'Редактировать',
+    previewView: 'Предпросмотр',
   },
 
   footer: {

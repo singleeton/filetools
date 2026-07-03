@@ -72,7 +72,10 @@
       "Bash(node test-remove-bg-3.js)",
       "Bash(npx eslint *)",
       "Bash(netstat -ano)",
-      "Bash(taskkill //PID 6012 //F)"
+      "Bash(taskkill //PID 6012 //F)",
+      "Bash(node test-refine.js)",
+      "Bash(node test-refine-2.js)",
+      "Bash(taskkill //PID 15140 //F)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",
