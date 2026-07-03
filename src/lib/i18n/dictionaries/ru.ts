@@ -53,7 +53,7 @@ export const ru: Dictionary = {
     'png-to-jpg': { name: 'PNG в JPG', shortDesc: 'Конвертируйте PNG в JPG', description: 'Конвертируйте PNG в JPEG. Выберите уровень качества.' },
     'image-resize': { name: 'Изменить размер', shortDesc: 'Измените размер изображений', description: 'Измените размер изображений. Поддержка JPG, PNG, WebP.' },
     'pdf-rotate': { name: 'Повернуть PDF', shortDesc: 'Поверните страницы PDF', description: 'Поверните все страницы PDF на 90°, 180° или 270°.' },
-    'remove-bg': { name: 'Удалить фон', shortDesc: 'Удалите фон в интерактивном редакторе', description: 'Закрасьте области для удаления. Интерактивный редактор с кистью, отменой и предпросмотром. Вывод в прозрачном PNG.' },
+    'remove-bg': { name: 'Удалить фон', shortDesc: 'Автоматическое удаление фона с помощью ИИ', description: 'Автоматически удалите фон изображения с помощью ИИ. Получите прозрачный PNG за секунды — без ручного редактирования.' },
   },
 
   features: {
@@ -196,17 +196,14 @@ export const ru: Dictionary = {
   },
 
   removeBg: {
-    uploadPrompt: 'Загрузите изображение для начала редактирования',
-    brushSize: 'Размер кисти',
-    eraser: 'Ластик',
-    brush: 'Кисть',
-    undo: 'Отменить',
-    reset: 'Сбросить',
+    processing: 'Удаление фона...',
+    modelLoading: 'Загрузка AI-модели (только в первый раз)...',
+    before: 'До',
+    after: 'После',
     download: 'Скачать',
-    original: 'Оригинал',
-    preview: 'Предпросмотр',
-    paintToRemove: 'Закрасьте области для удаления',
-    zoom: 'Масштаб',
+    removeAnother: 'Другое изображение',
+    error: 'Не удалось удалить фон',
+    retry: 'Повторить',
   },
 
   footer: {

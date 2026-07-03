@@ -53,7 +53,7 @@ export const zh: Dictionary = {
     'png-to-jpg': { name: 'PNG 转 JPG', shortDesc: '将 PNG 图片转换为 JPG 格式', description: '将 PNG 图片转换为 JPEG 格式。可选择质量级别。' },
     'image-resize': { name: '图片调整大小', shortDesc: '将图片调整为任意尺寸', description: '将图片调整为自定义尺寸。支持 JPG、PNG、WebP。' },
     'pdf-rotate': { name: 'PDF 旋转', shortDesc: '旋转 PDF 页面', description: '将 PDF 中的所有页面旋转 90°、180° 或 270°。' },
-    'remove-bg': { name: '移除背景', shortDesc: '使用交互式编辑器移除背景', description: '涂抹要删除的区域。交互式编辑器支持画笔、撤销和实时预览。输出为透明 PNG。' },
+    'remove-bg': { name: '移除背景', shortDesc: '使用 AI 自动移除背景', description: '使用人工智能自动移除图片背景。几秒钟内获得透明 PNG——无需手动编辑。' },
   },
 
   features: {
@@ -189,17 +189,14 @@ export const zh: Dictionary = {
   },
 
   removeBg: {
-    uploadPrompt: '上传图片开始编辑',
-    brushSize: '画笔大小',
-    eraser: '橡皮擦',
-    brush: '画笔',
-    undo: '撤销',
-    reset: '重置',
+    processing: '正在删除背景...',
+    modelLoading: '正在下载AI模型（仅首次）...',
+    before: '原图',
+    after: '效果',
     download: '下载',
-    original: '原图',
-    preview: '预览',
-    paintToRemove: '涂抹要删除的区域',
-    zoom: '缩放',
+    removeAnother: '处理其他图片',
+    error: '背景删除失败',
+    retry: '重试',
   },
 
   footer: {

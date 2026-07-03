@@ -73,8 +73,8 @@ export const en = {
     },
     'remove-bg': {
       name: 'Remove Background',
-      shortDesc: 'Remove background with interactive editor',
-      description: 'Paint over areas to remove from your image. Interactive editor with brush tool, undo, and live preview. Output as transparent PNG.',
+      shortDesc: 'Automatically remove background with AI',
+      description: 'Automatically remove the background from your image using AI. Get a transparent PNG in seconds — no manual editing required.',
     },
   },
 
@@ -218,17 +218,14 @@ export const en = {
   },
 
   removeBg: {
-    uploadPrompt: 'Upload an image to start editing',
-    brushSize: 'Brush Size',
-    eraser: 'Eraser',
-    brush: 'Brush',
-    undo: 'Undo',
-    reset: 'Reset',
+    processing: 'Removing background...',
+    modelLoading: 'Downloading AI model (first time only)...',
+    before: 'Before',
+    after: 'After',
     download: 'Download',
-    original: 'Original',
-    preview: 'Preview',
-    paintToRemove: 'Paint over areas to make transparent',
-    zoom: 'Zoom',
+    removeAnother: 'Remove Another',
+    error: 'Background removal failed',
+    retry: 'Try Again',
   },
 
   footer: {

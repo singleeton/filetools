@@ -75,8 +75,8 @@ export const tr: Dictionary = {
     },
     'remove-bg': {
       name: 'Arka Plan Kaldır',
-      shortDesc: 'İnteraktif editör ile arka planı kaldırın',
-      description: 'Kaldırmak istediğiniz alanları fırça ile boyayın. Geri alma, önizleme ve yakınlaştırma destekli editör. Şeffaf PNG olarak çıktı.',
+      shortDesc: 'Yapay zeka ile arka planı otomatik kaldırın',
+      description: 'Yapay zeka kullanarak görselinizin arka planını otomatik olarak kaldırın. Saniyeler içinde şeffaf PNG elde edin — manuel düzenleme gerekmez.',
     },
   },
 
@@ -220,17 +220,14 @@ export const tr: Dictionary = {
   },
 
   removeBg: {
-    uploadPrompt: 'Düzenlemeye başlamak için bir görsel yükleyin',
-    brushSize: 'Fırça Boyutu',
-    eraser: 'Silgi',
-    brush: 'Fırça',
-    undo: 'Geri Al',
-    reset: 'Sıfırla',
+    processing: 'Arka plan kaldırılıyor...',
+    modelLoading: 'AI modeli indiriliyor (yalnızca ilk kez)...',
+    before: 'Önce',
+    after: 'Sonra',
     download: 'İndir',
-    original: 'Orijinal',
-    preview: 'Önizleme',
-    paintToRemove: 'Şeffaf yapmak istediğiniz alanları boyayın',
-    zoom: 'Yakınlaştır',
+    removeAnother: 'Başka Görsel',
+    error: 'Arka plan kaldırılamadı',
+    retry: 'Tekrar Dene',
   },
 
   footer: {
