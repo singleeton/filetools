@@ -40,19 +40,25 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'File too large (max 5MB)' }, { status: 400 })
   }
 
-  const blob = await put(`uploads/${crypto.randomUUID()}-${file.name}`, file, {
-    access: 'public',
-  })
+  try {
+    const blob = await put(`uploads/${crypto.randomUUID()}-${file.name}`, file, {
+      access: 'public',
+    })
 
-  const media = await db.media.create({
-    data: {
-      url: blob.url,
-      pathname: blob.pathname,
-      filename: file.name,
-      size: file.size,
-      mimeType: file.type,
-    },
-  })
+    const media = await db.media.create({
+      data: {
+        url: blob.url,
+        pathname: blob.pathname,
+        filename: file.name,
+        size: file.size,
+        mimeType: file.type,
+      },
+    })
 
-  return NextResponse.json({ url: media.url, id: media.id })
+    return NextResponse.json({ url: media.url, id: media.id })
+  } catch (error) {
+    console.error('Blob upload failed:', error)
+    const message = error instanceof Error ? error.message : 'Upload failed'
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
 }
