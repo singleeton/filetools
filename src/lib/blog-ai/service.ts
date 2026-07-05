@@ -3,7 +3,7 @@ import type { BlogProviderName, BlogGenerationResult } from './types'
 import { tools } from '@/lib/tools-registry'
 import { locales } from '@/lib/i18n/config'
 
-const ACTIVE_PROVIDER: BlogProviderName = 'openai'
+const ACTIVE_PROVIDER: BlogProviderName = 'gemini'
 
 function dayOfYear(date: Date): number {
   const start = Date.UTC(date.getUTCFullYear(), 0, 0)

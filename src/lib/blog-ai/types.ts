@@ -1,4 +1,4 @@
-export type BlogProviderName = 'openai'
+export type BlogProviderName = 'gemini' | 'openai'
 
 export interface BlogGenerationInput {
   locale: string
