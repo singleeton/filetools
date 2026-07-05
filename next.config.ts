@@ -31,6 +31,12 @@ const nextConfig: NextConfig = {
 
   serverExternalPackages: ['mammoth', 'unpdf', 'pdf-parse', 'pdfjs-dist'],
 
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },
+    ],
+  },
+
   experimental: {
     optimizeCss: true,
     serverActions: {

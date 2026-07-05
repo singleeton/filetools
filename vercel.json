@@ -5,6 +5,15 @@
   "functions": {
     "app/api/**": {
       "maxDuration": 30
+    },
+    "app/api/cron/generate-blog/route.ts": {
+      "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/generate-blog",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }

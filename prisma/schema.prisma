@@ -131,3 +131,46 @@ model LandingContent {
   @@unique([section, locale])
   @@map("landing_content")
 }
+
+// --- BLOG ---
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model BlogPost {
+  id              String     @id @default(cuid())
+  slug            String
+  locale          String
+  title           String
+  excerpt         String     @db.Text
+  content         String     @db.Text // Markdown
+  coverImageUrl   String?
+  status          BlogStatus @default(DRAFT)
+  aiGenerated     Boolean    @default(false)
+  translationKey  String?    // links same-topic posts across locales (AI batches only)
+  metaTitle       String?
+  metaDescription String?    @db.Text
+  publishedAt     DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@unique([slug, locale])
+  @@index([locale, status, publishedAt])
+  @@index([translationKey])
+  @@map("blog_posts")
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  url       String
+  pathname  String
+  filename  String
+  size      Int?
+  mimeType  String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("media")
+}

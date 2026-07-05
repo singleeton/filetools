@@ -8,6 +8,7 @@ export const en = {
     subtitle:
       'Convert, merge, split and compress PDF & documents instantly in your browser. No installation required.',
     cta: 'Try Free Tools',
+    image: '',
   },
 
   popularTools: {
@@ -84,21 +85,25 @@ export const en = {
     fast: {
       title: 'Fast Processing',
       description: 'Files are processed instantly on our servers. No waiting.',
+      image: '',
     },
     secure: {
       title: 'Secure & Private',
       description:
         'Files are automatically deleted after processing. We never store your data.',
+      image: '',
     },
     noInstall: {
       title: 'No Installation',
       description:
         'Works entirely in your browser. No software to download or install.',
+      image: '',
     },
     mobile: {
       title: 'Mobile Friendly',
       description:
         'Use on any device — desktop, tablet, or phone. Fully responsive.',
+      image: '',
     },
   },
 
@@ -237,6 +242,25 @@ export const en = {
     cancel: 'Cancel',
     editView: 'Edit',
     previewView: 'Preview',
+    brushTool: 'Brush',
+    wandTool: 'Magic Wand',
+    tolerance: 'Tolerance',
+    selectSimilar: 'Select all similar colors',
+  },
+
+  blog: {
+    nav: 'Blog',
+    latestTitle: 'Latest from our blog',
+    latestSubtitle: 'Tips, guides and updates about file conversion',
+    viewAll: 'View all posts',
+    readMore: 'Read more',
+    listTitle: 'Blog',
+    listSubtitle: 'Guides, tips and news about PDF & file tools',
+    emptyState: 'No posts yet. Check back soon!',
+    publishedOn: 'Published on',
+    backToBlog: 'Back to blog',
+    previous: 'Previous',
+    next: 'Next',
   },
 
   footer: {
@@ -302,6 +326,10 @@ export const en = {
     'remove-bg': {
       title: 'Remove Background Free Online - Background Remover',
       description: 'Remove image background online for free. Get transparent PNG output. No sign-up required.',
+    },
+    blog: {
+      title: 'Blog - FileTools Tips & Guides',
+      description: 'Guides, tips and news about PDF and file conversion tools. Learn how to merge, split, compress and convert files.',
     },
   },
 }

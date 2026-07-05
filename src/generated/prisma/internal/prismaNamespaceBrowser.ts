@@ -58,7 +58,9 @@ export const ModelName = {
   ToolUsageLog: 'ToolUsageLog',
   PageView: 'PageView',
   AdSlot: 'AdSlot',
-  LandingContent: 'LandingContent'
+  LandingContent: 'LandingContent',
+  BlogPost: 'BlogPost',
+  Media: 'Media'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -185,6 +187,40 @@ export const LandingContentScalarFieldEnum = {
 } as const
 
 export type LandingContentScalarFieldEnum = (typeof LandingContentScalarFieldEnum)[keyof typeof LandingContentScalarFieldEnum]
+
+
+export const BlogPostScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  locale: 'locale',
+  title: 'title',
+  excerpt: 'excerpt',
+  content: 'content',
+  coverImageUrl: 'coverImageUrl',
+  status: 'status',
+  aiGenerated: 'aiGenerated',
+  translationKey: 'translationKey',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlogPostScalarFieldEnum = (typeof BlogPostScalarFieldEnum)[keyof typeof BlogPostScalarFieldEnum]
+
+
+export const MediaScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  pathname: 'pathname',
+  filename: 'filename',
+  size: 'size',
+  mimeType: 'mimeType',
+  createdAt: 'createdAt'
+} as const
+
+export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
 
 
 export const SortOrder = {

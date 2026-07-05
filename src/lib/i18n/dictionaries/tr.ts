@@ -10,6 +10,7 @@ export const tr: Dictionary = {
     subtitle:
       'PDF ve belgelerinizi tarayıcınızda anında dönüştürün, birleştirin, bölün ve sıkıştırın. Kurulum gerektirmez.',
     cta: 'Ücretsiz Deneyin',
+    image: '',
   },
 
   popularTools: {
@@ -86,21 +87,25 @@ export const tr: Dictionary = {
     fast: {
       title: 'Hızlı İşleme',
       description: 'Dosyalar sunucularımızda anında işlenir. Bekleme yok.',
+      image: '',
     },
     secure: {
       title: 'Güvenli ve Gizli',
       description:
         'Dosyalar işlem sonrası otomatik olarak silinir. Verilerinizi asla saklamayız.',
+      image: '',
     },
     noInstall: {
       title: 'Kurulum Gerektirmez',
       description:
         'Tamamen tarayıcınızda çalışır. İndirme veya kurulum gerekmez.',
+      image: '',
     },
     mobile: {
       title: 'Mobil Uyumlu',
       description:
         'Her cihazda kullanın — masaüstü, tablet veya telefon. Tam uyumlu.',
+      image: '',
     },
   },
 
@@ -239,6 +244,25 @@ export const tr: Dictionary = {
     cancel: 'Vazgeç',
     editView: 'Düzenle',
     previewView: 'Önizleme',
+    brushTool: 'Fırça',
+    wandTool: 'Sihirli Değnek',
+    tolerance: 'Tolerans',
+    selectSimilar: 'Tüm benzer renkleri seç',
+  },
+
+  blog: {
+    nav: 'Blog',
+    latestTitle: 'Blogumuzdan son yazılar',
+    latestSubtitle: 'Dosya dönüştürme hakkında ipuçları, rehberler ve güncellemeler',
+    viewAll: 'Tüm yazıları gör',
+    readMore: 'Devamını oku',
+    listTitle: 'Blog',
+    listSubtitle: 'PDF ve dosya araçları hakkında rehberler, ipuçları ve haberler',
+    emptyState: 'Henüz yazı yok. Yakında burada olacak!',
+    publishedOn: 'Yayın tarihi',
+    backToBlog: 'Bloga dön',
+    previous: 'Önceki',
+    next: 'Sonraki',
   },
 
   footer: {
@@ -284,5 +308,9 @@ export const tr: Dictionary = {
     'image-resize': { title: 'Görsel Boyutlandır - Ücretsiz Online', description: 'Görselleri ücretsiz olarak istediğiniz boyuta getirin.' },
     'pdf-rotate': { title: 'PDF Döndür - Ücretsiz Online', description: 'PDF sayfalarını ücretsiz olarak 90°, 180° veya 270° döndürün.' },
     'remove-bg': { title: 'Arka Plan Kaldır - Ücretsiz Online', description: 'Görsellerden arka planı ücretsiz olarak kaldırın.' },
+    blog: {
+      title: 'Blog - FileTools İpuçları ve Rehberler',
+      description: 'PDF ve dosya dönüştürme araçları hakkında rehberler, ipuçları ve haberler.',
+    },
   },
 }

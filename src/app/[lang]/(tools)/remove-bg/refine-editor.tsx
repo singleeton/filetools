@@ -2,9 +2,11 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Undo2, RotateCcw, Paintbrush, Eraser } from 'lucide-react'
+import { Undo2, RotateCcw, Paintbrush, Eraser, Wand2, Brush } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useDictionary } from '@/lib/i18n/dictionary-context'
+
+const MAX_RGB_DISTANCE = 441.67 // sqrt(255^2 * 3), the largest possible distance between two RGB colors
 
 interface RefineEditorProps {
   originalUrl: string
@@ -33,11 +35,15 @@ export function RefineEditor({ originalUrl, resultUrl, onApply, onCancel }: Refi
   const [loaded, setLoaded] = useState(false)
   const [brushSize, setBrushSize] = useState(30)
   const [mode, setMode] = useState<'erase' | 'restore'>('restore')
+  const [tool, setTool] = useState<'brush' | 'wand'>('brush')
+  const [tolerance, setTolerance] = useState(30)
+  const [globalSelect, setGlobalSelect] = useState(false)
   const [isPainting, setIsPainting] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [dims, setDims] = useState({ w: 0, h: 0 })
 
   const imgElRef = useRef<HTMLImageElement | null>(null)
+  const origPixelsRef = useRef<Uint8ClampedArray | null>(null)
   const maskDataRef = useRef<Uint8Array | null>(null)
   const initialMaskRef = useRef<Uint8Array | null>(null)
   const historyRef = useRef<Uint8Array[]>([])
@@ -56,6 +62,10 @@ export function RefineEditor({ originalUrl, resultUrl, onApply, onCancel }: Refi
       off.width = w
       off.height = h
       const octx = off.getContext('2d')!
+      octx.drawImage(origImg, 0, 0, w, h)
+      origPixelsRef.current = octx.getImageData(0, 0, w, h).data
+
+      octx.clearRect(0, 0, w, h)
       octx.drawImage(resImg, 0, 0, w, h)
       const alpha = octx.getImageData(0, 0, w, h).data
 
@@ -169,13 +179,67 @@ export function RefineEditor({ originalUrl, resultUrl, onApply, onCancel }: Refi
     draw()
   }, [brushSize, mode, dims, draw])
 
+  const selectByColor = useCallback((x: number, y: number) => {
+    const pixels = origPixelsRef.current
+    const mask = maskDataRef.current
+    if (!pixels || !mask || !dims.w) return
+
+    const w = dims.w
+    const h = dims.h
+    const px0 = Math.min(w - 1, Math.max(0, Math.round(x)))
+    const py0 = Math.min(h - 1, Math.max(0, Math.round(y)))
+    const startIdx = py0 * w + px0
+    const sBase = startIdx * 4
+    const r0 = pixels[sBase]
+    const g0 = pixels[sBase + 1]
+    const b0 = pixels[sBase + 2]
+    const tolSq = ((tolerance / 100) * MAX_RGB_DISTANCE) ** 2
+    const val = mode === 'erase' ? 1 : 0
+
+    const distSq = (i: number) => {
+      const idx = i * 4
+      const dr = pixels[idx] - r0
+      const dg = pixels[idx + 1] - g0
+      const db = pixels[idx + 2] - b0
+      return dr * dr + dg * dg + db * db
+    }
+
+    saveHistory()
+
+    if (globalSelect) {
+      for (let i = 0; i < w * h; i++) {
+        if (distSq(i) <= tolSq) mask[i] = val
+      }
+    } else {
+      const visited = new Uint8Array(w * h)
+      const stack = [startIdx]
+      visited[startIdx] = 1
+      while (stack.length) {
+        const idx = stack.pop()!
+        if (distSq(idx) > tolSq) continue
+        mask[idx] = val
+        const cx = idx % w
+        const cy = (idx / w) | 0
+        if (cx > 0 && !visited[idx - 1]) { visited[idx - 1] = 1; stack.push(idx - 1) }
+        if (cx < w - 1 && !visited[idx + 1]) { visited[idx + 1] = 1; stack.push(idx + 1) }
+        if (cy > 0 && !visited[idx - w]) { visited[idx - w] = 1; stack.push(idx - w) }
+        if (cy < h - 1 && !visited[idx + w]) { visited[idx + w] = 1; stack.push(idx + w) }
+      }
+    }
+    draw()
+  }, [dims, tolerance, globalSelect, mode, saveHistory, draw])
+
   const onDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
+    const p = getPos(e)
+    if (tool === 'wand') {
+      selectByColor(p.x, p.y)
+      return
+    }
     saveHistory()
     setIsPainting(true)
-    const p = getPos(e)
     paintAt(p.x, p.y)
-  }, [saveHistory, getPos, paintAt])
+  }, [tool, selectByColor, saveHistory, getPos, paintAt])
 
   const onMove = useCallback((e: React.MouseEvent) => {
     if (!isPainting) return
@@ -249,18 +313,57 @@ export function RefineEditor({ originalUrl, resultUrl, onApply, onCancel }: Refi
 
         <div className="mx-2 h-6 w-px bg-border" />
 
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-muted-foreground whitespace-nowrap">{t.brushSize}</label>
-          <input
-            type="range"
-            min={5}
-            max={100}
-            value={brushSize}
-            onChange={(e) => setBrushSize(Number(e.target.value))}
-            className="w-24 accent-primary"
-          />
-          <span className="text-xs text-muted-foreground w-6 text-right">{brushSize}</span>
+        <div className="flex items-center gap-1">
+          <Button size="sm" variant={tool === 'brush' ? 'default' : 'outline'} onClick={() => setTool('brush')}>
+            <Brush className="mr-1.5 h-4 w-4" />
+            {t.brushTool}
+          </Button>
+          <Button size="sm" variant={tool === 'wand' ? 'default' : 'outline'} onClick={() => setTool('wand')}>
+            <Wand2 className="mr-1.5 h-4 w-4" />
+            {t.wandTool}
+          </Button>
         </div>
+
+        <div className="mx-2 h-6 w-px bg-border" />
+
+        {tool === 'brush' ? (
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-muted-foreground whitespace-nowrap">{t.brushSize}</label>
+            <input
+              type="range"
+              min={5}
+              max={100}
+              value={brushSize}
+              onChange={(e) => setBrushSize(Number(e.target.value))}
+              className="w-24 accent-primary"
+            />
+            <span className="text-xs text-muted-foreground w-6 text-right">{brushSize}</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-muted-foreground whitespace-nowrap">{t.tolerance}</label>
+              <input
+                type="range"
+                min={1}
+                max={100}
+                value={tolerance}
+                onChange={(e) => setTolerance(Number(e.target.value))}
+                className="w-24 accent-primary"
+              />
+              <span className="text-xs text-muted-foreground w-6 text-right">{tolerance}</span>
+            </div>
+            <label className="flex items-center gap-1.5 text-xs text-muted-foreground whitespace-nowrap">
+              <input
+                type="checkbox"
+                checked={globalSelect}
+                onChange={(e) => setGlobalSelect(e.target.checked)}
+                className="accent-primary"
+              />
+              {t.selectSimilar}
+            </label>
+          </div>
+        )}
 
         <div className="mx-2 h-6 w-px bg-border" />
 

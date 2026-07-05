@@ -31,6 +31,7 @@ export function applyOverrides(
     if (overrides.hero.title) result.hero.title = overrides.hero.title
     if (overrides.hero.subtitle) result.hero.subtitle = overrides.hero.subtitle
     if (overrides.hero.cta) result.hero.cta = overrides.hero.cta
+    if (overrides.hero.heroImage) result.hero.image = overrides.hero.heroImage
   }
 
   if (overrides.features) {
@@ -44,6 +45,7 @@ export function applyOverrides(
     if (o) {
       if (o.title) result.features[key].title = o.title
       if (o.description) result.features[key].description = o.description
+      if (o.image) result.features[key].image = o.image
     }
   })
 

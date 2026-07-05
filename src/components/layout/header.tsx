@@ -37,6 +37,12 @@ export function Header() {
           >
             {dict.nav.tools}
           </Link>
+          <Link
+            href={`/${lang}/blog`}
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {dict.blog.nav}
+          </Link>
           {toolIds.map((id) => (
             <Link
               key={id}

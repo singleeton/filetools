@@ -6,17 +6,18 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Save, Loader2, Plus, Trash2 } from 'lucide-react'
 import { useAdminLang } from '@/components/admin/admin-lang-provider'
+import { ImageUploadField } from '@/components/admin/image-upload-field'
 
 const LOCALES = ['en', 'tr', 'ru', 'zh'] as const
 const LOCALE_NAMES: Record<string, string> = { en: 'English', tr: 'Türkçe', ru: 'Русский', zh: '中文' }
 
 const SECTIONS = [
-  { id: 'hero', label: 'Hero Section', fields: ['title', 'subtitle', 'cta'] },
+  { id: 'hero', label: 'Hero Section', fields: ['title', 'subtitle', 'cta'], imageFields: ['heroImage'] },
   { id: 'features', label: 'Features', fields: ['title', 'subtitle'] },
-  { id: 'feature_1', label: 'Feature 1', fields: ['title', 'description'] },
-  { id: 'feature_2', label: 'Feature 2', fields: ['title', 'description'] },
-  { id: 'feature_3', label: 'Feature 3', fields: ['title', 'description'] },
-  { id: 'feature_4', label: 'Feature 4', fields: ['title', 'description'] },
+  { id: 'feature_1', label: 'Feature 1', fields: ['title', 'description'], imageFields: ['image'] },
+  { id: 'feature_2', label: 'Feature 2', fields: ['title', 'description'], imageFields: ['image'] },
+  { id: 'feature_3', label: 'Feature 3', fields: ['title', 'description'], imageFields: ['image'] },
+  { id: 'feature_4', label: 'Feature 4', fields: ['title', 'description'], imageFields: ['image'] },
   { id: 'howItWorks', label: 'How It Works', fields: ['title', 'subtitle'] },
   { id: 'step_1', label: 'Step 1', fields: ['title', 'description'] },
   { id: 'step_2', label: 'Step 2', fields: ['title', 'description'] },
@@ -133,16 +134,27 @@ export function LandingCmsClient({ initialContent }: { initialContent: ContentEn
         {activeSection === 'faq' ? (
           <FaqEditor items={getFaqItems()} onChange={updateFaq} />
         ) : (
-          sectionConfig.fields.map((field) => (
-            <div key={field} className="space-y-2">
-              <Label className="capitalize">{field}</Label>
-              <Input
-                value={(parsed[field] as string) || ''}
-                onChange={(e) => updateField(field, e.target.value)}
-                placeholder={field}
-              />
-            </div>
-          ))
+          <>
+            {sectionConfig.fields.map((field) => (
+              <div key={field} className="space-y-2">
+                <Label className="capitalize">{field}</Label>
+                <Input
+                  value={(parsed[field] as string) || ''}
+                  onChange={(e) => updateField(field, e.target.value)}
+                  placeholder={field}
+                />
+              </div>
+            ))}
+            {'imageFields' in sectionConfig &&
+              sectionConfig.imageFields.map((field) => (
+                <ImageUploadField
+                  key={field}
+                  label={field === 'heroImage' ? 'Hero image' : 'Image'}
+                  value={(parsed[field] as string) || ''}
+                  onChange={(url) => updateField(field, url)}
+                />
+              ))}
+          </>
         )}
       </div>
 

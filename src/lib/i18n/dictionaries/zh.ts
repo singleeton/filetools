@@ -10,6 +10,7 @@ export const zh: Dictionary = {
     subtitle:
       '在浏览器中即时转换、合并、拆分和压缩 PDF 及文档。无需安装任何软件。',
     cta: '免费试用',
+    image: '',
   },
 
   popularTools: {
@@ -62,18 +63,22 @@ export const zh: Dictionary = {
     fast: {
       title: '极速处理',
       description: '文件在我们的服务器上即时处理，无需等待。',
+      image: '',
     },
     secure: {
       title: '安全私密',
       description: '文件处理后自动删除。我们绝不存储您的数据。',
+      image: '',
     },
     noInstall: {
       title: '无需安装',
       description: '完全在浏览器中运行。无需下载或安装任何软件。',
+      image: '',
     },
     mobile: {
       title: '移动端适配',
       description: '在任何设备上使用——电脑、平板或手机。完全响应式设计。',
+      image: '',
     },
   },
 
@@ -208,6 +213,25 @@ export const zh: Dictionary = {
     cancel: '取消',
     editView: '编辑',
     previewView: '预览',
+    brushTool: '画笔',
+    wandTool: '魔术棒',
+    tolerance: '容差',
+    selectSimilar: '选择所有相似颜色',
+  },
+
+  blog: {
+    nav: '博客',
+    latestTitle: '最新博客文章',
+    latestSubtitle: '关于文件转换的技巧、指南和更新',
+    viewAll: '查看所有文章',
+    readMore: '阅读更多',
+    listTitle: '博客',
+    listSubtitle: '关于 PDF 和文件工具的指南、技巧和新闻',
+    emptyState: '暂无文章，敬请期待！',
+    publishedOn: '发布于',
+    backToBlog: '返回博客',
+    previous: '上一页',
+    next: '下一页',
   },
 
   footer: {
@@ -248,5 +272,9 @@ export const zh: Dictionary = {
     'image-resize': { title: '调整图片大小 — 免费在线', description: '免费在线调整图片大小。' },
     'pdf-rotate': { title: 'PDF 旋转 — 免费在线', description: '免费在线旋转 PDF 页面。' },
     'remove-bg': { title: '移除背景 — 免费在线', description: '免费在线移除图片背景。' },
+    blog: {
+      title: '博客 - FileTools 技巧与指南',
+      description: '关于 PDF 和文件转换工具的指南、技巧和新闻。',
+    },
   },
 }

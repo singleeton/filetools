@@ -62,6 +62,50 @@ interface FaqItem {
   answer: string
 }
 
+interface BlogPostStructuredDataProps {
+  title: string
+  description: string
+  url: string
+  image?: string | null
+  datePublished: string
+  dateModified: string
+}
+
+export function BlogPostStructuredData({
+  title,
+  description,
+  url,
+  image,
+  datePublished,
+  dateModified,
+}: BlogPostStructuredDataProps) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    url: `${siteConfig.url}${url}`,
+    ...(image ? { image } : {}),
+    datePublished,
+    dateModified,
+    author: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  )
+}
+
 export function FaqStructuredData({ items }: { items: FaqItem[] }) {
   const jsonLd = {
     '@context': 'https://schema.org',

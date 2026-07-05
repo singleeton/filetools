@@ -57,3 +57,13 @@ export type AdSlot = Prisma.AdSlotModel
  * 
  */
 export type LandingContent = Prisma.LandingContentModel
+/**
+ * Model BlogPost
+ * 
+ */
+export type BlogPost = Prisma.BlogPostModel
+/**
+ * Model Media
+ * 
+ */
+export type Media = Prisma.MediaModel
