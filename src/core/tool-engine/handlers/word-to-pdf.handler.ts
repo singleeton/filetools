@@ -1,6 +1,11 @@
+import fs from 'fs'
+import path from 'path'
 import mammoth from 'mammoth'
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import fontkit from 'fontkit'
+import { PDFDocument, rgb } from 'pdf-lib'
 import type { ToolHandler, ToolResult } from '../types'
+
+const FONTS_DIR = path.join(process.cwd(), 'src/assets/fonts/liberation-sans')
 
 interface DocElement {
   tag?: string
@@ -102,10 +107,12 @@ function isBlockTag(tag: string): boolean {
 
 async function generatePdf(elements: DocElement[]): Promise<Uint8Array> {
   const doc = await PDFDocument.create()
-  const fontRegular = await doc.embedFont(StandardFonts.Helvetica)
-  const fontBold = await doc.embedFont(StandardFonts.HelveticaBold)
-  const fontItalic = await doc.embedFont(StandardFonts.HelveticaOblique)
-  const fontBoldItalic = await doc.embedFont(StandardFonts.HelveticaBoldOblique)
+  doc.registerFontkit(fontkit)
+
+  const fontRegular = await doc.embedFont(fs.readFileSync(path.join(FONTS_DIR, 'LiberationSans-Regular.ttf')))
+  const fontBold = await doc.embedFont(fs.readFileSync(path.join(FONTS_DIR, 'LiberationSans-Bold.ttf')))
+  const fontItalic = await doc.embedFont(fs.readFileSync(path.join(FONTS_DIR, 'LiberationSans-Italic.ttf')))
+  const fontBoldItalic = await doc.embedFont(fs.readFileSync(path.join(FONTS_DIR, 'LiberationSans-BoldItalic.ttf')))
 
   const PAGE_W = 595.28
   const PAGE_H = 841.89

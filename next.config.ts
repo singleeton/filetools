@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
 
   serverExternalPackages: ['mammoth', 'unpdf', 'pdf-parse', 'pdfjs-dist'],
 
+  outputFileTracingIncludes: {
+    '/api/tools/*': ['./src/assets/fonts/**/*'],
+  },
+
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },
