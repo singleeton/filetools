@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { put } from '@vercel/blob'
 import { executeTool } from '@/core/tool-engine'
 import { loadAllHandlers } from '@/core/tool-engine/loader'
 import { getToolConfig } from '@/lib/tool-configs'
@@ -16,6 +17,7 @@ const STATUS_MAP = {
   INVALID_INPUT: 400,
   FILE_TOO_LARGE: 413,
   PROCESSING_ERROR: 500,
+  PASSWORD_PROTECTED: 422,
 } as const
 
 export async function POST(
@@ -79,6 +81,26 @@ export async function POST(
   }
 
   await incrementUsage()
+
+  if ('files' in result) {
+    const uploaded = await Promise.all(
+      result.files.map(async (f) => {
+        const blob = await put(
+          `tool-outputs/${crypto.randomUUID()}-${f.fileName}`,
+          Buffer.from(f.data),
+          { access: 'public', contentType: f.mimeType },
+        )
+        return {
+          fileName: f.fileName,
+          url: blob.url,
+          size: f.data.byteLength,
+          pageCount: f.pageCount,
+        }
+      }),
+    )
+
+    return NextResponse.json({ success: true, files: uploaded })
+  }
 
   return new Response(Buffer.from(result.file), {
     status: 200,

@@ -4,17 +4,32 @@ export interface ToolInput {
   options?: Record<string, unknown>
 }
 
-export interface ToolResult {
-  success: true
-  file: Uint8Array
-  fileName: string
-  mimeType: string
-}
+export type ToolResult =
+  | {
+      success: true
+      file: Uint8Array
+      fileName: string
+      mimeType: string
+    }
+  | {
+      success: true
+      files: {
+        fileName: string
+        mimeType: string
+        data: Uint8Array
+        pageCount?: number
+      }[]
+    }
 
 export interface ToolError {
   success: false
   error: string
-  code: 'INVALID_TOOL' | 'INVALID_INPUT' | 'PROCESSING_ERROR' | 'FILE_TOO_LARGE'
+  code:
+    | 'INVALID_TOOL'
+    | 'INVALID_INPUT'
+    | 'PROCESSING_ERROR'
+    | 'FILE_TOO_LARGE'
+    | 'PASSWORD_PROTECTED'
 }
 
 export type ToolOutput = ToolResult | ToolError

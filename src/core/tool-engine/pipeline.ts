@@ -1,3 +1,4 @@
+import { EncryptedPDFError } from 'pdf-lib'
 import { getToolHandler } from './registry'
 import { getToolConfig } from '@/lib/tool-configs'
 import { validateFile } from '@/utils/file-validation'
@@ -60,13 +61,26 @@ export async function executeTool(input: ToolInput): Promise<ToolOutput> {
   try {
     const result = await handler.execute(files, options)
     logger.timing(slug, 'Handler execution', startTime)
-    logger.info(
-      slug,
-      `Output: ${result.fileName} (${(result.file.byteLength / 1024).toFixed(1)} KB)`,
-    )
+    if ('file' in result) {
+      logger.info(
+        slug,
+        `Output: ${result.fileName} (${(result.file.byteLength / 1024).toFixed(1)} KB)`,
+      )
+    } else {
+      logger.info(slug, `Output: ${result.files.length} files`)
+    }
     return result
   } catch (err) {
     logger.error(slug, 'Handler threw an exception', err)
+
+    if (err instanceof EncryptedPDFError) {
+      return {
+        success: false,
+        error: 'This PDF is password-protected. Please remove the password and try again.',
+        code: 'PASSWORD_PROTECTED',
+      }
+    }
+
     const message =
       err instanceof Error ? err.message : 'An unexpected error occurred'
 
@@ -78,7 +92,8 @@ export async function executeTool(input: ToolInput): Promise<ToolOutput> {
       message.includes('No extractable text') ||
       message.includes('Could not read') ||
       message.includes('Could not extract') ||
-      message.includes('End of data reached')
+      message.includes('End of data reached') ||
+      message.includes('Empty split plan')
 
     return {
       success: false,
