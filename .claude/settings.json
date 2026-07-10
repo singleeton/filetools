@@ -133,7 +133,40 @@
       "Bash(echo \"EXIT:$?\")",
       "Bash(npx tsx *)",
       "Bash(npm --version)",
-      "Bash(claude --version)"
+      "Bash(claude --version)",
+      "Bash(grep -ril \"word\" src/app/api)",
+      "Bash(find src/app/api -iname \"*word*\" -o -iname \"*doc*\")",
+      "Bash(curl -sI https://raw.githubusercontent.com/google/fonts/main/ofl/notosans/NotoSans-Regular.ttf --max-time 10)",
+      "Bash(node -e \"console.log\\(require.resolve\\('fontkit'\\)\\)\")",
+      "Bash(node -e \"try{console.log\\(require.resolve\\('@pdf-lib/fontkit'\\)\\)}catch\\(e\\){console.log\\('NOT FOUND: @pdf-lib/fontkit'\\)}\")",
+      "Bash(node -e \"const fk = require\\('fontkit'\\); console.log\\(typeof fk.create, typeof fk.open, Object.keys\\(fk\\).slice\\(0,10\\)\\)\")",
+      "Bash(npx --no-install tsx --version)",
+      "Bash(npx --no-install tsx scratch-test.ts)",
+      "Bash(npm uninstall *)",
+      "Bash(rm \"c:\\\\Users\\\\yusuf\\\\Desktop\\\\sith-code\\\\pdftools\\\\src\\\\app\\\\[lang]\\\\\\(tools\\)\\\\pdf-split\\\\split-options.tsx\" && echo deleted)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000 --max-time 5)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\\\\n\" http://localhost:3000 --max-time 5)",
+      "Bash(curl -s -o /dev/null -w \"tr:%{http_code}\\\\n\" http://localhost:3000/tr/pdf-split --max-time 5)",
+      "Bash(npx --no-install playwright --version)",
+      "Bash(where chromium-cli *)",
+      "Bash(npm list *)",
+      "Read(//c/Users/yusuf/AppData/Roaming/npm/**)",
+      "Read(//c//**)",
+      "Bash(node -e \"console.log\\(require.resolve\\('playwright'\\)\\)\")",
+      "Bash(ls \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\ms-playwright\" 2>/dev/null)",
+      "Read(//c/Users/yusuf/AppData/Local/ms-playwright/**)",
+      "Bash(node \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\304fb06e-66bf-49b5-807e-8e5004b07b88\\\\scratchpad\\\\make-test-pdf.js\")",
+      "Bash(node scratch-make-test-pdf.js)",
+      "Bash(npx --yes -p playwright node \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\304fb06e-66bf-49b5-807e-8e5004b07b88\\\\scratchpad\\\\drive.js\")",
+      "Bash(ls \"c:\\\\Users\\\\yusuf\\\\Desktop\\\\sith-code\\\\pdftools\\\\node_modules\\\\playwright\" 2>/dev/null && echo \"found in project\" || echo \"not in project node_modules\"; find \"$HOME/.npm/_npx\" -maxdepth 3 -iname \"playwright\" 2>/dev/null | head -5)",
+      "Read(//c/Users/yusuf/.npm/**)",
+      "Bash(node \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\304fb06e-66bf-49b5-807e-8e5004b07b88\\\\scratchpad\\\\drive.js\")",
+      "Bash(node scratch-drive.js)",
+      "Bash(node scratch-drive-merge.js)",
+      "Bash(rm -f scratch-make-test-pdf.js scratch-drive.js scratch-drive-merge.js)",
+      "Bash(git checkout *)",
+      "Bash(powershell -NoProfile -Command 'Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '\\\\''*next dev*'\\\\'' -or $_.CommandLine -like '\\\\''*node_modules\\\\.bin\\\\next*'\\\\'' } | Select-Object ProcessId, CommandLine')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://filetools-e0ak8cs5b-sith1.vercel.app --max-time 10)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",
@@ -141,7 +174,8 @@
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\users",
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\blog",
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\admin\\(dashboard)\\blog",
-      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\blog"
+      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\blog",
+      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\(tools)\\pdf-split"
     ]
   }
 }

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { HomeStructuredData, FaqStructuredData } from '@/components/shared/structured-data'
+import { AdSlot } from '@/components/shared/ad-slot'
 import { getDictionary } from '@/lib/i18n/get-dictionary'
 import { locales, type Locale } from '@/lib/i18n/config'
 import { getLatestPublishedPosts } from '@/lib/blog'
@@ -194,6 +195,11 @@ export default async function HomePage({
           </div>
         </div>
       </section>
+
+      {/* ADS */}
+      <div className="container mx-auto px-4 py-8">
+        <AdSlot name="landing-mid" />
+      </div>
 
       {/* TRUST */}
       <section className="border-t py-16 sm:py-20">

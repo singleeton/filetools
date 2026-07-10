@@ -1,4 +1,5 @@
 import { db } from '@/lib/db'
+import { AdSlotRenderer } from './ad-slot-renderer'
 
 export async function AdSlot({ name }: { name: string }) {
   let slot: { code: string | null; isActive: boolean } | null = null
@@ -14,11 +15,5 @@ export async function AdSlot({ name }: { name: string }) {
 
   if (!slot || !slot.isActive || !slot.code) return null
 
-  return (
-    <div
-      className="ad-slot w-full"
-      data-slot={name}
-      dangerouslySetInnerHTML={{ __html: slot.code }}
-    />
-  )
+  return <AdSlotRenderer name={name} code={slot.code} />
 }

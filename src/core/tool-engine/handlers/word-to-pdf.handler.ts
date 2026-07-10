@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import mammoth from 'mammoth'
-import fontkit from 'fontkit'
+import * as fontkit from 'fontkit'
 import { PDFDocument, rgb } from 'pdf-lib'
 import type { ToolHandler, ToolResult } from '../types'
 

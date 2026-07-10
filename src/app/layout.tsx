@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import { GoogleAnalytics } from '@/components/layout/google-analytics'
+import { AdsenseLoader } from '@/components/layout/adsense-loader'
 import { ThemeProvider } from '@/components/layout/theme-provider'
 import { siteConfig } from '@/lib/site-config'
 import './globals.css'
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col font-sans">
         <ThemeProvider>
           <GoogleAnalytics />
+          <AdsenseLoader />
           {children}
         </ThemeProvider>
       </body>
