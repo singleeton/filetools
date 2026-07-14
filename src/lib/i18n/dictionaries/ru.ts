@@ -3,6 +3,18 @@ import type { Dictionary } from './en'
 export const ru: Dictionary = {
   nav: {
     tools: 'Инструменты',
+    signIn: 'Войти',
+    signUp: 'Регистрация',
+    browseAll: 'Все: {category}',
+    featuredTool: 'Рекомендуемый инструмент',
+    tryNow: 'Попробовать',
+    comingSoonTitle: 'Скоро',
+    comingSoonDesc: 'Мы разрабатываем эти инструменты — загляните позже.',
+    popular: 'Популярное',
+    new: 'Новое',
+    viewAllTools: 'Все инструменты',
+    popularTools: 'Популярные инструменты',
+    newTools: 'Новые инструменты',
   },
 
   hero: {
@@ -34,6 +46,8 @@ export const ru: Dictionary = {
     image: { label: 'Инструменты изображений', tagline: 'Изменение размера, конвертация и обработка' },
     ai: { label: 'AI инструменты', tagline: 'Умные инструменты, скоро' },
     video: { label: 'Видео инструменты', tagline: 'Конвертация и редактирование, скоро' },
+    audio: { label: 'Аудио инструменты', tagline: 'Конвертация и редактирование, скоро' },
+    file: { label: 'Файловые инструменты', tagline: 'Архивы и сжатие, скоро' },
   },
 
   showcase: {
@@ -51,6 +65,11 @@ export const ru: Dictionary = {
     freeLabel: 'Бесплатное использование',
     signupValue: '0',
     signupLabel: 'Требуется регистраций',
+  },
+
+  toolsPage: {
+    title: 'Все инструменты',
+    subtitle: 'Все бесплатные инструменты по категориям',
   },
 
   tool: {
@@ -492,6 +511,10 @@ export const ru: Dictionary = {
     blog: {
       title: 'Блог — Советы и руководства FileTools',
       description: 'Руководства, советы и новости об инструментах для PDF и конвертации файлов.',
+    },
+    tools: {
+      title: 'Все инструменты - FileTools',
+      description: 'Все бесплатные инструменты FileTools по категориям: PDF, Word, Excel, изображения и другое.',
     },
   },
 }

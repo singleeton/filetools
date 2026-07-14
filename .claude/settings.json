@@ -198,7 +198,15 @@
       "Bash(curl -s -o /dev/null -w \"screenshot: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/screenshots/pdf-merge.png\" --max-time 15)",
       "Bash(curl -s -o /dev/null -w \"pdf-split screenshot: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/screenshots/pdf-split.png\" --max-time 15)",
       "Bash(curl -s -o /dev/null -w \"remove-bg screenshot: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/screenshots/remove-bg.png\" --max-time 15)",
-      "Bash(curl -s -o /dev/null -w \"ads.txt \\(regresyon kontrolü\\): %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/ads.txt\" --max-time 15)"
+      "Bash(curl -s -o /dev/null -w \"ads.txt \\(regresyon kontrolü\\): %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/ads.txt\" --max-time 15)",
+      "Bash(curl -s -o /dev/null http://localhost:3000 --max-time 2)",
+      "Bash(curl -s \"https://filetools-ochre.vercel.app/tr/pdf-split\" --max-time 10)",
+      "Bash(curl -s -o /dev/null -w \"pdf-split: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/tr/pdf-split\" --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"ads.txt: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/ads.txt\" --max-time 15)",
+      "Bash(xargs grep -l \"side\")",
+      "Bash(mkdir -p \"c:\\\\Users\\\\yusuf\\\\Desktop\\\\sith-code\\\\pdftools\\\\src\\\\app\\\\[lang]\\\\tools\")",
+      "Bash(node scratch-nav-shoot.js)",
+      "Bash(node scratch-mobile-shoot.js)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",
@@ -207,7 +215,8 @@
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\blog",
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\admin\\(dashboard)\\blog",
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\blog",
-      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\(tools)\\pdf-split"
+      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\(tools)\\pdf-split",
+      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]"
     ]
   }
 }

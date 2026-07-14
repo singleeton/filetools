@@ -1,6 +1,18 @@
 export const en = {
   nav: {
     tools: 'Tools',
+    signIn: 'Sign In',
+    signUp: 'Sign Up',
+    browseAll: 'Browse all {category}',
+    featuredTool: 'Featured Tool',
+    tryNow: 'Try it now',
+    comingSoonTitle: 'Coming soon',
+    comingSoonDesc: "We're building these tools — check back soon.",
+    popular: 'Popular',
+    new: 'New',
+    viewAllTools: 'View All Tools',
+    popularTools: 'Popular Tools',
+    newTools: 'New Tools',
   },
 
   hero: {
@@ -32,6 +44,8 @@ export const en = {
     image: { label: 'Image Tools', tagline: 'Resize, convert & clean up' },
     ai: { label: 'AI Tools', tagline: 'Smart tools, on the way' },
     video: { label: 'Video Tools', tagline: 'Convert & edit, on the way' },
+    audio: { label: 'Audio Tools', tagline: 'Convert & edit, on the way' },
+    file: { label: 'File Tools', tagline: 'Archives & compression, on the way' },
   },
 
   showcase: {
@@ -49,6 +63,11 @@ export const en = {
     freeLabel: 'Free to use',
     signupValue: '0',
     signupLabel: 'Sign-ups required',
+  },
+
+  toolsPage: {
+    title: 'All Tools',
+    subtitle: 'Every free tool, organized by category',
   },
 
   tool: {
@@ -539,6 +558,10 @@ export const en = {
     blog: {
       title: 'Blog - FileTools Tips & Guides',
       description: 'Guides, tips and news about PDF and file conversion tools. Learn how to merge, split, compress and convert files.',
+    },
+    tools: {
+      title: 'All Tools - FileTools',
+      description: 'Browse every free FileTools tool, organized by category: PDF, Word, Excel, Image and more.',
     },
   },
 }

@@ -3,6 +3,18 @@ import type { Dictionary } from './en'
 export const tr: Dictionary = {
   nav: {
     tools: 'Araçlar',
+    signIn: 'Giriş Yap',
+    signUp: 'Kayıt Ol',
+    browseAll: 'Tüm {category} gör',
+    featuredTool: 'Öne Çıkan Araç',
+    tryNow: 'Şimdi Dene',
+    comingSoonTitle: 'Yakında',
+    comingSoonDesc: 'Bu araçları geliştiriyoruz — yakında burada olacak.',
+    popular: 'Popüler',
+    new: 'Yeni',
+    viewAllTools: 'Tüm Araçları Gör',
+    popularTools: 'Popüler Araçlar',
+    newTools: 'Yeni Araçlar',
   },
 
   hero: {
@@ -34,6 +46,8 @@ export const tr: Dictionary = {
     image: { label: 'Görsel Araçları', tagline: 'Boyutlandır, dönüştür ve düzenle' },
     ai: { label: 'AI Araçları', tagline: 'Akıllı araçlar, yolda' },
     video: { label: 'Video Araçları', tagline: 'Dönüştür ve düzenle, yolda' },
+    audio: { label: 'Ses Araçları', tagline: 'Dönüştür ve düzenle, yolda' },
+    file: { label: 'Dosya Araçları', tagline: 'Arşiv ve sıkıştırma, yolda' },
   },
 
   showcase: {
@@ -51,6 +65,11 @@ export const tr: Dictionary = {
     freeLabel: 'Ücretsiz kullanım',
     signupValue: '0',
     signupLabel: 'Kayıt gereksinimi',
+  },
+
+  toolsPage: {
+    title: 'Tüm Araçlar',
+    subtitle: 'Kategoriye göre düzenlenmiş tüm ücretsiz araçlar',
   },
 
   tool: {
@@ -520,6 +539,10 @@ export const tr: Dictionary = {
     blog: {
       title: 'Blog - FileTools İpuçları ve Rehberler',
       description: 'PDF ve dosya dönüştürme araçları hakkında rehberler, ipuçları ve haberler.',
+    },
+    tools: {
+      title: 'Tüm Araçlar - FileTools',
+      description: 'Tüm ücretsiz FileTools araçlarına göz atın: PDF, Word, Excel, Görsel ve daha fazlası.',
     },
   },
 }

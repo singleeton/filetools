@@ -3,6 +3,18 @@ import type { Dictionary } from './en'
 export const zh: Dictionary = {
   nav: {
     tools: '工具',
+    signIn: '登录',
+    signUp: '注册',
+    browseAll: '查看全部{category}',
+    featuredTool: '推荐工具',
+    tryNow: '立即试用',
+    comingSoonTitle: '即将推出',
+    comingSoonDesc: '我们正在开发这些工具，敬请期待。',
+    popular: '热门',
+    new: '新',
+    viewAllTools: '查看全部工具',
+    popularTools: '热门工具',
+    newTools: '新工具',
   },
 
   hero: {
@@ -34,6 +46,8 @@ export const zh: Dictionary = {
     image: { label: '图片工具', tagline: '调整大小、转换和清理' },
     ai: { label: 'AI 工具', tagline: '智能工具，即将推出' },
     video: { label: '视频工具', tagline: '转换和编辑，即将推出' },
+    audio: { label: '音频工具', tagline: '转换和编辑，即将推出' },
+    file: { label: '文件工具', tagline: '压缩与归档，即将推出' },
   },
 
   showcase: {
@@ -51,6 +65,11 @@ export const zh: Dictionary = {
     freeLabel: '免费使用',
     signupValue: '0',
     signupLabel: '需要注册',
+  },
+
+  toolsPage: {
+    title: '全部工具',
+    subtitle: '按分类整理的所有免费工具',
   },
 
   tool: {
@@ -484,6 +503,10 @@ export const zh: Dictionary = {
     blog: {
       title: '博客 - FileTools 技巧与指南',
       description: '关于 PDF 和文件转换工具的指南、技巧和新闻。',
+    },
+    tools: {
+      title: '全部工具 - FileTools',
+      description: '按分类浏览所有免费 FileTools 工具：PDF、Word、Excel、图片等。',
     },
   },
 }
