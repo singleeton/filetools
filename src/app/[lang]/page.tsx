@@ -8,22 +8,32 @@ import {
 import { Button } from '@/components/ui/button'
 import { HomeStructuredData, FaqStructuredData } from '@/components/shared/structured-data'
 import { AdSlot } from '@/components/shared/ad-slot'
+import { FloatingIcons } from '@/components/landing/floating-icons'
+import { HeroVisual } from '@/components/landing/hero-visual'
+import { HeroDropzone } from '@/components/landing/hero-dropzone'
+import { CategoryCard } from '@/components/landing/category-card'
+import { AnimatedCounter } from '@/components/landing/animated-counter'
+import { ToolShowcase } from '@/components/landing/tool-showcase'
+import { FaqAccordion } from '@/components/landing/faq-accordion'
 import { getDictionary } from '@/lib/i18n/get-dictionary'
+import { getDictionaryWithOverrides } from '@/lib/landing-content'
 import { locales, type Locale } from '@/lib/i18n/config'
 import { getLatestPublishedPosts } from '@/lib/blog'
+import { getToolById, tools } from '@/lib/tools-registry'
+import { categoryMeta, categoryOrder, getCategoryToolCount } from '@/lib/categories'
 import type { Metadata } from 'next'
 
 const toolIcons: Record<string, React.ReactNode> = {
-  Merge: <Merge className="h-8 w-8" />,
-  Scissors: <Scissors className="h-8 w-8" />,
-  FileDown: <FileDown className="h-8 w-8" />,
-  FileText: <FileText className="h-8 w-8" />,
-  FileOutput: <FileOutput className="h-8 w-8" />,
-  RotateCw: <RotateCw className="h-8 w-8" />,
-  Sheet: <Sheet className="h-8 w-8" />,
-  Image: <Image className="h-8 w-8" />,
-  Maximize: <Maximize className="h-8 w-8" />,
-  Eraser: <Eraser className="h-8 w-8" />,
+  Merge: <Merge className="h-7 w-7" />,
+  Scissors: <Scissors className="h-7 w-7" />,
+  FileDown: <FileDown className="h-7 w-7" />,
+  FileText: <FileText className="h-7 w-7" />,
+  FileOutput: <FileOutput className="h-7 w-7" />,
+  RotateCw: <RotateCw className="h-7 w-7" />,
+  Sheet: <Sheet className="h-7 w-7" />,
+  Image: <Image className="h-7 w-7" />,
+  Maximize: <Maximize className="h-7 w-7" />,
+  Eraser: <Eraser className="h-7 w-7" />,
 }
 
 const toolIconMap: Record<string, string> = {
@@ -38,6 +48,13 @@ const toolIconMap: Record<string, string> = {
   'png-to-jpg': 'Image',
   'image-resize': 'Maximize',
   'remove-bg': 'Eraser',
+}
+
+// Deterministic placeholder so SSR/client output never mismatches (no Math.random).
+function placeholderUses(id: string): number {
+  let hash = 0
+  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0
+  return 400 + (hash % 3600)
 }
 
 export async function generateMetadata({
@@ -63,7 +80,7 @@ export default async function HomePage({
   params: Promise<{ lang: string }>
 }) {
   const { lang } = await params
-  const dict = await getDictionary(lang as Locale)
+  const dict = await getDictionaryWithOverrides(lang as Locale)
   const toolIds = Object.keys(dict.tool) as (keyof typeof dict.tool)[]
   const latestPosts = await getLatestPublishedPosts(lang, 3)
 
@@ -80,6 +97,17 @@ export default async function HomePage({
     <Download key="d" className="h-8 w-8" />,
   ]
   const stepKeys = ['step1', 'step2', 'step3'] as const
+  const trustItems = ([
+    { icon: <ServerOff className="h-6 w-6" />, ...dict.trust.noStorage },
+    { icon: <Trash2 className="h-6 w-6" />, ...dict.trust.autoDelete },
+    { icon: <Lock className="h-6 w-6" />, ...dict.trust.encrypted },
+  ] as const)
+
+  const showcaseTools = [
+    { tool: getToolById('pdf-merge'), copy: dict.showcase.pdfMerge },
+    { tool: getToolById('pdf-split'), copy: dict.showcase.pdfWorkspace },
+    { tool: getToolById('remove-bg'), copy: dict.showcase.removeBg },
+  ].filter((entry): entry is { tool: NonNullable<typeof entry.tool>; copy: { title: string; description: string } } => Boolean(entry.tool?.screenshot))
 
   return (
     <>
@@ -87,34 +115,77 @@ export default async function HomePage({
       <FaqStructuredData items={dict.faq.items} />
 
       {/* HERO */}
-      <section className="border-b bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto px-4 py-20 text-center sm:py-28">
-          <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            {dict.hero.title}
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-            {dict.hero.subtitle}
-          </p>
-          <div className="mt-8">
-            <a href="#tools">
-              <Button size="lg" className="text-base">{dict.hero.cta}</Button>
-            </a>
+      <section className="relative overflow-hidden border-b bg-gradient-to-b from-background to-muted/30">
+        <FloatingIcons />
+        <div className="container relative mx-auto grid gap-12 px-4 py-20 sm:py-28 lg:grid-cols-2 lg:items-center">
+          <div className="text-center lg:text-left">
+            {dict.hero.badge && (
+              <span className="inline-flex items-center rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+                {dict.hero.badge}
+              </span>
+            )}
+            <h1 className="mx-auto mt-5 max-w-xl text-4xl font-bold tracking-tight sm:text-5xl lg:mx-0 lg:text-6xl">
+              {dict.hero.title}
+            </h1>
+            <p className="mx-auto mt-6 max-w-lg text-lg text-muted-foreground sm:text-xl lg:mx-0">
+              {dict.hero.subtitle}
+            </p>
+            <div className="mt-8 flex justify-center lg:justify-start">
+              <a href="#tools">
+                <Button size="lg" className="text-base">{dict.hero.cta}</Button>
+              </a>
+            </div>
+            <HeroDropzone lang={lang} hint={dict.hero.dropHint} />
           </div>
-          {dict.hero.image && (
-            <NextImage
-              src={dict.hero.image}
-              alt={dict.hero.title}
-              width={960}
-              height={480}
-              unoptimized
-              className="mx-auto mt-12 w-full max-w-3xl rounded-xl border object-cover"
-            />
-          )}
+
+          <div>
+            {dict.hero.image ? (
+              <NextImage
+                src={dict.hero.image}
+                alt={dict.hero.title}
+                width={960}
+                height={480}
+                unoptimized
+                className="mx-auto w-full max-w-lg rounded-xl border object-cover"
+              />
+            ) : (
+              <HeroVisual
+                convertedIn={dict.hero.visual.convertedIn}
+                noWatermark={dict.hero.visual.noWatermark}
+                autoDeleted={dict.hero.visual.autoDeleted}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* CATEGORIES */}
+      <section className="py-16 sm:py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-center text-3xl font-bold tracking-tight">{dict.categories.title}</h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.categories.subtitle}</p>
+          <div className="mx-auto mt-12 grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {categoryOrder.map((cat) => {
+              const count = getCategoryToolCount(cat)
+              return (
+                <CategoryCard
+                  key={cat}
+                  lang={lang}
+                  meta={categoryMeta[cat]}
+                  label={dict.categories[cat].label}
+                  tagline={dict.categories[cat].tagline}
+                  countLabel={dict.categories.toolsCount.replace('{count}', String(count))}
+                  comingSoon={count === 0}
+                  comingSoonLabel={dict.categories.comingSoon}
+                />
+              )
+            })}
+          </div>
         </div>
       </section>
 
       {/* TOOL GRID */}
-      <section id="tools" className="py-16 sm:py-20">
+      <section id="tools" className="border-y bg-muted/30 py-16 sm:py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-center text-3xl font-bold tracking-tight">
             {dict.popularTools.title}
@@ -123,53 +194,28 @@ export default async function HomePage({
             {dict.popularTools.subtitle}
           </p>
           <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {toolIds.map((id) => (
-              <Link
-                key={id}
-                href={`/${lang}/${id}`}
-                className="group flex flex-col items-center rounded-xl border bg-card p-8 text-center transition-all hover:border-primary/50 hover:shadow-md"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  {toolIcons[toolIconMap[id]] || <FileText className="h-8 w-8" />}
-                </div>
-                <h3 className="mt-4 text-lg font-semibold">{dict.tool[id].name}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{dict.tool[id].shortDesc}</p>
-                <span className="mt-4 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                  {dict.popularTools.useTool}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section className="border-y bg-muted/30 py-16 sm:py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-center text-3xl font-bold tracking-tight">{dict.features.title}</h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.features.subtitle}</p>
-          <div className="mx-auto mt-12 grid max-w-4xl gap-8 sm:grid-cols-2">
-            {featureKeys.map((key, i) => (
-              <div key={key} className="flex gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  {featureIcons[i]}
-                </div>
-                <div>
-                  <h3 className="font-semibold">{dict.features[key].title}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{dict.features[key].description}</p>
-                  {dict.features[key].image && (
-                    <NextImage
-                      src={dict.features[key].image}
-                      alt={dict.features[key].title}
-                      width={400}
-                      height={220}
-                      unoptimized
-                      className="mt-3 w-full max-w-xs rounded-lg border object-cover"
-                    />
-                  )}
-                </div>
-              </div>
-            ))}
+            {toolIds.map((id) => {
+              const meta = categoryMeta[getToolById(id)?.category ?? 'pdf']
+              return (
+                <Link
+                  key={id}
+                  href={`/${lang}/${id}`}
+                  className="group flex flex-col items-center rounded-xl border bg-card p-8 text-center transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md"
+                >
+                  <div className={`flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br ${meta.gradient} text-white transition-transform group-hover:scale-105`}>
+                    {toolIcons[toolIconMap[id]] || <FileText className="h-7 w-7" />}
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold">{dict.tool[id].name}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{dict.tool[id].shortDesc}</p>
+                  <span className="mt-3 text-xs text-muted-foreground">
+                    {placeholderUses(id).toLocaleString(lang)} {dict.popularTools.usesLabel}
+                  </span>
+                  <span className="mt-3 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    {dict.popularTools.useTool}
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -179,13 +225,14 @@ export default async function HomePage({
         <div className="container mx-auto px-4">
           <h2 className="text-center text-3xl font-bold tracking-tight">{dict.howItWorks.title}</h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.howItWorks.subtitle}</p>
-          <div className="mx-auto mt-12 grid max-w-3xl gap-8 sm:grid-cols-3">
+          <div className="relative mx-auto mt-14 grid max-w-3xl gap-10 sm:grid-cols-3">
+            <div className="absolute top-8 right-[16.5%] left-[16.5%] hidden h-px bg-border sm:block" />
             {stepKeys.map((key, i) => (
-              <div key={key} className="flex flex-col items-center text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <div key={key} className="relative flex flex-col items-center text-center">
+                <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border bg-background text-primary shadow-sm">
                   {stepIcons[i]}
                 </div>
-                <div className="mt-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                <div className="mt-3 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
                   {i + 1}
                 </div>
                 <h3 className="mt-3 font-semibold">{dict.howItWorks[key].title}</h3>
@@ -201,32 +248,91 @@ export default async function HomePage({
         <AdSlot name="landing-mid" />
       </div>
 
-      {/* TRUST */}
-      <section className="border-t py-16 sm:py-20">
+      {/* WHY CHOOSE US (features + trust merged) */}
+      <section className="border-y bg-muted/30 py-16 sm:py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-center text-3xl font-bold tracking-tight">{dict.trust.title}</h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.trust.subtitle}</p>
-          <div className="mx-auto mt-12 grid max-w-4xl gap-8 sm:grid-cols-3">
-            {([
-              { icon: <ServerOff className="h-8 w-8" />, ...dict.trust.noStorage },
-              { icon: <Trash2 className="h-8 w-8" />, ...dict.trust.autoDelete },
-              { icon: <Lock className="h-8 w-8" />, ...dict.trust.encrypted },
-            ] as const).map((item) => (
-              <div key={item.title} className="flex flex-col items-center text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500/10 text-green-600">
+          <h2 className="text-center text-3xl font-bold tracking-tight">{dict.features.title}</h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.features.subtitle}</p>
+          <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featureKeys.map((key, i) => (
+              <div key={key} className="flex gap-4 rounded-xl border bg-card p-5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  {featureIcons[i]}
+                </div>
+                <div>
+                  <h3 className="font-semibold">{dict.features[key].title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{dict.features[key].description}</p>
+                </div>
+              </div>
+            ))}
+            {trustItems.map((item) => (
+              <div key={item.title} className="flex gap-4 rounded-xl border bg-card p-5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600">
                   {item.icon}
                 </div>
-                <h3 className="mt-4 font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                <div>
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* LIVE STATISTICS */}
+      <section className="py-16 sm:py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 divide-y-0 lg:grid-cols-4">
+            <div className="text-center">
+              <div className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
+                <AnimatedCounter value={tools.length} suffix="+" />
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">{dict.stats.toolsLabel}</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
+                <AnimatedCounter value={categoryOrder.length} />
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">{dict.stats.categoriesLabel}</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">{dict.stats.freeValue}</div>
+              <p className="mt-2 text-sm text-muted-foreground">{dict.stats.freeLabel}</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">{dict.stats.signupValue}</div>
+              <p className="mt-2 text-sm text-muted-foreground">{dict.stats.signupLabel}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* INTERACTIVE SHOWCASE */}
+      {showcaseTools.length > 0 && (
+        <section className="border-y bg-muted/30 py-16 sm:py-20">
+          <div className="container mx-auto px-4">
+            <h2 className="text-center text-3xl font-bold tracking-tight">{dict.showcase.title}</h2>
+            <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.showcase.subtitle}</p>
+            <div className="mx-auto mt-14 max-w-5xl space-y-16">
+              {showcaseTools.map(({ tool, copy }, i) => (
+                <ToolShowcase
+                  key={tool.id}
+                  title={copy.title}
+                  description={copy.description}
+                  screenshot={tool.screenshot!}
+                  accent={categoryMeta[tool.category].accent}
+                  reversed={i % 2 === 1}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* BLOG */}
       {latestPosts.length > 0 && (
-        <section className="border-t py-16 sm:py-20">
+        <section className="py-16 sm:py-20">
           <div className="container mx-auto px-4">
             <h2 className="text-center text-3xl font-bold tracking-tight">{dict.blog.latestTitle}</h2>
             <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.blog.latestSubtitle}</p>
@@ -268,13 +374,8 @@ export default async function HomePage({
       <section className="border-t bg-muted/30 py-16 sm:py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-center text-3xl font-bold tracking-tight">{dict.faq.title}</h2>
-          <div className="mx-auto mt-12 max-w-2xl space-y-6">
-            {dict.faq.items.map((item, i) => (
-              <div key={i} className="rounded-lg border bg-card p-6">
-                <h3 className="font-semibold">{item.question}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{item.answer}</p>
-              </div>
-            ))}
+          <div className="mx-auto mt-12 max-w-2xl">
+            <FaqAccordion items={dict.faq.items} />
           </div>
         </div>
       </section>

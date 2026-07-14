@@ -6,17 +6,51 @@ export const tr: Dictionary = {
   },
 
   hero: {
+    badge: 'Kayıt yok · Kurulum yok · %100 ücretsiz',
     title: 'Hızlı ve Ücretsiz Online Dosya Araçları',
     subtitle:
       'PDF ve belgelerinizi tarayıcınızda anında dönüştürün, birleştirin, bölün ve sıkıştırın. Kurulum gerektirmez.',
     cta: 'Ücretsiz Deneyin',
+    dropHint: 'veya başlamak için dosyanızı buraya bırakın',
     image: '',
+    visual: { convertedIn: '1.2 saniyede dönüştürüldü', noWatermark: 'Filigran yok', autoDeleted: 'Otomatik silindi' },
   },
 
   popularTools: {
     title: 'Popüler Araçlar',
     subtitle: 'PDF ve belge dosyalarıyla çalışmak için ihtiyacınız olan her şey',
     useTool: 'Kullan →',
+    usesLabel: 'bu ay kullanıldı',
+  },
+
+  categories: {
+    title: 'Kategorilere Göz At',
+    subtitle: 'Her araç, dosya tipine göre düzenlendi',
+    toolsCount: '{count} araç',
+    comingSoon: 'Yakında',
+    pdf: { label: 'PDF Araçları', tagline: 'Birleştir, böl, sıkıştır ve döndür' },
+    word: { label: 'Word Araçları', tagline: "Word'e ve Word'den dönüştür" },
+    excel: { label: 'Excel Araçları', tagline: "PDF'den tablo çıkar" },
+    image: { label: 'Görsel Araçları', tagline: 'Boyutlandır, dönüştür ve düzenle' },
+    ai: { label: 'AI Araçları', tagline: 'Akıllı araçlar, yolda' },
+    video: { label: 'Video Araçları', tagline: 'Dönüştür ve düzenle, yolda' },
+  },
+
+  showcase: {
+    title: 'Canlı Örnekler',
+    subtitle: 'Gerçek araçlar, gerçek arayüzler — mockup değil',
+    pdfMerge: { title: "PDF'leri saniyeler içinde birleştir", description: 'Sürükleyerek sırala, sonra tek bir belgede birleştir.' },
+    pdfWorkspace: { title: 'Tam bir sayfa çalışma alanı', description: 'Canlı önizlemelerle sayfaları sırala, döndür, sil ve böl.' },
+    removeBg: { title: 'Yapay zeka ile arka plan kaldırma', description: 'Kenarları düzeltmek için boyayın, saniyeler içinde temiz sonuç alın.' },
+  },
+
+  stats: {
+    toolsLabel: 'Ücretsiz araç',
+    categoriesLabel: 'Kategori',
+    freeValue: '%100',
+    freeLabel: 'Ücretsiz kullanım',
+    signupValue: '0',
+    signupLabel: 'Kayıt gereksinimi',
   },
 
   tool: {

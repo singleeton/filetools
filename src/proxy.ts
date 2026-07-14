@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { locales, defaultLocale } from './lib/i18n/config'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   const pathnameHasLocale = locales.some(
@@ -23,6 +23,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|admin|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|ads.txt).*)',
+    // Skip API routes, admin, Next internals, and any path with a file
+    // extension (static assets in /public — images, fonts, txt, xml, ...).
+    '/((?!api|admin|_next/static|_next/image|.*\\..*).*)',
   ],
 }

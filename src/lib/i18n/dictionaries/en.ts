@@ -4,17 +4,51 @@ export const en = {
   },
 
   hero: {
+    badge: 'No sign-up · No installation · 100% free',
     title: 'Fast & Free Online File Tools',
     subtitle:
       'Convert, merge, split and compress PDF & documents instantly in your browser. No installation required.',
     cta: 'Try Free Tools',
+    dropHint: 'or drop a file here to get started',
     image: '',
+    visual: { convertedIn: 'Converted in 1.2s', noWatermark: 'No watermark', autoDeleted: 'Auto-deleted' },
   },
 
   popularTools: {
     title: 'Popular Tools',
     subtitle: 'Everything you need to work with PDF and document files',
     useTool: 'Use Tool →',
+    usesLabel: 'uses this month',
+  },
+
+  categories: {
+    title: 'Explore by Category',
+    subtitle: 'Every tool, organized by file type',
+    toolsCount: '{count} tools',
+    comingSoon: 'Coming soon',
+    pdf: { label: 'PDF Tools', tagline: 'Merge, split, compress & rotate' },
+    word: { label: 'Word Tools', tagline: 'Convert to and from Word' },
+    excel: { label: 'Excel Tools', tagline: 'Extract tables from PDF' },
+    image: { label: 'Image Tools', tagline: 'Resize, convert & clean up' },
+    ai: { label: 'AI Tools', tagline: 'Smart tools, on the way' },
+    video: { label: 'Video Tools', tagline: 'Convert & edit, on the way' },
+  },
+
+  showcase: {
+    title: 'See It In Action',
+    subtitle: 'Real tools, real interfaces — no mockups',
+    pdfMerge: { title: 'Merge PDFs in seconds', description: 'Drag to reorder, then combine into one clean document.' },
+    pdfWorkspace: { title: 'A full page workspace', description: 'Reorder, rotate, delete and split pages with live thumbnails.' },
+    removeBg: { title: 'AI background removal', description: 'Paint to refine edges and get a clean cut-out instantly.' },
+  },
+
+  stats: {
+    toolsLabel: 'Free tools',
+    categoriesLabel: 'Categories',
+    freeValue: '100%',
+    freeLabel: 'Free to use',
+    signupValue: '0',
+    signupLabel: 'Sign-ups required',
   },
 
   tool: {

@@ -1,4 +1,4 @@
-export type ToolCategory = 'pdf' | 'convert' | 'image' | 'ai' | 'video'
+export type ToolCategory = 'pdf' | 'word' | 'excel' | 'image' | 'ai' | 'video'
 
 export interface Tool {
   id: string
@@ -9,6 +9,8 @@ export interface Tool {
   icon: string
   isNew?: boolean
   isPremium?: boolean
+  /** Path to a real product screenshot used in the landing page showcase */
+  screenshot?: string
 }
 
 export interface ToolPageProps {

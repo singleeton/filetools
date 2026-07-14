@@ -1,4 +1,6 @@
 import { db } from './db'
+import { getDictionary } from './i18n/get-dictionary'
+import type { Locale } from './i18n/config'
 import type { Dictionary } from './i18n/dictionaries/en'
 
 export async function getLandingOverrides(locale: string): Promise<Record<string, Record<string, string>>> {
@@ -92,4 +94,18 @@ export function applyOverrides(
   }
 
   return result
+}
+
+/** Fetches the dictionary for a locale with admin-edited landing content merged in. */
+export async function getDictionaryWithOverrides(locale: Locale): Promise<Dictionary> {
+  let dict = await getDictionary(locale)
+  try {
+    const overrides = await getLandingOverrides(locale)
+    if (Object.keys(overrides).length > 0) {
+      dict = applyOverrides(dict, overrides)
+    }
+  } catch {
+    // use default dictionary
+  }
+  return dict
 }

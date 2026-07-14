@@ -179,7 +179,20 @@
       "Bash(curl -sI https://filetools-ochre.vercel.app/ads.txt --max-time 15)",
       "Skill(update-config)",
       "Skill(update-config:*)",
-      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('.claude/settings.json','utf8'\\)\\); console.log\\('valid'\\)\")"
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('.claude/settings.json','utf8'\\)\\); console.log\\('valid'\\)\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\(JSON.stringify\\({dependencies:p.dependencies, devDependencies:p.devDependencies}, null, 2\\)\\)\")",
+      "Bash(echo \"started with pid $!\")",
+      "Bash(ls -la \"c:\\\\Users\\\\yusuf\\\\Desktop\\\\sith-code\\\\pdftools\\\\tmp\\\\test.jpg\" \"c:\\\\Users\\\\yusuf\\\\Desktop\\\\sith-code\\\\pdftools\\\\tmp\\\\test.png\")",
+      "Bash(node -e \"console.log\\(require.resolve\\('sharp'\\)\\)\")",
+      "Bash(npx --yes -p playwright node \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\a7cf65ef-d316-4bb8-b6ed-e2d51dfccad7\\\\scratchpad\\\\shoot.js\")",
+      "Bash(npm ls *)",
+      "Bash(node \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\a7cf65ef-d316-4bb8-b6ed-e2d51dfccad7\\\\scratchpad\\\\shoot.js\")",
+      "Bash(cp \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\a7cf65ef-d316-4bb8-b6ed-e2d51dfccad7\\\\scratchpad\\\\shoot.js\" \"c:\\\\Users\\\\yusuf\\\\Desktop\\\\sith-code\\\\pdftools\\\\scratch-shoot.js\")",
+      "Bash(node scratch-shoot.js)",
+      "Bash(node scratch-shoot2.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/screenshots/pdf-merge.png\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/_next/image?url=%2Fscreenshots%2Fpdf-merge.png&w=1200&q=75\")",
+      "Bash(echo \"restarted pid $!\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",

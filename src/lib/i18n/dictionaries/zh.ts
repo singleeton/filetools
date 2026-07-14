@@ -6,17 +6,51 @@ export const zh: Dictionary = {
   },
 
   hero: {
+    badge: '无需注册 · 无需安装 · 100% 免费',
     title: '快速免费的在线文件工具',
     subtitle:
       '在浏览器中即时转换、合并、拆分和压缩 PDF 及文档。无需安装任何软件。',
     cta: '免费试用',
+    dropHint: '或将文件拖到此处开始',
     image: '',
+    visual: { convertedIn: '1.2 秒内转换完成', noWatermark: '无水印', autoDeleted: '自动删除' },
   },
 
   popularTools: {
     title: '热门工具',
     subtitle: '处理 PDF 和文档文件所需的一切',
     useTool: '使用工具 →',
+    usesLabel: '本月使用次数',
+  },
+
+  categories: {
+    title: '按分类浏览',
+    subtitle: '每个工具都按文件类型分类',
+    toolsCount: '{count} 个工具',
+    comingSoon: '即将推出',
+    pdf: { label: 'PDF 工具', tagline: '合并、拆分、压缩和旋转' },
+    word: { label: 'Word 工具', tagline: '与 Word 互相转换' },
+    excel: { label: 'Excel 工具', tagline: '从 PDF 提取表格' },
+    image: { label: '图片工具', tagline: '调整大小、转换和清理' },
+    ai: { label: 'AI 工具', tagline: '智能工具，即将推出' },
+    video: { label: '视频工具', tagline: '转换和编辑，即将推出' },
+  },
+
+  showcase: {
+    title: '实际效果演示',
+    subtitle: '真实工具，真实界面 —— 非效果图',
+    pdfMerge: { title: '几秒钟合并 PDF', description: '拖动排序，然后合并为一个文档。' },
+    pdfWorkspace: { title: '完整的页面工作区', description: '通过实时缩略图重新排序、旋转、删除和拆分页面。' },
+    removeBg: { title: 'AI 智能抠图', description: '涂抹修正边缘，即刻获得干净的抠图结果。' },
+  },
+
+  stats: {
+    toolsLabel: '免费工具',
+    categoriesLabel: '分类',
+    freeValue: '100%',
+    freeLabel: '免费使用',
+    signupValue: '0',
+    signupLabel: '需要注册',
   },
 
   tool: {
