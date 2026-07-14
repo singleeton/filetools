@@ -192,7 +192,13 @@
       "Bash(node scratch-shoot2.js)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/screenshots/pdf-merge.png\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/_next/image?url=%2Fscreenshots%2Fpdf-merge.png&w=1200&q=75\")",
-      "Bash(echo \"restarted pid $!\")"
+      "Bash(echo \"restarted pid $!\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://filetools-ochre.vercel.app/screenshots/pdf-merge.png\" --max-time 10)",
+      "Bash(curl -s -o /dev/null -w \"ana sayfa: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/tr\" --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"screenshot: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/screenshots/pdf-merge.png\" --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"pdf-split screenshot: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/screenshots/pdf-split.png\" --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"remove-bg screenshot: %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/screenshots/remove-bg.png\" --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"ads.txt \\(regresyon kontrolü\\): %{http_code}\\\\n\" \"https://filetools-ochre.vercel.app/ads.txt\" --max-time 15)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",
