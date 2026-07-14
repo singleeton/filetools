@@ -369,7 +369,7 @@ export function PdfWorkspace({ file, exportSlug, outputBaseName, defaultTool, on
           </PdfCanvas>
 
           {step === 'editing' && (
-            <div className="pointer-events-auto absolute right-3 top-3 w-56">
+            <div className="pointer-events-auto absolute right-3 bottom-3 w-56">
               <PdfLiveSummary
                 selectedCount={selection.selectedIds.size}
                 outputCount={exportGroups.length}
