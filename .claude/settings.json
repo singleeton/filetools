@@ -10,6 +10,8 @@
       "Bash(echo \"tmp/\")",
       "Bash(git rm *)",
       "Bash(git commit *)",
+      "Bash(git add *)",
+      "Bash(git push*)",
       "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\" http://localhost:3000/admin/login)",
       "WebFetch(domain:filetools-ochre.vercel.app)",
       "Bash(npx vercel *)",
@@ -166,7 +168,18 @@
       "Bash(rm -f scratch-make-test-pdf.js scratch-drive.js scratch-drive-merge.js)",
       "Bash(git checkout *)",
       "Bash(powershell -NoProfile -Command 'Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '\\\\''*next dev*'\\\\'' -or $_.CommandLine -like '\\\\''*node_modules\\\\.bin\\\\next*'\\\\'' } | Select-Object ProcessId, CommandLine')",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://filetools-e0ak8cs5b-sith1.vercel.app --max-time 10)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://filetools-e0ak8cs5b-sith1.vercel.app --max-time 10)",
+      "Bash(vercel --prod --yes)",
+      "Bash(curl -s https://filetools-ochre.vercel.app/tr/pdf-split --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://filetools-ochre.vercel.app/tr --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://filetools-ochre.vercel.app/tr/pdf-split --max-time 15)",
+      "Bash(curl -s https://filetools-ochre.vercel.app/ads.txt --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://filetools-ochre.vercel.app/ads.txt --max-time 15)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://filetools-ochre.vercel.app/tr/word-to-pdf --max-time 15)",
+      "Bash(curl -sI https://filetools-ochre.vercel.app/ads.txt --max-time 15)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('.claude/settings.json','utf8'\\)\\); console.log\\('valid'\\)\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",
