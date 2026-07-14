@@ -17,7 +17,7 @@ export function PdfPagePreviewOverlay({ page, position, getThumbnail, onClose, p
 
   useEffect(() => {
     let cancelled = false
-    getThumbnail(page.sourceIndex, 900).then((info) => {
+    getThumbnail(page.sourceIndex, 1800).then((info) => {
       if (!cancelled) setThumb(info)
     })
     return () => {
@@ -47,14 +47,14 @@ export function PdfPagePreviewOverlay({ page, position, getThumbnail, onClose, p
         <X className="size-5" />
       </button>
 
-      <div className="flex max-h-full max-w-full flex-col items-center gap-3" onClick={(e) => e.stopPropagation()}>
-        <div className="flex max-h-[80vh] items-center justify-center overflow-hidden rounded-lg bg-white shadow-2xl">
+      <div className="flex h-[90vh] w-[min(92vw,1400px)] flex-col items-center gap-3" onClick={(e) => e.stopPropagation()}>
+        <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-lg bg-white shadow-2xl">
           {thumb ? (
             <img
               src={thumb.dataUrl}
               alt={`${pageLabel} ${position + 1}`}
               style={{ transform: `rotate(${page.rotation}deg)` }}
-              className="max-h-[80vh] max-w-full object-contain"
+              className="h-full w-full object-contain"
             />
           ) : (
             <div className="flex h-64 w-48 items-center justify-center">

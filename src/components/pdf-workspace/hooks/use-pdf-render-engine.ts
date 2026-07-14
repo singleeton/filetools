@@ -66,7 +66,10 @@ export function usePdfRenderEngine(file: File | null): UsePdfRenderEngineReturn 
   const docRef = useRef<PDFDocumentProxy | null>(null)
   // Insertion-ordered map used as a cheap LRU: re-inserting a key on access
   // moves it to the end, so eviction (from the front) drops the coldest entry.
-  const thumbnailCache = useRef<Map<number, Promise<PdfThumbnailInfo>>>(new Map())
+  // Keyed by `${sourceIndex}:${maxWidth}` — grid thumbnails and the larger
+  // preview overlay request different resolutions for the same page and
+  // must not collide on a shared cache entry.
+  const thumbnailCache = useRef<Map<string, Promise<PdfThumbnailInfo>>>(new Map())
   const geometryCache = useRef<Map<number, Promise<PdfPageGeometry>>>(new Map())
   const queueRef = useRef(new RenderQueue())
 
@@ -147,11 +150,12 @@ export function usePdfRenderEngine(file: File | null): UsePdfRenderEngineReturn 
     if (!doc) return Promise.reject(new Error('PDF not loaded'))
 
     const cache = thumbnailCache.current
-    const cached = cache.get(sourceIndex)
+    const cacheKey = `${sourceIndex}:${maxWidth}`
+    const cached = cache.get(cacheKey)
     if (cached) {
       // touch: move to the end so it's the most-recently-used entry
-      cache.delete(sourceIndex)
-      cache.set(sourceIndex, cached)
+      cache.delete(cacheKey)
+      cache.set(cacheKey, cached)
       return cached
     }
 
@@ -176,7 +180,7 @@ export function usePdfRenderEngine(file: File | null): UsePdfRenderEngineReturn 
       }
     })
 
-    cache.set(sourceIndex, promise)
+    cache.set(cacheKey, promise)
     if (cache.size > THUMBNAIL_CACHE_LIMIT) {
       const oldestKey = cache.keys().next().value
       if (oldestKey !== undefined) cache.delete(oldestKey)
