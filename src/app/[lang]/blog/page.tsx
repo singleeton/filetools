@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { ArrowRight } from 'lucide-react'
 import { getDictionary } from '@/lib/i18n/get-dictionary'
 import { locales, type Locale } from '@/lib/i18n/config'
 import { getPublishedPostsPage } from '@/lib/blog'
@@ -51,28 +52,38 @@ export default async function BlogListPage({
       {posts.length === 0 ? (
         <p className="mt-12 text-center text-muted-foreground">{dict.blog.emptyState}</p>
       ) : (
-        <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto mt-14 max-w-4xl divide-y">
           {posts.map((post) => (
             <Link
               key={post.id}
               href={`/${lang}/blog/${post.slug}`}
-              className="group flex flex-col overflow-hidden rounded-xl border bg-card transition-all hover:border-primary/50 hover:shadow-md"
+              className="group flex flex-col gap-6 py-10 first:pt-0 sm:flex-row sm:items-center"
             >
               {post.coverImageUrl && (
-                <Image
-                  src={post.coverImageUrl}
-                  alt={post.title}
-                  width={400}
-                  height={220}
-                  unoptimized
-                  className="h-40 w-full object-cover"
-                />
+                <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-2xl sm:w-80">
+                  <Image
+                    src={post.coverImageUrl}
+                    alt={post.title}
+                    fill
+                    sizes="(min-width: 640px) 320px, 100vw"
+                    unoptimized
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
               )}
-              <div className="flex flex-1 flex-col p-5">
-                <h2 className="font-semibold group-hover:text-primary">{post.title}</h2>
-                <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
-                <span className="mt-4 text-sm font-medium text-primary">
-                  {dict.blog.readMore} →
+              <div className="min-w-0 flex-1">
+                {post.publishedAt && (
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric' }).format(post.publishedAt)}
+                  </span>
+                )}
+                <h2 className="mt-2 text-xl font-semibold tracking-tight group-hover:text-primary sm:text-2xl">
+                  {post.title}
+                </h2>
+                <p className="mt-3 text-base text-muted-foreground">{post.excerpt}</p>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                  {dict.blog.readMore}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
             </Link>
@@ -81,7 +92,7 @@ export default async function BlogListPage({
       )}
 
       {totalPages > 1 && (
-        <div className="mx-auto mt-12 flex max-w-5xl items-center justify-center gap-4">
+        <div className="mx-auto mt-4 flex max-w-4xl items-center justify-center gap-4 border-t pt-8">
           {page > 1 && (
             <Link href={`/${lang}/blog?page=${page - 1}`} className="text-sm font-medium text-primary hover:underline">
               ← {dict.blog.previous}

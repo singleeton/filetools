@@ -112,6 +112,23 @@ export function MobileNavDrawer({ open, onClose }: MobileNavDrawerProps) {
           })}
         </div>
 
+        <div className="space-y-1 border-t p-4">
+          <Link
+            href={`/${lang}/tools`}
+            onClick={onClose}
+            className="block rounded-md py-2 text-sm font-medium hover:text-foreground"
+          >
+            {dict.nav.tools}
+          </Link>
+          <Link
+            href={`/${lang}/blog`}
+            onClick={onClose}
+            className="block rounded-md py-2 text-sm font-medium hover:text-foreground"
+          >
+            {dict.blog.nav}
+          </Link>
+        </div>
+
         <div className="space-y-2 border-t p-4">
           <Link href={`/${lang}/login`} onClick={onClose}>
             <Button variant="outline" className="w-full">{dict.nav.signIn}</Button>

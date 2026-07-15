@@ -1,12 +1,13 @@
 'use client'
 
+import Link from 'next/link'
 import { navCategoryOrder } from '@/lib/categories'
 import { useDictionary } from '@/lib/i18n/dictionary-context'
 import { NavDropdown } from './nav-dropdown'
 import { CategoryMegaMenu } from './category-mega-menu'
 import { ToolsMegaMenu } from './tools-mega-menu'
 
-/** Desktop nav bar: one hover-mega-menu per category, plus the Tools menu. */
+/** Desktop nav bar: one hover-mega-menu per category, plus the Tools and Blog links. */
 export function Navigation() {
   const { dict, lang } = useDictionary()
 
@@ -23,6 +24,13 @@ export function Navigation() {
       <NavDropdown label={dict.nav.tools} href={`/${lang}/tools`} align="right">
         {(close) => <ToolsMegaMenu onNavigate={close} />}
       </NavDropdown>
+
+      <Link
+        href={`/${lang}/blog`}
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+      >
+        {dict.blog.nav}
+      </Link>
     </nav>
   )
 }

@@ -19,7 +19,6 @@ import { FaqAccordion } from '@/components/landing/faq-accordion'
 import { getDictionary } from '@/lib/i18n/get-dictionary'
 import { getDictionaryWithOverrides } from '@/lib/landing-content'
 import { locales, type Locale } from '@/lib/i18n/config'
-import { getLatestPublishedPosts } from '@/lib/blog'
 import { getToolById, tools } from '@/lib/tools-registry'
 import { categoryMeta, categoryOrder, getCategoryToolCount } from '@/lib/categories'
 import type { Metadata } from 'next'
@@ -48,7 +47,6 @@ export default async function HomePage({
 }) {
   const { lang } = await params
   const dict = await getDictionaryWithOverrides(lang as Locale)
-  const latestPosts = await getLatestPublishedPosts(lang, 3)
 
   const featureIcons = [
     <Zap key="z" className="h-6 w-6" />,
@@ -127,7 +125,7 @@ export default async function HomePage({
 
       {/* CATEGORIES */}
       <section className="relative overflow-hidden py-16 sm:py-20">
-        <SectionGlow colors={['bg-rose-500/10', 'bg-blue-500/10', 'bg-violet-500/10']} />
+        <SectionGlow colors={['bg-blue-500/10', 'bg-emerald-500/10', 'bg-violet-500/10']} />
         <div className="container relative mx-auto px-4">
           <h2 className="text-center text-3xl font-bold tracking-tight">{dict.categories.title}</h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.categories.subtitle}</p>
@@ -257,46 +255,6 @@ export default async function HomePage({
           </div>
         </div>
       </section>
-
-      {/* BLOG */}
-      {latestPosts.length > 0 && (
-        <section className="py-16 sm:py-20">
-          <div className="container mx-auto px-4">
-            <h2 className="text-center text-3xl font-bold tracking-tight">{dict.blog.latestTitle}</h2>
-            <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.blog.latestSubtitle}</p>
-            <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {latestPosts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/${lang}/blog/${post.slug}`}
-                  className="group flex flex-col overflow-hidden rounded-xl border bg-card transition-all hover:border-primary/50 hover:shadow-md"
-                >
-                  {post.coverImageUrl && (
-                    <NextImage
-                      src={post.coverImageUrl}
-                      alt={post.title}
-                      width={400}
-                      height={220}
-                      unoptimized
-                      className="h-40 w-full object-cover"
-                    />
-                  )}
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-semibold group-hover:text-primary">{post.title}</h3>
-                    <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
-                    <span className="mt-4 text-sm font-medium text-primary">{dict.blog.readMore} →</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-            <div className="mt-8 text-center">
-              <Link href={`/${lang}/blog`} className="text-sm font-medium text-primary hover:underline">
-                {dict.blog.viewAll} →
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* FAQ */}
       <section className="border-t bg-muted/30 py-16 sm:py-20">
