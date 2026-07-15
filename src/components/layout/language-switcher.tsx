@@ -2,12 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { Globe } from 'lucide-react'
 import { locales, localeNames, localeFlags, type Locale } from '@/lib/i18n/config'
 import { useDictionary } from '@/lib/i18n/dictionary-context'
 
 export function LanguageSwitcher() {
-  const { lang } = useDictionary()
+  const { lang, localeAlternates } = useDictionary()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -23,6 +24,12 @@ export function LanguageSwitcher() {
   }, [])
 
   function getLocalizedPath(locale: Locale) {
+    // Pages whose URL can't be derived by swapping the lang segment (e.g. a
+    // blog post with a per-locale slug) register their own mapping; fall
+    // back to the blog index rather than guessing a slug that may 404.
+    if (localeAlternates) {
+      return localeAlternates[locale] ?? `/${locale}/blog`
+    }
     const segments = pathname.split('/')
     segments[1] = locale
     return segments.join('/')
@@ -41,7 +48,7 @@ export function LanguageSwitcher() {
       {open && (
         <div className="absolute right-0 top-full z-50 mt-1 w-40 rounded-lg border bg-popover p-1 shadow-md">
           {locales.map((locale) => (
-            <a
+            <Link
               key={locale}
               href={getLocalizedPath(locale)}
               onClick={() => setOpen(false)}
@@ -53,7 +60,7 @@ export function LanguageSwitcher() {
             >
               <span>{localeFlags[locale]}</span>
               <span>{localeNames[locale]}</span>
-            </a>
+            </Link>
           ))}
         </div>
       )}

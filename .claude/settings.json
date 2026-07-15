@@ -236,7 +236,17 @@
       "Bash(node shot8.tmp.js)",
       "Bash(node shot9.tmp.js)",
       "Bash(node shotg.tmp.js)",
-      "Bash(node shoth.tmp.js)"
+      "Bash(node shoth.tmp.js)",
+      "Bash(sleep 4 && cat /tmp/dev-server.log 2>&1 | tail -30)",
+      "Bash(python3 -c ' *)",
+      "Bash(node \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\fa1a1add-88d4-4278-b7da-49c54a13970e\\\\scratchpad\\\\gen-dummy-pdfs.js\")",
+      "Bash(node .tmp-screenshot-gen/gen-dummy-pdfs.js)",
+      "Bash(cp .tmp-screenshot-gen/gen-dummy-pdfs.js /dev/null)",
+      "Bash(node .tmp-screenshot-gen/capture.js)",
+      "Bash(node .tmp-screenshot-gen/gen-avatar.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/tr)",
+      "Bash(taskkill //F //PID 1436)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",

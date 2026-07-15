@@ -162,7 +162,7 @@ export default async function HomePage({
                   key={tool.id}
                   title={copy.title}
                   description={copy.description}
-                  screenshot={tool.screenshot!}
+                  screenshot={(lang === 'en' && tool.screenshotEn) || tool.screenshot!}
                   accent={categoryMeta[tool.category].accent}
                   reversed={i % 2 === 1}
                   index={i}

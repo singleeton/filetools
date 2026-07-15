@@ -13,6 +13,8 @@ export interface Tool {
   isPopular?: boolean
   /** Path to a real product screenshot used in the landing page showcase */
   screenshot?: string
+  /** English-UI variant of `screenshot`, shown when the current locale is English */
+  screenshotEn?: string
 }
 
 export interface ToolPageProps {

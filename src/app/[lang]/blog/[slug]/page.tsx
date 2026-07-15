@@ -7,6 +7,7 @@ import { getDictionary } from '@/lib/i18n/get-dictionary'
 import { locales, type Locale } from '@/lib/i18n/config'
 import { getPublishedPostBySlug, getPublishedSiblingsByTranslationKey } from '@/lib/blog'
 import { BlogPostStructuredData } from '@/components/shared/structured-data'
+import { LocaleAlternatesSync } from '@/components/shared/locale-alternates-sync'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -57,8 +58,19 @@ export default async function BlogPostPage({
 
   if (!post) notFound()
 
+  const alternates: Partial<Record<Locale, string>> = { [lang as Locale]: `/${lang}/blog/${slug}` }
+  if (post.translationKey) {
+    const siblings = await getPublishedSiblingsByTranslationKey(post.translationKey)
+    for (const sibling of siblings) {
+      if (locales.includes(sibling.locale as Locale)) {
+        alternates[sibling.locale as Locale] = `/${sibling.locale}/blog/${sibling.slug}`
+      }
+    }
+  }
+
   return (
     <article className="container mx-auto max-w-3xl px-4 py-16 sm:py-20">
+      <LocaleAlternatesSync alternates={alternates} />
       <BlogPostStructuredData
         title={post.title}
         description={post.metaDescription || post.excerpt}

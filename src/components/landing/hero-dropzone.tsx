@@ -5,13 +5,29 @@ import { useRouter } from 'next/navigation'
 import { Upload } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+const EXTENSION_CATEGORY: Record<string, string> = {
+  pdf: 'pdf',
+  doc: 'word',
+  docx: 'word',
+  xls: 'excel',
+  xlsx: 'excel',
+  csv: 'excel',
+  jpg: 'image',
+  jpeg: 'image',
+  png: 'image',
+  webp: 'image',
+  gif: 'image',
+  heic: 'image',
+  mp4: 'video',
+  mov: 'video',
+  avi: 'video',
+  mkv: 'video',
+}
+
 function resolveToolPath(lang: string, fileName: string): string {
   const ext = fileName.split('.').pop()?.toLowerCase() ?? ''
-  if (ext === 'pdf') return `/${lang}/pdf-merge`
-  if (ext === 'doc' || ext === 'docx') return `/${lang}/word-to-pdf`
-  if (ext === 'jpg' || ext === 'jpeg') return `/${lang}/jpg-to-png`
-  if (ext === 'png') return `/${lang}/png-to-jpg`
-  return `/${lang}/tools`
+  const category = EXTENSION_CATEGORY[ext]
+  return category ? `/${lang}/tools#${category}` : `/${lang}/tools`
 }
 
 interface HeroDropzoneProps {
