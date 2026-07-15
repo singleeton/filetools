@@ -251,7 +251,8 @@
       "Bash(node .tmp-screenshot-gen/gen-assets.js)",
       "Bash(node .tmp-screenshot-gen/capture-locales.js)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/ru/pdf-merge)",
-      "Bash(taskkill //F //PID 3032)"
+      "Bash(taskkill //F //PID 3032)",
+      "Bash(taskkill //F //PID 20916)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",

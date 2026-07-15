@@ -35,10 +35,6 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col font-sans">
         <ThemeProvider>
-          {/* TEMP: remove this before real launch */}
-          <div className="fixed top-2 right-2 z-[100] rounded-md bg-black px-2.5 py-1 text-xs font-bold tracking-wide text-white shadow-md">
-            BARIŞ
-          </div>
           <GoogleAnalytics />
           <AdsenseLoader />
           {children}
