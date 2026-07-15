@@ -13,6 +13,8 @@ import { HeroDropzone } from '@/components/landing/hero-dropzone'
 import { CategoryCard } from '@/components/landing/category-card'
 import { AnimatedCounter } from '@/components/landing/animated-counter'
 import { ToolShowcase } from '@/components/landing/tool-showcase'
+import { HowItWorksSteps } from '@/components/landing/how-it-works-steps'
+import { SectionGlow } from '@/components/landing/section-glow'
 import { FaqAccordion } from '@/components/landing/faq-accordion'
 import { getDictionary } from '@/lib/i18n/get-dictionary'
 import { getDictionaryWithOverrides } from '@/lib/landing-content'
@@ -124,12 +126,13 @@ export default async function HomePage({
       </section>
 
       {/* CATEGORIES */}
-      <section className="py-16 sm:py-20">
-        <div className="container mx-auto px-4">
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        <SectionGlow colors={['bg-rose-500/10', 'bg-blue-500/10', 'bg-violet-500/10']} />
+        <div className="container relative mx-auto px-4">
           <h2 className="text-center text-3xl font-bold tracking-tight">{dict.categories.title}</h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.categories.subtitle}</p>
           <div className="mx-auto mt-12 grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {categoryOrder.map((cat) => {
+            {categoryOrder.map((cat, i) => {
               const count = getCategoryToolCount(cat)
               return (
                 <CategoryCard
@@ -141,6 +144,7 @@ export default async function HomePage({
                   countLabel={dict.categories.toolsCount.replace('{count}', String(count))}
                   comingSoon={count === 0}
                   comingSoonLabel={dict.categories.comingSoon}
+                  index={i}
                 />
               )
             })}
@@ -150,8 +154,9 @@ export default async function HomePage({
 
       {/* INTERACTIVE SHOWCASE */}
       {showcaseTools.length > 0 && (
-        <section className="border-y bg-muted/30 py-16 sm:py-20">
-          <div className="container mx-auto px-4">
+        <section className="relative overflow-hidden border-y bg-muted/30 py-16 sm:py-20">
+          <SectionGlow colors={['bg-violet-500/10', 'bg-amber-500/10', 'bg-rose-500/10']} />
+          <div className="container relative mx-auto px-4">
             <h2 className="text-center text-3xl font-bold tracking-tight">{dict.showcase.title}</h2>
             <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.showcase.subtitle}</p>
             <div className="mx-auto mt-14 max-w-5xl space-y-16">
@@ -176,21 +181,14 @@ export default async function HomePage({
         <div className="container mx-auto px-4">
           <h2 className="text-center text-3xl font-bold tracking-tight">{dict.howItWorks.title}</h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.howItWorks.subtitle}</p>
-          <div className="relative mx-auto mt-14 grid max-w-3xl gap-10 sm:grid-cols-3">
-            <div className="absolute top-8 right-[16.5%] left-[16.5%] hidden h-px bg-border sm:block" />
-            {stepKeys.map((key, i) => (
-              <div key={key} className="relative flex flex-col items-center text-center">
-                <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border bg-background text-primary shadow-sm">
-                  {stepIcons[i]}
-                </div>
-                <div className="mt-3 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-                  {i + 1}
-                </div>
-                <h3 className="mt-3 font-semibold">{dict.howItWorks[key].title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{dict.howItWorks[key].description}</p>
-              </div>
-            ))}
-          </div>
+          <HowItWorksSteps
+            steps={stepKeys.map((key, i) => ({
+              icon: stepIcons[i],
+              number: i + 1,
+              title: dict.howItWorks[key].title,
+              description: dict.howItWorks[key].description,
+            }))}
+          />
         </div>
       </section>
 
@@ -232,8 +230,9 @@ export default async function HomePage({
       </section>
 
       {/* LIVE STATISTICS */}
-      <section className="py-16 sm:py-20">
-        <div className="container mx-auto px-4">
+      <section className="relative overflow-hidden py-16 sm:py-20">
+        <SectionGlow colors={['bg-primary/5', 'bg-emerald-500/10', 'bg-blue-500/10']} />
+        <div className="container relative mx-auto px-4">
           <div className="mx-auto grid max-w-4xl grid-cols-2 gap-8 divide-y-0 lg:grid-cols-4">
             <div className="text-center">
               <div className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">

@@ -16,9 +16,11 @@ interface CategoryCardProps {
   countLabel: string
   comingSoon: boolean
   comingSoonLabel: string
+  /** Staggers the idle icon float so cards don't bob in sync. */
+  index?: number
 }
 
-export function CategoryCard({ lang, meta, label, tagline, countLabel, comingSoon, comingSoonLabel }: CategoryCardProps) {
+export function CategoryCard({ lang, meta, label, tagline, countLabel, comingSoon, comingSoonLabel, index = 0 }: CategoryCardProps) {
   const Icon = iconMap[meta.icon as keyof typeof iconMap] ?? FileText
 
   return (
@@ -27,7 +29,10 @@ export function CategoryCard({ lang, meta, label, tagline, countLabel, comingSoo
       className={`group relative flex flex-col overflow-hidden rounded-2xl border p-6 transition-all hover:-translate-y-1 hover:shadow-lg ${comingSoon ? 'opacity-70' : ''}`}
     >
       <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${meta.gradient} opacity-[0.06] transition-opacity group-hover:opacity-[0.12]`} />
-      <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-sm`}>
+      <div
+        className={`animate-float-sm flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-sm`}
+        style={{ animationDelay: `${index * 0.4}s` }}
+      >
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="mt-4 text-lg font-semibold">{label}</h3>
