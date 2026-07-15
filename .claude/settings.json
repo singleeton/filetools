@@ -246,7 +246,12 @@
       "Bash(node .tmp-screenshot-gen/gen-avatar.js)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/en)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/tr)",
-      "Bash(taskkill //F //PID 1436)"
+      "Bash(taskkill //F //PID 1436)",
+      "Bash(sleep 4 && cat /tmp/dev-server2.log | tail -20)",
+      "Bash(node .tmp-screenshot-gen/gen-assets.js)",
+      "Bash(node .tmp-screenshot-gen/capture-locales.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/ru/pdf-merge)",
+      "Bash(taskkill //F //PID 3032)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",

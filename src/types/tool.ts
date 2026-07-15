@@ -11,10 +11,10 @@ export interface Tool {
   isPremium?: boolean
   /** Curated "Popular" badge in nav/mega-menu — not live usage data */
   isPopular?: boolean
-  /** Path to a real product screenshot used in the landing page showcase */
+  /** Path to a real product screenshot used in the landing page showcase (Turkish UI, the default) */
   screenshot?: string
-  /** English-UI variant of `screenshot`, shown when the current locale is English */
-  screenshotEn?: string
+  /** Per-locale UI variants of `screenshot`, keyed by locale code (e.g. `en`, `ru`, `zh`); falls back to `screenshot` when missing */
+  screenshotLocales?: Partial<Record<string, string>>
 }
 
 export interface ToolPageProps {
