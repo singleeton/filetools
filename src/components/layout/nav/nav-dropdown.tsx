@@ -83,7 +83,7 @@ export function NavDropdown({ label, href, disabled, panelClassName, align = 'le
       >
         <div
           className={cn(
-            'overflow-hidden rounded-2xl border border-white/10 bg-background shadow-2xl shadow-black/10 supports-[backdrop-filter]:bg-background/95 supports-[backdrop-filter]:backdrop-blur-xl',
+            'overflow-hidden rounded-2xl border border-white/10 bg-background shadow-2xl shadow-black/10',
             panelClassName,
           )}
         >

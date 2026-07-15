@@ -37,7 +37,7 @@ export function CategoryMegaMenu({ category, onNavigate }: CategoryMegaMenuProps
 
   return (
     <div className="w-[760px] p-5">
-      <div className="grid grid-cols-[170px_1fr] gap-6">
+      <div className="grid grid-cols-[170px_minmax(0,1fr)] gap-6">
         <div className="border-r pr-5">
           <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${meta.gradient} text-white`}>
             {renderNavIcon(meta.icon, 'h-5 w-5')}
@@ -46,8 +46,8 @@ export function CategoryMegaMenu({ category, onNavigate }: CategoryMegaMenuProps
           <p className="mt-1 text-xs text-muted-foreground">{categoryDict.tagline}</p>
         </div>
 
-        <div className={`grid gap-x-5 ${featured ? 'grid-cols-[1fr_200px]' : 'grid-cols-1'}`}>
-          <div className="grid content-start gap-x-3">
+        <div className={`grid gap-x-5 ${featured ? 'grid-cols-[minmax(0,1fr)_200px]' : 'grid-cols-1'}`}>
+          <div className="grid min-w-0 content-start gap-x-3">
             {catTools.map((tool) => (
               <MegaMenuCard
                 key={tool.id}
