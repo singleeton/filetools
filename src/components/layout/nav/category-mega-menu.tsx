@@ -47,7 +47,7 @@ export function CategoryMegaMenu({ category, onNavigate }: CategoryMegaMenuProps
         </div>
 
         <div className={`grid gap-x-5 ${featured ? 'grid-cols-[minmax(0,1fr)_200px]' : 'grid-cols-1'}`}>
-          <div className="grid min-w-0 content-start gap-x-3">
+          <div className="flex min-w-0 flex-col">
             {catTools.map((tool) => (
               <MegaMenuCard
                 key={tool.id}

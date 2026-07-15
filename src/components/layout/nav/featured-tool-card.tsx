@@ -22,7 +22,7 @@ export function FeaturedToolCard({ lang, tool, name, description, meta, label, c
       onClick={onNavigate}
       className={`group relative flex flex-col overflow-hidden rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg`}
     >
-      <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${meta.gradient} opacity-[0.08] transition-opacity group-hover:opacity-[0.14]`} />
+      <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${meta.gradient} opacity-[0.12] transition-opacity group-hover:opacity-[0.2]`} />
       <span className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">{label}</span>
       <div className={`mt-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-sm`}>
         {renderNavIcon(tool.icon, 'h-5 w-5')}
