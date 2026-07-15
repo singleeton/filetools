@@ -11,7 +11,7 @@ function resolveToolPath(lang: string, fileName: string): string {
   if (ext === 'doc' || ext === 'docx') return `/${lang}/word-to-pdf`
   if (ext === 'jpg' || ext === 'jpeg') return `/${lang}/jpg-to-png`
   if (ext === 'png') return `/${lang}/png-to-jpg`
-  return `/${lang}#tools`
+  return `/${lang}/tools`
 }
 
 interface HeroDropzoneProps {

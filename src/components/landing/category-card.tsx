@@ -23,7 +23,7 @@ export function CategoryCard({ lang, meta, label, tagline, countLabel, comingSoo
 
   return (
     <Link
-      href={`/${lang}#tools`}
+      href={`/${lang}/tools#${meta.id}`}
       className={`group relative flex flex-col overflow-hidden rounded-2xl border p-6 transition-all hover:-translate-y-1 hover:shadow-lg ${comingSoon ? 'opacity-70' : ''}`}
     >
       <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${meta.gradient} opacity-[0.06] transition-opacity group-hover:opacity-[0.12]`} />

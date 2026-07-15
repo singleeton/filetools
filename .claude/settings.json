@@ -228,7 +228,9 @@
       "Bash(rm -f inspect-menu.tmp.js crop.tmp.js)",
       "Bash(pkill -f \"next dev\")",
       "Bash(pkill -f \"npm run dev\")",
-      "Bash(node shot.tmp.js)"
+      "Bash(node shot.tmp.js)",
+      "Bash(node shot2.tmp.js)",
+      "Bash(node anim-check.tmp.js)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",

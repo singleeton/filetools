@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import NextImage from 'next/image'
 import {
-  FileText, Scissors, FileDown, FileOutput, Merge,
   Upload, Cog, Download, Zap, Shield, Monitor, Globe,
-  ServerOff, Trash2, Lock, RotateCw, Image, Maximize, Eraser, Sheet,
+  ServerOff, Trash2, Lock,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { HomeStructuredData, FaqStructuredData } from '@/components/shared/structured-data'
@@ -22,40 +21,6 @@ import { getLatestPublishedPosts } from '@/lib/blog'
 import { getToolById, tools } from '@/lib/tools-registry'
 import { categoryMeta, categoryOrder, getCategoryToolCount } from '@/lib/categories'
 import type { Metadata } from 'next'
-
-const toolIcons: Record<string, React.ReactNode> = {
-  Merge: <Merge className="h-7 w-7" />,
-  Scissors: <Scissors className="h-7 w-7" />,
-  FileDown: <FileDown className="h-7 w-7" />,
-  FileText: <FileText className="h-7 w-7" />,
-  FileOutput: <FileOutput className="h-7 w-7" />,
-  RotateCw: <RotateCw className="h-7 w-7" />,
-  Sheet: <Sheet className="h-7 w-7" />,
-  Image: <Image className="h-7 w-7" />,
-  Maximize: <Maximize className="h-7 w-7" />,
-  Eraser: <Eraser className="h-7 w-7" />,
-}
-
-const toolIconMap: Record<string, string> = {
-  'pdf-merge': 'Merge',
-  'pdf-split': 'Scissors',
-  'pdf-compress': 'FileDown',
-  'pdf-rotate': 'RotateCw',
-  'word-to-pdf': 'FileText',
-  'pdf-to-word': 'FileOutput',
-  'pdf-to-excel': 'Sheet',
-  'jpg-to-png': 'Image',
-  'png-to-jpg': 'Image',
-  'image-resize': 'Maximize',
-  'remove-bg': 'Eraser',
-}
-
-// Deterministic placeholder so SSR/client output never mismatches (no Math.random).
-function placeholderUses(id: string): number {
-  let hash = 0
-  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0
-  return 400 + (hash % 3600)
-}
 
 export async function generateMetadata({
   params,
@@ -81,7 +46,6 @@ export default async function HomePage({
 }) {
   const { lang } = await params
   const dict = await getDictionaryWithOverrides(lang as Locale)
-  const toolIds = Object.keys(dict.tool) as (keyof typeof dict.tool)[]
   const latestPosts = await getLatestPublishedPosts(lang, 3)
 
   const featureIcons = [
@@ -131,9 +95,9 @@ export default async function HomePage({
               {dict.hero.subtitle}
             </p>
             <div className="mt-8 flex justify-center lg:justify-start">
-              <a href="#tools">
+              <Link href={`/${lang}/tools`}>
                 <Button size="lg" className="text-base">{dict.hero.cta}</Button>
-              </a>
+              </Link>
             </div>
             <HeroDropzone lang={lang} hint={dict.hero.dropHint} />
           </div>
@@ -184,41 +148,28 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* TOOL GRID */}
-      <section id="tools" className="border-y bg-muted/30 py-16 sm:py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-center text-3xl font-bold tracking-tight">
-            {dict.popularTools.title}
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
-            {dict.popularTools.subtitle}
-          </p>
-          <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {toolIds.map((id) => {
-              const meta = categoryMeta[getToolById(id)?.category ?? 'pdf']
-              return (
-                <Link
-                  key={id}
-                  href={`/${lang}/${id}`}
-                  className="group flex flex-col items-center rounded-xl border bg-card p-8 text-center transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md"
-                >
-                  <div className={`flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br ${meta.gradient} text-white transition-transform group-hover:scale-105`}>
-                    {toolIcons[toolIconMap[id]] || <FileText className="h-7 w-7" />}
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold">{dict.tool[id].name}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{dict.tool[id].shortDesc}</p>
-                  <span className="mt-3 text-xs text-muted-foreground">
-                    {placeholderUses(id).toLocaleString(lang)} {dict.popularTools.usesLabel}
-                  </span>
-                  <span className="mt-3 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                    {dict.popularTools.useTool}
-                  </span>
-                </Link>
-              )
-            })}
+      {/* INTERACTIVE SHOWCASE */}
+      {showcaseTools.length > 0 && (
+        <section className="border-y bg-muted/30 py-16 sm:py-20">
+          <div className="container mx-auto px-4">
+            <h2 className="text-center text-3xl font-bold tracking-tight">{dict.showcase.title}</h2>
+            <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.showcase.subtitle}</p>
+            <div className="mx-auto mt-14 max-w-5xl space-y-16">
+              {showcaseTools.map(({ tool, copy }, i) => (
+                <ToolShowcase
+                  key={tool.id}
+                  title={copy.title}
+                  description={copy.description}
+                  screenshot={tool.screenshot!}
+                  accent={categoryMeta[tool.category].accent}
+                  reversed={i % 2 === 1}
+                  index={i}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* HOW IT WORKS */}
       <section className="py-16 sm:py-20">
@@ -308,28 +259,6 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* INTERACTIVE SHOWCASE */}
-      {showcaseTools.length > 0 && (
-        <section className="border-y bg-muted/30 py-16 sm:py-20">
-          <div className="container mx-auto px-4">
-            <h2 className="text-center text-3xl font-bold tracking-tight">{dict.showcase.title}</h2>
-            <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.showcase.subtitle}</p>
-            <div className="mx-auto mt-14 max-w-5xl space-y-16">
-              {showcaseTools.map(({ tool, copy }, i) => (
-                <ToolShowcase
-                  key={tool.id}
-                  title={copy.title}
-                  description={copy.description}
-                  screenshot={tool.screenshot!}
-                  accent={categoryMeta[tool.category].accent}
-                  reversed={i % 2 === 1}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* BLOG */}
       {latestPosts.length > 0 && (
         <section className="py-16 sm:py-20">
@@ -386,9 +315,9 @@ export default async function HomePage({
           <h2 className="text-3xl font-bold tracking-tight">{dict.cta.title}</h2>
           <p className="mx-auto mt-3 max-w-lg text-muted-foreground">{dict.cta.subtitle}</p>
           <div className="mt-8">
-            <a href="#tools">
+            <Link href={`/${lang}/tools`}>
               <Button size="lg" className="text-base">{dict.cta.button}</Button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

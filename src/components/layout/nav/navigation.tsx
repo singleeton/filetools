@@ -20,7 +20,7 @@ export function Navigation() {
         </NavDropdown>
       ))}
 
-      <NavDropdown label={dict.nav.tools} href={`/${lang}#tools`} align="right">
+      <NavDropdown label={dict.nav.tools} href={`/${lang}/tools`} align="right">
         {(close) => <ToolsMegaMenu onNavigate={close} />}
       </NavDropdown>
     </nav>
