@@ -124,9 +124,8 @@ export default async function HomePage({
       </section>
 
       {/* CATEGORIES */}
-      <section className="relative overflow-hidden py-16 sm:py-20">
-        <SectionGlow colors={['bg-blue-500/10', 'bg-emerald-500/10', 'bg-violet-500/10']} />
-        <div className="container relative mx-auto px-4">
+      <section className="py-16 sm:py-20">
+        <div className="container mx-auto px-4">
           <h2 className="text-center text-3xl font-bold tracking-tight">{dict.categories.title}</h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">{dict.categories.subtitle}</p>
           <div className="mx-auto mt-12 grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">

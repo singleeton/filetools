@@ -234,7 +234,9 @@
       "Bash(node shot3.tmp.js)",
       "Bash(node shot7.tmp.js)",
       "Bash(node shot8.tmp.js)",
-      "Bash(node shot9.tmp.js)"
+      "Bash(node shot9.tmp.js)",
+      "Bash(node shotg.tmp.js)",
+      "Bash(node shoth.tmp.js)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",

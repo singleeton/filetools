@@ -30,6 +30,10 @@ export function CategoryCard({ lang, meta, label, tagline, countLabel, comingSoo
     >
       <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${meta.gradient} opacity-[0.06] transition-opacity group-hover:opacity-[0.12]`} />
       <div
+        aria-hidden
+        className={`absolute -top-8 -left-8 -z-10 h-28 w-28 rounded-full bg-gradient-to-br ${meta.gradient} opacity-10 blur-2xl transition-opacity duration-300 group-hover:opacity-20 dark:opacity-30 dark:group-hover:opacity-45`}
+      />
+      <div
         className={`animate-float-sm flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${meta.gradient} text-white shadow-sm`}
         style={{ animationDelay: `${index * 0.4}s` }}
       >
