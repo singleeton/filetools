@@ -130,6 +130,11 @@ export const en = {
       shortDesc: 'Automatically remove background with AI',
       description: 'Automatically remove the background from your image using AI. Get a transparent PNG in seconds — no manual editing required.',
     },
+    'pdf-sign': {
+      name: 'PDF Sign',
+      shortDesc: 'Add your signature to a PDF',
+      description: 'Draw, upload, or type your signature and place it anywhere on a PDF document.',
+    },
   },
 
   features: {
@@ -476,6 +481,33 @@ export const en = {
     selectSimilar: 'Select all similar colors',
   },
 
+  sign: {
+    pageLabel: 'Page {current} of {total}',
+    tabs: { draw: 'Draw', upload: 'Upload', type: 'Type' },
+    draw: { hint: 'Draw your signature with your mouse or finger', clear: 'Clear', use: 'Use this signature' },
+    upload: { choose: 'Choose an image', hint: 'PNG or JPG, transparent background works best', use: 'Use this signature' },
+    type: { placeholder: 'Type your name', fontLabel: 'Style', use: 'Use this signature' },
+    savedSignatures: {
+      title: 'Saved signatures',
+      empty: 'No saved signatures yet',
+      saveOption: 'Save this signature to my account',
+      delete: 'Delete',
+      loginHint: 'Sign in to save your signature for next time',
+    },
+    placement: {
+      addAnother: 'Add to another page',
+      remove: 'Remove',
+      dragHint: 'Drag to position, drag the corner to resize',
+    },
+    download: 'Download signed PDF',
+    processing: 'Signing your PDF...',
+    reset: 'Start over',
+    errors: {
+      noSignature: 'Create or choose a signature first',
+      noPlacement: 'Place your signature on the document first',
+    },
+  },
+
   blog: {
     nav: 'Blog',
     latestTitle: 'Latest from our blog',
@@ -554,6 +586,10 @@ export const en = {
     'remove-bg': {
       title: 'Remove Background Free Online - Background Remover',
       description: 'Remove image background online for free. Get transparent PNG output. No sign-up required.',
+    },
+    'pdf-sign': {
+      title: 'Sign PDF Online Free - Add Your Signature',
+      description: 'Sign a PDF online for free. Draw, upload, or type your signature and place it anywhere on the document. No sign-up required.',
     },
     blog: {
       title: 'Blog - FileTools Tips & Guides',

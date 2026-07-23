@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   AdminUser: 'AdminUser',
   User: 'User',
+  UserSignature: 'UserSignature',
   SiteSetting: 'SiteSetting',
   Tool: 'Tool',
   ToolUsageLog: 'ToolUsageLog',
@@ -105,6 +106,17 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserSignatureScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  url: 'url',
+  pathname: 'pathname',
+  createdAt: 'createdAt'
+} as const
+
+export type UserSignatureScalarFieldEnum = (typeof UserSignatureScalarFieldEnum)[keyof typeof UserSignatureScalarFieldEnum]
 
 
 export const SiteSettingScalarFieldEnum = {

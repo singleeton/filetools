@@ -28,6 +28,11 @@ export type AdminUser = Prisma.AdminUserModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model UserSignature
+ * 
+ */
+export type UserSignature = Prisma.UserSignatureModel
+/**
  * Model SiteSetting
  * 
  */

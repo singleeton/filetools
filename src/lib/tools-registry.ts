@@ -5,6 +5,7 @@ export const tools: Tool[] = [
   { id: 'pdf-split', name: 'PDF Split', description: 'Split a PDF file into separate pages or sections', href: '/pdf-split', category: 'pdf', icon: 'Scissors', screenshot: '/screenshots/pdf-split.png', screenshotLocales: { en: '/screenshots/pdf-split-en.png', ru: '/screenshots/pdf-split-ru.png', zh: '/screenshots/pdf-split-zh.png' }, isNew: true },
   { id: 'pdf-compress', name: 'PDF Compress', description: 'Reduce PDF file size by compressing images', href: '/pdf-compress', category: 'pdf', icon: 'FileDown' },
   { id: 'pdf-rotate', name: 'PDF Rotate', description: 'Rotate PDF pages by any angle', href: '/pdf-rotate', category: 'pdf', icon: 'RotateCw' },
+  { id: 'pdf-sign', name: 'PDF Sign', description: 'Draw, upload, or type your signature and place it on a PDF', href: '/pdf-sign', category: 'pdf', icon: 'PenLine', isNew: true },
   { id: 'word-to-pdf', name: 'Word to PDF', description: 'Convert DOCX files to PDF format', href: '/word-to-pdf', category: 'word', icon: 'FileText' },
   { id: 'pdf-to-word', name: 'PDF to Word', description: 'Convert PDF files to editable DOCX format', href: '/pdf-to-word', category: 'word', icon: 'FileOutput' },
   { id: 'pdf-to-excel', name: 'PDF to Excel', description: 'Convert PDF to Excel spreadsheet', href: '/pdf-to-excel', category: 'excel', icon: 'Sheet' },

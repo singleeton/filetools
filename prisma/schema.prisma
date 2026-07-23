@@ -34,7 +34,21 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  signatures UserSignature[]
+
   @@map("users")
+}
+
+model UserSignature {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url       String
+  pathname  String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("user_signatures")
 }
 
 // --- SITE SETTINGS (CMS) ---

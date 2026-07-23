@@ -132,6 +132,11 @@ export const tr: Dictionary = {
       shortDesc: 'Yapay zeka ile arka planı otomatik kaldırın',
       description: 'Yapay zeka kullanarak görselinizin arka planını otomatik olarak kaldırın. Saniyeler içinde şeffaf PNG elde edin — manuel düzenleme gerekmez.',
     },
+    'pdf-sign': {
+      name: 'PDF İmzala',
+      shortDesc: "PDF'ine imzanı ekle",
+      description: "İmzanı çiz, yükle veya yaz; PDF belgesinin istediğin yerine yerleştir.",
+    },
   },
 
   features: {
@@ -478,6 +483,33 @@ export const tr: Dictionary = {
     selectSimilar: 'Tüm benzer renkleri seç',
   },
 
+  sign: {
+    pageLabel: 'Sayfa {current} / {total}',
+    tabs: { draw: 'Çiz', upload: 'Yükle', type: 'Yaz' },
+    draw: { hint: 'Fare veya parmağınla imzanı çiz', clear: 'Temizle', use: 'Bu imzayı kullan' },
+    upload: { choose: 'Görsel seç', hint: 'PNG veya JPG, şeffaf arka plan daha iyi sonuç verir', use: 'Bu imzayı kullan' },
+    type: { placeholder: 'Adını yaz', fontLabel: 'Stil', use: 'Bu imzayı kullan' },
+    savedSignatures: {
+      title: 'Kayıtlı imzalarım',
+      empty: 'Henüz kayıtlı imzan yok',
+      saveOption: 'Bu imzayı hesabıma kaydet',
+      delete: 'Sil',
+      loginHint: 'İmzanı bir dahaki sefere kullanmak için giriş yap',
+    },
+    placement: {
+      addAnother: 'Başka sayfaya da ekle',
+      remove: 'Kaldır',
+      dragHint: 'Konumlandırmak için sürükle, boyutlandırmak için köşeyi sürükle',
+    },
+    download: 'İmzalı PDF\'i indir',
+    processing: 'PDF imzalanıyor...',
+    reset: 'Yeniden başla',
+    errors: {
+      noSignature: 'Önce bir imza oluştur veya seç',
+      noPlacement: 'Önce imzanı belge üzerine yerleştir',
+    },
+  },
+
   blog: {
     nav: 'Blog',
     latestTitle: 'Blogumuzdan son yazılar',
@@ -536,6 +568,10 @@ export const tr: Dictionary = {
     'image-resize': { title: 'Görsel Boyutlandır - Ücretsiz Online', description: 'Görselleri ücretsiz olarak istediğiniz boyuta getirin.' },
     'pdf-rotate': { title: 'PDF Döndür - Ücretsiz Online', description: 'PDF sayfalarını ücretsiz olarak 90°, 180° veya 270° döndürün.' },
     'remove-bg': { title: 'Arka Plan Kaldır - Ücretsiz Online', description: 'Görsellerden arka planı ücretsiz olarak kaldırın.' },
+    'pdf-sign': {
+      title: "PDF İmzala - Ücretsiz Online İmza Ekleme",
+      description: "PDF'ini ücretsiz imzala. İmzanı çiz, yükle veya yaz; belgenin istediğin yerine yerleştir. Kayıt gerekmez.",
+    },
     blog: {
       title: 'Blog - FileTools İpuçları ve Rehberler',
       description: 'PDF ve dosya dönüştürme araçları hakkında rehberler, ipuçları ve haberler.',

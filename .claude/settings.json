@@ -252,7 +252,16 @@
       "Bash(node .tmp-screenshot-gen/capture-locales.js)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/ru/pdf-merge)",
       "Bash(taskkill //F //PID 3032)",
-      "Bash(taskkill //F //PID 20916)"
+      "Bash(taskkill //F //PID 20916)",
+      "Bash(sleep 6 && cat /tmp/dev-server.log 2>/dev/null | tail -30)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/tr/pdf-sign)",
+      "Bash(node \"C:\\\\Users\\\\yusuf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-yusuf-Desktop-sith-code-pdftools\\\\c1a83d3e-ba02-4e53-9fd0-70a2eb9e7ba4\\\\scratchpad\\\\test-pdf-sign.js\")",
+      "Bash(node \".scratch-test/test-pdf-sign.js\")",
+      "Bash(node \".scratch-test/render-signed.js\")",
+      "Bash(node \".scratch-test/inspect-signed.js\")",
+      "Bash(node \".scratch-test/test-pdf-sign-2.js\")",
+      "Bash(node -r dotenv/config \".scratch-test/cleanup-test-user.js\" dotenv_config_path=.env.local)",
+      "Bash(taskkill //F //PID 20400)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",

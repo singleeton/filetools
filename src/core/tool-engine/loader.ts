@@ -9,6 +9,7 @@ import { jpgToPngHandler } from './handlers/jpg-to-png.handler'
 import { pngToJpgHandler } from './handlers/png-to-jpg.handler'
 import { imageResizeHandler } from './handlers/image-resize.handler'
 import { removeBgHandler } from './handlers/remove-bg.handler'
+import { pdfSignHandler } from './handlers/pdf-sign.handler'
 
 let loaded = false
 
@@ -29,6 +30,7 @@ export function loadAllHandlers(): void {
   registerTool('png-to-jpg', pngToJpgHandler)
   registerTool('image-resize', imageResizeHandler)
   registerTool('remove-bg', removeBgHandler)
+  registerTool('pdf-sign', pdfSignHandler)
 
   loaded = true
 }

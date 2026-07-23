@@ -108,6 +108,7 @@ export const zh: Dictionary = {
     'image-resize': { name: '图片调整大小', shortDesc: '将图片调整为任意尺寸', description: '将图片调整为自定义尺寸。支持 JPG、PNG、WebP。' },
     'pdf-rotate': { name: 'PDF 旋转', shortDesc: '旋转 PDF 页面', description: '将 PDF 中的所有页面旋转 90°、180° 或 270°。' },
     'remove-bg': { name: '移除背景', shortDesc: '使用 AI 自动移除背景', description: '使用人工智能自动移除图片背景。几秒钟内获得透明 PNG——无需手动编辑。' },
+    'pdf-sign': { name: 'PDF 签名', shortDesc: '为 PDF 添加签名', description: '手写、上传或输入你的签名，并将其放置在 PDF 文档的任意位置。' },
   },
 
   features: {
@@ -447,6 +448,33 @@ export const zh: Dictionary = {
     selectSimilar: '选择所有相似颜色',
   },
 
+  sign: {
+    pageLabel: '第 {current} / {total} 页',
+    tabs: { draw: '手写', upload: '上传', type: '输入' },
+    draw: { hint: '用鼠标或手指手写签名', clear: '清除', use: '使用此签名' },
+    upload: { choose: '选择图片', hint: 'PNG 或 JPG，透明背景效果更佳', use: '使用此签名' },
+    type: { placeholder: '输入姓名', fontLabel: '样式', use: '使用此签名' },
+    savedSignatures: {
+      title: '已保存的签名',
+      empty: '暂无已保存的签名',
+      saveOption: '将此签名保存到我的账户',
+      delete: '删除',
+      loginHint: '登录后可保存签名以便下次使用',
+    },
+    placement: {
+      addAnother: '添加到其他页面',
+      remove: '移除',
+      dragHint: '拖动以定位，拖动边角以调整大小',
+    },
+    download: '下载已签名的 PDF',
+    processing: '正在为 PDF 签名...',
+    reset: '重新开始',
+    errors: {
+      noSignature: '请先创建或选择一个签名',
+      noPlacement: '请先将签名放置到文档上',
+    },
+  },
+
   blog: {
     nav: '博客',
     latestTitle: '最新博客文章',
@@ -500,6 +528,7 @@ export const zh: Dictionary = {
     'image-resize': { title: '调整图片大小 — 免费在线', description: '免费在线调整图片大小。' },
     'pdf-rotate': { title: 'PDF 旋转 — 免费在线', description: '免费在线旋转 PDF 页面。' },
     'remove-bg': { title: '移除背景 — 免费在线', description: '免费在线移除图片背景。' },
+    'pdf-sign': { title: '免费在线 PDF 签名', description: '免费为 PDF 签名。手写、上传或输入签名，并放置在文档任意位置。无需注册。' },
     blog: {
       title: '博客 - FileTools 技巧与指南',
       description: '关于 PDF 和文件转换工具的指南、技巧和新闻。',

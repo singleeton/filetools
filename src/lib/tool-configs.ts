@@ -111,6 +111,17 @@ export const toolConfigs: Record<string, ToolConfig> = {
     maxFiles: 1,
     allowMultiple: false,
   },
+  'pdf-sign': {
+    id: 'pdf-sign',
+    name: 'PDF Sign',
+    description:
+      'Draw, upload, or type your signature and place it anywhere on a PDF document.',
+    shortDescription: 'Add your signature to a PDF',
+    acceptedTypes: ['.pdf', 'application/pdf'],
+    maxFileSize: 50 * MB,
+    maxFiles: 1,
+    allowMultiple: false,
+  },
   'remove-bg': {
     id: 'remove-bg',
     name: 'Remove Background',

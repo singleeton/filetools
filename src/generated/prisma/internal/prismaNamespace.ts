@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   AdminUser: 'AdminUser',
   User: 'User',
+  UserSignature: 'UserSignature',
   SiteSetting: 'SiteSetting',
   Tool: 'Tool',
   ToolUsageLog: 'ToolUsageLog',
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "adminUser" | "user" | "siteSetting" | "tool" | "toolUsageLog" | "pageView" | "adSlot" | "landingContent" | "blogPost" | "media"
+    modelProps: "adminUser" | "user" | "userSignature" | "siteSetting" | "tool" | "toolUsageLog" | "pageView" | "adSlot" | "landingContent" | "blogPost" | "media"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -558,6 +559,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserSignature: {
+      payload: Prisma.$UserSignaturePayload<ExtArgs>
+      fields: Prisma.UserSignatureFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserSignatureFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserSignatureFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>
+        }
+        findFirst: {
+          args: Prisma.UserSignatureFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserSignatureFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>
+        }
+        findMany: {
+          args: Prisma.UserSignatureFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>[]
+        }
+        create: {
+          args: Prisma.UserSignatureCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>
+        }
+        createMany: {
+          args: Prisma.UserSignatureCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserSignatureCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>[]
+        }
+        delete: {
+          args: Prisma.UserSignatureDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>
+        }
+        update: {
+          args: Prisma.UserSignatureUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>
+        }
+        deleteMany: {
+          args: Prisma.UserSignatureDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserSignatureUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserSignatureUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>[]
+        }
+        upsert: {
+          args: Prisma.UserSignatureUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSignaturePayload>
+        }
+        aggregate: {
+          args: Prisma.UserSignatureAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserSignature>
+        }
+        groupBy: {
+          args: Prisma.UserSignatureGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserSignatureGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserSignatureCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserSignatureCountAggregateOutputType> | number
         }
       }
     }
@@ -1220,6 +1295,17 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const UserSignatureScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  url: 'url',
+  pathname: 'pathname',
+  createdAt: 'createdAt'
+} as const
+
+export type UserSignatureScalarFieldEnum = (typeof UserSignatureScalarFieldEnum)[keyof typeof UserSignatureScalarFieldEnum]
+
+
 export const SiteSettingScalarFieldEnum = {
   id: 'id',
   key: 'key',
@@ -1554,6 +1640,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   adminUser?: Prisma.AdminUserOmit
   user?: Prisma.UserOmit
+  userSignature?: Prisma.UserSignatureOmit
   siteSetting?: Prisma.SiteSettingOmit
   tool?: Prisma.ToolOmit
   toolUsageLog?: Prisma.ToolUsageLogOmit
