@@ -5,6 +5,7 @@ import { locales, type Locale } from '@/lib/i18n/config'
 import { getToolsByCategory } from '@/lib/tools-registry'
 import { categoryMeta, navCategoryOrder } from '@/lib/categories'
 import { renderNavIcon } from '@/components/layout/nav/tool-nav-icons'
+import { DisableSoftLocaleSwitch } from '@/components/shared/disable-soft-locale-switch'
 import type { Metadata } from 'next'
 
 export async function generateMetadata({
@@ -34,6 +35,7 @@ export default async function ToolsPage({
 
   return (
     <div className="container mx-auto px-4 py-16 sm:py-20">
+      <DisableSoftLocaleSwitch />
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{dict.toolsPage.title}</h1>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{dict.toolsPage.subtitle}</p>

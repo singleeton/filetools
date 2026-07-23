@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { HomeStructuredData, FaqStructuredData } from '@/components/shared/structured-data'
+import { DisableSoftLocaleSwitch } from '@/components/shared/disable-soft-locale-switch'
 import { AdSlot } from '@/components/shared/ad-slot'
 import { FloatingIcons } from '@/components/landing/floating-icons'
 import { HeroVisual } from '@/components/landing/hero-visual'
@@ -75,6 +76,7 @@ export default async function HomePage({
 
   return (
     <>
+      <DisableSoftLocaleSwitch />
       <HomeStructuredData />
       <FaqStructuredData items={dict.faq.items} />
 

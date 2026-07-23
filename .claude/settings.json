@@ -261,7 +261,14 @@
       "Bash(node \".scratch-test/inspect-signed.js\")",
       "Bash(node \".scratch-test/test-pdf-sign-2.js\")",
       "Bash(node -r dotenv/config \".scratch-test/cleanup-test-user.js\" dotenv_config_path=.env.local)",
-      "Bash(taskkill //F //PID 20400)"
+      "Bash(taskkill //F //PID 20400)",
+      "Bash(mkdir -p \"c:\\\\Users\\\\yusuf\\\\Desktop\\\\sith-code\\\\pdftools\\\\src\\\\app\\\\api\\\\dictionary\\\\[lang]\")",
+      "Bash(node \".scratch-test/test-lang-switch.js\")",
+      "Bash(node \".scratch-test/debug-switcher.js\")",
+      "Bash(node \".scratch-test/test-lang-switch-2.js\")",
+      "Bash(node \".scratch-test/test-lang-switch-3.js\")",
+      "Bash(taskkill //F //PID 30896)",
+      "Bash(rm -rf .scratch-test)"
     ],
     "additionalDirectories": [
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\admin\\tools",
@@ -271,7 +278,8 @@
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\admin\\(dashboard)\\blog",
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\blog",
       "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]\\(tools)\\pdf-split",
-      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]"
+      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\[lang]",
+      "c:\\Users\\yusuf\\Desktop\\sith-code\\pdftools\\src\\app\\api\\dictionary"
     ]
   }
 }

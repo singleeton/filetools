@@ -8,7 +8,7 @@ import { locales, localeNames, localeFlags, type Locale } from '@/lib/i18n/confi
 import { useDictionary } from '@/lib/i18n/dictionary-context'
 
 export function LanguageSwitcher() {
-  const { lang, localeAlternates } = useDictionary()
+  const { lang, localeAlternates, softSwitchDisabled, setDictionary } = useDictionary()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -35,6 +35,37 @@ export function LanguageSwitcher() {
     return segments.join('/')
   }
 
+  // Switching `[lang]` is a real Next.js navigation (different route
+  // segment value), which remounts everything below it — wiping whatever
+  // the user was doing on the current page (uploaded file, drawn signature,
+  // half-filled form, etc). For pages whose content is purely
+  // dictionary-driven (i.e. `localeAlternates` is null — every tool page,
+  // home, tools listing, auth pages) we swap the dictionary in place
+  // instead, so the page never remounts. Pages with real per-locale server
+  // content (blog, where `localeAlternates` is set) still do a normal
+  // navigation, since a client-side swap can't refetch that.
+  async function handleClick(e: React.MouseEvent, locale: Locale, href: string) {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+    if (localeAlternates || softSwitchDisabled) return
+    if (locale === lang) {
+      setOpen(false)
+      return
+    }
+
+    e.preventDefault()
+    setOpen(false)
+
+    try {
+      const res = await fetch(`/api/dictionary/${locale}`)
+      if (!res.ok) throw new Error('Failed to load dictionary')
+      const { dict } = await res.json()
+      setDictionary(dict, locale)
+      window.history.pushState(null, '', href)
+    } catch {
+      window.location.assign(href)
+    }
+  }
+
   return (
     <div ref={ref} className="relative">
       <button
@@ -47,21 +78,24 @@ export function LanguageSwitcher() {
 
       {open && (
         <div className="absolute right-0 top-full z-50 mt-1 w-40 rounded-lg border bg-popover p-1 shadow-md">
-          {locales.map((locale) => (
-            <Link
-              key={locale}
-              href={getLocalizedPath(locale)}
-              onClick={() => setOpen(false)}
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent ${
-                locale === lang
-                  ? 'font-medium text-foreground'
-                  : 'text-muted-foreground'
-              }`}
-            >
-              <span>{localeFlags[locale]}</span>
-              <span>{localeNames[locale]}</span>
-            </Link>
-          ))}
+          {locales.map((locale) => {
+            const href = getLocalizedPath(locale)
+            return (
+              <Link
+                key={locale}
+                href={href}
+                onClick={(e) => handleClick(e, locale, href)}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent ${
+                  locale === lang
+                    ? 'font-medium text-foreground'
+                    : 'text-muted-foreground'
+                }`}
+              >
+                <span>{localeFlags[locale]}</span>
+                <span>{localeNames[locale]}</span>
+              </Link>
+            )
+          })}
         </div>
       )}
     </div>

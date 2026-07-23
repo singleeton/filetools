@@ -32,7 +32,7 @@ export default async function LangLayout({
 
   return (
     <DictionaryProvider dictionary={dict} lang={lang as Locale}>
-      <SetHtmlLang lang={lang} />
+      <SetHtmlLang />
       <PageTracker />
       <Header />
       <div className="container mx-auto px-4 pt-4">
